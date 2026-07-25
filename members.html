@@ -111,93 +111,224 @@
 
 <main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter relative" id="home"><nav class="breadcrumbs-ui py-4 max-w-container-max mx-auto px-gutter text-sm text-on-surface-variant" aria-label="breadcrumb"><a href="index.html" class="hover:text-primary">Home</a> &gt; <span>Meet the Omnikon Community</span></nav>
 <section id="contributors" class="mb-section-gap">
-<div class="flex items-center gap-4 mb-8">
-<div class="flex items-center gap-2 text-primary">
-<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
-        <h2 class="text-on-surface font-label-mono text-label-mono whitespace-nowrap">Member's Wall</h2>
-</div>
-<div class="h-px bg-surface-container flex-grow"></div>
-<a class="text-primary hover:text-primary-container transition-colors text-code-sm font-code-sm flex items-center gap-1 whitespace-nowrap" href="https://github.com/orgs/Omnikon-Org/people" target="_blank">
-                View all members <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
-</a>
-</div>
 
-<div class="flex flex-col gap-6 md:gap-8 w-full" id="contributors-list"></div>
+  <!-- Header -->
+  <div class="flex items-center gap-4 mb-6">
+    <div class="flex items-center gap-2 text-primary">
+      <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+      <h1 class="text-on-surface font-label-mono text-label-mono whitespace-nowrap">Member's Wall</h1>
+    </div>
+    <div class="h-px bg-surface-container flex-grow"></div>
+    <a class="text-primary hover:text-primary-container transition-colors text-code-sm font-code-sm flex items-center gap-1 whitespace-nowrap"
+       href="https://github.com/orgs/Omnikon-Org/people" target="_blank">
+      View all <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+    </a>
+  </div>
+
+  <!-- Wall container -->
+  <div id="contributors-list"></div>
+
+</section>
+
+<style>
+/* ── Members Wall — Compact premium layout ─────────────── */
+
+/* Group block */
+.mw-group { margin-bottom: 20px; }
+
+/* Inline separator label */
+.mw-sep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.mw-sep-line {
+  height: 1px;
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+}
+.mw-sep-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  white-space: nowrap;
+}
+
+/* Card row */
+.mw-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px 22px;
+}
+
+/* Individual card */
+.mw-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: transform 0.22s ease;
+  cursor: pointer;
+}
+.mw-card:hover { transform: translateY(-4px); }
+
+/* Avatar shells */
+.mw-avatar {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mw-avatar img {
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Founder — gold, large */
+.mw-avatar.founder {
+  width: 80px; height: 80px;
+  padding: 3px;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24, #d97706);
+  box-shadow: 0 0 20px rgba(245,158,11,0.5), 0 0 6px rgba(245,158,11,0.25);
+}
+.mw-avatar.founder img { width: 74px; height: 74px; border: 2px solid #050505; border-radius: 50%; }
+
+/* Co-founder — red→purple, medium */
+.mw-avatar.cofounder {
+  width: 68px; height: 68px;
+  padding: 2.5px;
+  background: linear-gradient(135deg, #DC2626, #9333ea);
+  box-shadow: 0 0 14px rgba(220,38,38,0.4), 0 0 5px rgba(147,51,234,0.25);
+}
+.mw-avatar.cofounder img { width: 63px; height: 63px; border: 2px solid #050505; border-radius: 50%; }
+
+/* Member — subtle, smaller */
+.mw-avatar.member {
+  width: 56px; height: 56px;
+  padding: 2px;
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 0 8px rgba(220,38,38,0.08);
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.mw-avatar.member img { width: 52px; height: 52px; border: 1.5px solid #0d0d0d; border-radius: 50%; }
+.mw-card:hover .mw-avatar.member {
+  background: linear-gradient(135deg, rgba(220,38,38,0.55), rgba(147,51,234,0.35));
+  box-shadow: 0 0 16px rgba(220,38,38,0.3);
+}
+
+/* Name */
+.mw-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  text-align: center;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Role badge */
+.mw-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.mw-badge.founder  { background: rgba(245,158,11,0.14); color: #fbbf24; border: 1px solid rgba(245,158,11,0.38); }
+.mw-badge.cofounder { background: rgba(220,38,38,0.14); color: #f87171; border: 1px solid rgba(220,38,38,0.32); }
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const ROLES = {
+    founder:   ['rishibyte'],
+    cofounder: ['pranav00076', 'sharanyobanerjee', 'wombatfreak6', 'yuvraj-sarathe'],
+    hidden:    ['omnikonorg-work']
+  };
+
+  function getRole(login) {
+    const l = login.toLowerCase();
+    if (ROLES.hidden.includes(l))    return 'hidden';
+    if (ROLES.founder.includes(l))   return 'founder';
+    if (ROLES.cofounder.includes(l)) return 'cofounder';
+    return 'member';
+  }
+
+  function buildCard(m, role) {
+    const a = document.createElement('a');
+    a.href = m.html_url;
+    a.target = '_blank';
+    a.className = 'mw-card';
+    a.setAttribute('aria-label', `${m.login} — ${role}`);
+
+    const name = m.name || m.login;
+    const badgeHtml = role === 'founder'
+      ? `<span class="mw-badge founder">⭐ Founder</span>`
+      : role === 'cofounder'
+      ? `<span class="mw-badge cofounder">🔥 Co-founder</span>`
+      : '';
+
+    a.innerHTML = `
+      <div class="mw-avatar ${role}">
+        <img src="${m.avatar_url}" alt="${m.login}" loading="lazy">
+      </div>
+      <div class="mw-name" title="${name}">${name}</div>
+      ${badgeHtml}
+    `;
+    return a;
+  }
+
+  function buildGroup(label, members, role, container) {
+    if (!members.length) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'mw-group';
+
+    const sep = document.createElement('div');
+    sep.className = 'mw-sep';
+    sep.innerHTML = `<div class="mw-sep-line"></div><span class="mw-sep-label">${label}</span><div class="mw-sep-line"></div>`;
+    wrap.appendChild(sep);
+
+    const row = document.createElement('div');
+    row.className = 'mw-row';
+    members.forEach(m => row.appendChild(buildCard(m, role)));
+    wrap.appendChild(row);
+    container.appendChild(wrap);
+  }
+
   fetch('github_summary.json')
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-      // Render Contributors
-      const contribContainer = document.getElementById('contributors-list');
-      
-      const row1 = document.createElement('div');
-      row1.className = 'flex flex-wrap justify-center gap-6 md:gap-8';
-      const row2 = document.createElement('div');
-      row2.className = 'flex flex-wrap justify-center gap-6 md:gap-8';
-
-      const validMembers = data.members.filter(member => member.type !== 'Bot' && !member.login.toLowerCase().includes('bot'));
-      
-      validMembers.forEach((member, index) => {
-          const a = document.createElement('a');
-          a.href = member.html_url;
-          a.target = '_blank';
-          a.className = 'flex flex-col items-center gap-2 group cursor-pointer';
-          a.innerHTML = `
-            <div class="w-16 h-16 rounded-full border border-primary flex items-center justify-center text-xl font-display-lg text-on-surface bg-surface group-hover:glow-active transition-all relative">
-              <img src="${member.avatar_url}" alt="${member.login}" class="rounded-full w-full h-full">
-            </div>
-            <div class="text-center">
-              <div class="text-on-surface font-label-mono text-sm">${member.login}</div>
-            </div>
-          `;
-          if (index < 5) {
-              row1.appendChild(a);
-          } else {
-              row2.appendChild(a);
-          }
-      });
-      
-      contribContainer.appendChild(row1);
-      if (row2.children.length > 0) {
-          contribContainer.appendChild(row2);
-      }
-
-      // Render Projects
-      const projContainer = document.getElementById('projects-container');
-      if (projContainer && data.repos) {
-        projContainer.innerHTML = '';
-        data.repos.forEach(repo => {
-          const repoHtml = `
-            <a href="${repo.html_url}" target="_blank" class="flex items-start gap-4 p-4 hover:bg-surface-variant transition-colors border-l-2 border-transparent hover:border-primary block group">
-              <span class="material-symbols-outlined text-primary mt-1" data-icon="folder">folder</span>
-              <div class="flex-grow">
-                <div class="flex items-center gap-2">
-                  <div class="text-on-surface font-label-mono text-sm group-hover:text-primary transition-colors">${repo.name}</div>
-                  ${repo.name.toLowerCase() === 'astrodex' ? `<span class="px-2 py-0.5 bg-primary/20 text-primary border border-primary/30 text-[10px] uppercase font-bold rounded ml-2 shadow-[0_0_10px_rgba(255,42,75,0.2)]">GSSoC 2026</span>` : ''}
-                  ${repo.name.toLowerCase() === 'cntrl' ? `<span class="px-2 py-0.5 bg-primary/20 text-primary border border-primary/30 text-[10px] uppercase font-bold rounded ml-2 shadow-[0_0_10px_rgba(255,42,75,0.2)]">ECSoC 2026</span>` : ''}
-                  ${repo.homepage ? `<button onclick="window.open('${repo.homepage}', '_blank'); event.preventDefault();" class="px-3 py-1 bg-primary/20 hover:bg-primary border border-primary text-white hover:text-background text-[10px] uppercase font-bold rounded ml-3 z-10 relative cursor-pointer transition-all shadow-[0_0_10px_rgba(255,42,75,0.2)]">Live Website</button>` : ''}
-                </div>
-                <div class="text-on-surface-variant text-code-sm font-code-sm mt-1">${repo.description || ''}</div>
-              </div>
-              <div class="flex items-center gap-1 text-on-surface-variant text-code-sm">
-                <span class="material-symbols-outlined text-sm" data-icon="star">star</span> ${repo.stars}
-              </div>
-            </a>
-          `;
-          projContainer.insertAdjacentHTML('beforeend', repoHtml);
-        });
-      }
+      const container = document.getElementById('contributors-list');
+      const valid = data.members.filter(m =>
+        m.type !== 'Bot' &&
+        !m.login.toLowerCase().includes('bot') &&
+        getRole(m.login) !== 'hidden'
+      );
+      buildGroup('Founder',     valid.filter(m => getRole(m.login) === 'founder'),   'founder',   container);
+      buildGroup('Co-founders', valid.filter(m => getRole(m.login) === 'cofounder'), 'cofounder', container);
+      buildGroup('Members',     valid.filter(m => getRole(m.login) === 'member'),    'member',    container);
     })
-    .catch(err => {
-      console.error('Failed to load GitHub summary:', err);
-      const projContainer = document.getElementById('projects-container');
-      if (projContainer) projContainer.innerHTML = '<div class="text-center text-primary text-code-sm">Failed to load projects.</div>';
+    .catch(() => {
+      document.getElementById('contributors-list').innerHTML =
+        '<p style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center">Failed to load members.</p>';
     });
 });
 </script>
-</section>
+
 
 
 

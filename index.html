@@ -1135,59 +1135,196 @@
 
 <section id="contributors" class="mb-section-gap">
 <div class="flex items-center gap-4 mb-8">
-<div class="flex items-center gap-2 text-primary">
-<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
-        <h2 class="text-on-surface font-label-mono text-label-mono whitespace-nowrap">Member's Wall</h2>
-</div>
-<div class="h-px bg-surface-container flex-grow"></div>
-<a class="text-primary hover:text-primary-container transition-colors text-code-sm font-code-sm flex items-center gap-1 whitespace-nowrap" href="https://github.com/orgs/Omnikon-Org/people" target="_blank">
-                View all members <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
-</a>
+  <div class="flex items-center gap-2 text-primary">
+    <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+    <h2 class="text-on-surface font-label-mono text-label-mono whitespace-nowrap">Member's Wall</h2>
+  </div>
+  <div class="h-px bg-surface-container flex-grow"></div>
+  <a class="text-primary hover:text-primary-container transition-colors text-code-sm font-code-sm flex items-center gap-1 whitespace-nowrap" href="https://github.com/orgs/Omnikon-Org/people" target="_blank">
+    View all members <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+  </a>
 </div>
 
-<div class="flex flex-col gap-6 md:gap-8 w-full" id="contributors-list"></div>
+<div class="flex flex-col gap-10 w-full" id="contributors-list"></div>
+
+<!-- Members Wall styles -->
+<style>
+  .member-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s ease;
+  }
+  .member-card:hover { transform: translateY(-5px); }
+
+  /* Avatar rings per role */
+  .member-avatar-wrap {
+    position: relative;
+  }
+  .member-avatar-wrap img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Founder — large, golden glow */
+  .avatar-founder {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24, #d97706);
+    box-shadow: 0 0 22px rgba(245,158,11,0.55), 0 0 6px rgba(245,158,11,0.3);
+  }
+  .avatar-founder img { border: 2px solid #050505; border-radius: 50%; }
+
+  /* Co-founder — medium, red/purple glow */
+  .avatar-cofounder {
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(135deg, #DC2626, #9333ea);
+    box-shadow: 0 0 16px rgba(220,38,38,0.45), 0 0 6px rgba(147,51,234,0.3);
+  }
+  .avatar-cofounder img { border: 2px solid #050505; border-radius: 50%; }
+
+  /* Member — standard, subtle */
+  .avatar-member {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    padding: 2px;
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 10px rgba(220,38,38,0.1);
+    transition: box-shadow 0.3s;
+  }
+  .member-card:hover .avatar-member {
+    box-shadow: 0 0 18px rgba(220,38,38,0.35);
+    background: linear-gradient(135deg, rgba(220,38,38,0.6), rgba(147,51,234,0.4));
+  }
+
+  /* Role badge */
+  .role-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-founder  { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
+  .badge-cofounder { background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.35); }
+
+  /* Section sub-heading */
+  .members-group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .members-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Role definitions (login: lowercase) ─────────────────────
+  const ROLES = {
+    founder:    ['rishibyte'],
+    cofounder:  ['pranav00076', 'sharanyobanerjee', 'wombatfreak6', 'yuvraj-sarathe'],
+    hidden:     ['omnikonorg-work']   // remove from wall entirely
+  };
+
+  function getRole(login) {
+    const l = login.toLowerCase();
+    if (ROLES.hidden.includes(l))    return 'hidden';
+    if (ROLES.founder.includes(l))   return 'founder';
+    if (ROLES.cofounder.includes(l)) return 'cofounder';
+    return 'member';
+  }
+
+  // ── Build a member card element ──────────────────────────────
+  function buildCard(member, role) {
+    const a = document.createElement('a');
+    a.href = member.html_url;
+    a.target = '_blank';
+    a.className = 'member-card';
+    a.setAttribute('aria-label', `${member.login} — ${role}`);
+
+    const avatarClass = role === 'founder' ? 'avatar-founder'
+                      : role === 'cofounder' ? 'avatar-cofounder'
+                      : 'avatar-member';
+
+    const badgeHtml = role === 'founder'
+      ? `<span class="role-badge badge-founder">⭐ Founder</span>`
+      : role === 'cofounder'
+      ? `<span class="role-badge badge-cofounder">🔥 Co-founder</span>`
+      : '';
+
+    const displayName = member.name || member.login;
+
+    a.innerHTML = `
+      <div class="member-avatar-wrap ${avatarClass}">
+        <img src="${member.avatar_url}" alt="${member.login}" loading="lazy">
+      </div>
+      <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px;">
+        <div style="color:var(--color-on-surface, #e3e2e2); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;">${displayName}</div>
+        ${badgeHtml}
+      </div>
+    `;
+    return a;
+  }
+
+  // ── Render a group row ───────────────────────────────────────
+  function buildGroup(label, members, role, container) {
+    if (!members.length) return;
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'members-group-label';
+    labelEl.textContent = label;
+    container.appendChild(labelEl);
+
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex; flex-wrap:wrap; justify-content:center; gap:28px; margin-bottom:8px;';
+    members.forEach(m => row.appendChild(buildCard(m, role)));
+    container.appendChild(row);
+  }
+
   fetch('github_summary.json')
     .then(res => res.json())
     .then(data => {
-      // Render Contributors
       const contribContainer = document.getElementById('contributors-list');
-      
-      const row1 = document.createElement('div');
-      row1.className = 'flex flex-wrap justify-center gap-6 md:gap-8';
-      const row2 = document.createElement('div');
-      row2.className = 'flex flex-wrap justify-center gap-6 md:gap-8';
 
-      const validMembers = data.members.filter(member => member.type !== 'Bot' && !member.login.toLowerCase().includes('bot'));
-      
-      validMembers.forEach((member, index) => {
-          const a = document.createElement('a');
-          a.href = member.html_url;
-          a.target = '_blank';
-          a.className = 'flex flex-col items-center gap-2 group cursor-pointer';
-          a.innerHTML = `
-            <div class="w-16 h-16 rounded-full border border-primary flex items-center justify-center text-xl font-display-lg text-on-surface bg-surface group-hover:glow-active transition-all relative">
-              <img src="${member.avatar_url}" alt="${member.login}" class="rounded-full w-full h-full">
-            </div>
-            <div class="text-center">
-              <div class="text-on-surface font-label-mono text-sm">${member.login}</div>
-            </div>
-          `;
-          if (index < 5) {
-              row1.appendChild(a);
-          } else {
-              row2.appendChild(a);
-          }
-      });
-      
-      contribContainer.appendChild(row1);
-      if (row2.children.length > 0) {
-          contribContainer.appendChild(row2);
-      }
+      // Filter bots + hidden, separate into role buckets
+      const valid = data.members.filter(m =>
+        m.type !== 'Bot' &&
+        !m.login.toLowerCase().includes('bot') &&
+        getRole(m.login) !== 'hidden'
+      );
 
-      // Render Projects
+      const founders   = valid.filter(m => getRole(m.login) === 'founder');
+      const cofounders = valid.filter(m => getRole(m.login) === 'cofounder');
+      const members    = valid.filter(m => getRole(m.login) === 'member');
+
+      buildGroup('Founder',      founders,   'founder',   contribContainer);
+      buildGroup('Co-founders',  cofounders, 'cofounder', contribContainer);
+      buildGroup('Members',      members,    'member',    contribContainer);
+
+      // Render Projects (unchanged logic)
       const projContainer = document.getElementById('projects-container');
       if (projContainer && data.repos) {
         projContainer.innerHTML = '';
