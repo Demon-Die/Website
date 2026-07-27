@@ -107,6 +107,7 @@ body.grid-bg {
     box-shadow: 0 0 20px rgba(255, 42, 75, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
+    z-index: 9999;
 }
 #chatbot-toggle:hover {
     background: linear-gradient(135deg, rgba(255, 42, 75, 0.4), rgba(255, 42, 75, 0.1));
@@ -288,5 +289,23 @@ body.grid-bg {
 .scroll-reveal.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+    #chatbot-toggle {
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+        right: 16px !important;
+        z-index: 9999 !important;
+    }
+    #chatbot-modal {
+        right: 12px;
+        left: 12px;
+        bottom: calc(85px + env(safe-area-inset-bottom, 0px));
+        width: auto;
+        max-width: none;
+        height: 75vh;
+        max-height: 500px;
+        z-index: 10000;
+    }
 }
 

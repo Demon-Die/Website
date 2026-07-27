@@ -59,10 +59,10 @@
 ]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script></head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg overflow-x-hidden">
 
 <nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
-<div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
+<div class="flex justify-between items-center w-full px-4 sm:px-gutter h-16 max-w-container-max mx-auto">
 <div class="flex items-center gap-2 h-full">
-<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-16 w-16 mr-2 object-cover rounded-md">
-<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-xl">Omnikon</span>
+<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-9 w-9 sm:h-10 sm:w-10 mr-1.5 object-cover rounded-md">
+<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-lg sm:text-xl">Omnikon</span>
 </div>
 <div id="desktop-nav" class="hidden md:flex items-center gap-8"><a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="index.html">Home</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="javascript:void(0)" onclick="window.openHackathonWindow();">🏆 Hackathon</a>
@@ -70,13 +70,12 @@
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="members.html">Members</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="achievements.html">Achievements</a></div>
-<a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star
-                Star on GitHub">
+<a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star Star on GitHub">
 <span class="material-symbols-outlined text-sm" data-icon="star">star</span>
                 Star on GitHub
             </button></a>
 
-<button class="md:hidden text-on-surface p-2" onclick="toggleMobileMenu()" aria-label="menu">
+<button class="md:hidden text-on-surface p-2 shrink-0 flex items-center justify-center" onclick="toggleMobileMenu()" aria-label="menu">
 <span class="material-symbols-outlined" data-icon="menu">menu</span>
 </button>
 </div>
@@ -122,7 +121,7 @@
 </a>
 </div>
 
-<div class="flex flex-col gap-6 md:gap-8 w-full" id="contributors-list"></div>
+<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 sm:gap-4 md:gap-6 justify-items-center w-full" id="contributors-list"></div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -132,37 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
       // Render Contributors
       const contribContainer = document.getElementById('contributors-list');
       
-      const row1 = document.createElement('div');
-      row1.className = 'flex flex-wrap justify-center gap-6 md:gap-8';
-      const row2 = document.createElement('div');
-      row2.className = 'flex flex-wrap justify-center gap-6 md:gap-8';
-
       const validMembers = data.members.filter(member => member.type !== 'Bot' && !member.login.toLowerCase().includes('bot'));
       
-      validMembers.forEach((member, index) => {
+      validMembers.forEach(member => {
           const a = document.createElement('a');
           a.href = member.html_url;
           a.target = '_blank';
-          a.className = 'flex flex-col items-center gap-2 group cursor-pointer';
+          a.className = 'flex flex-col items-center gap-1 group cursor-pointer w-full max-w-[80px] sm:max-w-[96px] p-1.5 rounded-lg hover:bg-surface-variant/30 transition-all';
           a.innerHTML = `
-            <div class="w-16 h-16 rounded-full border border-primary flex items-center justify-center text-xl font-display-lg text-on-surface bg-surface group-hover:glow-active transition-all relative">
-              <img src="${member.avatar_url}" alt="${member.login}" class="rounded-full w-full h-full">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-primary flex items-center justify-center bg-surface group-hover:scale-105 group-hover:glow-active transition-all overflow-hidden shrink-0">
+              <img src="${member.avatar_url}" alt="${member.login}" class="w-full h-full object-cover">
             </div>
-            <div class="text-center">
-              <div class="text-on-surface font-label-mono text-sm">${member.login}</div>
+            <div class="text-center w-full">
+              <div class="text-on-surface font-label-mono text-[10px] sm:text-xs truncate w-full group-hover:text-primary transition-colors">${member.login}</div>
             </div>
           `;
-          if (index < 5) {
-              row1.appendChild(a);
-          } else {
-              row2.appendChild(a);
-          }
+          contribContainer.appendChild(a);
       });
-      
-      contribContainer.appendChild(row1);
-      if (row2.children.length > 0) {
-          contribContainer.appendChild(row2);
-      }
 
       // Render Projects
       const projContainer = document.getElementById('projects-container');
@@ -203,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </main>
   
-  <button id="chatbot-toggle" class="fixed bottom-4 right-4 rounded-full shadow-lg bg-primary/20 backdrop-blur-md border border-primary p-3 hover:bg-primary/30 transition" aria-label="hub">
+  <button id="chatbot-toggle" class="fixed bottom-6 right-4 sm:right-6 z-[9999] rounded-full shadow-lg bg-primary/20 backdrop-blur-md border border-primary p-3 hover:bg-primary/30 transition" aria-label="hub">
     <span class="material-symbols-outlined text-2xl text-primary">hub</span>
   </button>
   
@@ -243,39 +228,37 @@ document.addEventListener('DOMContentLoaded', () => {
   
   <script type="module" src="fetch_recent_activity.js"></script>
   <script type="module" src="fetch_community_feed.js"></script>
-  <script type="module" src="chatbot.js"></script>
-
-<footer class="bg-background dark:bg-background border-t border-surface-variant relative z-10 py-12 mt-auto">
-  <div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-8">
+  <script type="module" src="chatbot.js"></script><footer class="bg-background dark:bg-background border-t border-surface-variant relative z-10 py-6 sm:py-8 md:py-12 mt-auto">
+  <div class="max-w-container-max mx-auto px-4 sm:px-gutter grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
     <div>
-      <h3 class="text-xl font-bold mb-4">Omnikon</h3>
-      <p class="text-on-surface-variant">Open Source Community for Developers.</p>
+      <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-4">Omnikon</h3>
+      <p class="text-on-surface-variant text-xs sm:text-sm">Open Source Community for Developers.</p>
     </div>
     <div>
-      <h3 class="font-bold mb-4">Pages</h3>
-      <ul class="space-y-2">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="javascript:void(0)" onclick="window.openHackathonWindow()">Hackathon</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blogs.html">Blog</a></li>
+      <h3 class="font-bold text-sm sm:text-base mb-2 sm:mb-4">Pages</h3>
+      <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
+        <li><a href="index.html" class="hover:text-primary transition-colors">Home</a></li>
+        <li><a href="javascript:void(0)" onclick="window.openHackathonWindow()" class="hover:text-primary transition-colors">Hackathon</a></li>
+        <li><a href="projects.html" class="hover:text-primary transition-colors">Projects</a></li>
+        <li><a href="blogs.html" class="hover:text-primary transition-colors">Blog</a></li>
       </ul>
     </div>
     <div>
-      <h3 class="font-bold mb-4">Community</h3>
-      <ul class="space-y-2">
-        <li><a href="members.html">Members</a></li>
-        <li><a href="achievements.html">Community</a></li>
-        <li><a href="docs.html">Docs</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
+      <h3 class="font-bold text-sm sm:text-base mb-2 sm:mb-4">Community</h3>
+      <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
+        <li><a href="members.html" class="hover:text-primary transition-colors">Members</a></li>
+        <li><a href="achievements.html" class="hover:text-primary transition-colors">Community</a></li>
+        <li><a href="docs.html" class="hover:text-primary transition-colors">Docs</a></li>
+        <li><a href="about.html" class="hover:text-primary transition-colors">About</a></li>
+        <li><a href="contact.html" class="hover:text-primary transition-colors">Contact</a></li>
       </ul>
     </div>
     <div>
-      <h3 class="font-bold mb-4">Socials</h3>
-      <ul class="space-y-2">
-        <li><a href="https://github.com/Omnikon-Org" target="_blank">GitHub</a></li>
-        <li><a href="https://discord.gg/yWtjK2Tb8T" target="_blank">Discord</a></li>
-        <li><a href="#" target="_blank">LinkedIn</a></li>
+      <h3 class="font-bold text-sm sm:text-base mb-2 sm:mb-4">Socials</h3>
+      <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
+        <li><a href="https://github.com/Omnikon-Org" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
+        <li><a href="https://discord.gg/yWtjK2Tb8T" target="_blank" class="hover:text-primary transition-colors">Discord</a></li>
+        <li><a href="#" target="_blank" class="hover:text-primary transition-colors">LinkedIn</a></li>
       </ul>
     </div>
   </div>
