@@ -14,11 +14,17 @@ if [[ -z "$TOKEN" ]]; then
   echo "Error: GitHub token not found in .env"
   exit 1
 fi
-ORG="Omnikon"
+ORG="Omnikon-Org"
 
 # ------------------------------------------------------------
 # Fetch organization repositories (first 100, pagination if needed)
-REPOS=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/repos?per_page=100")
+if [[ -n "$TOKEN" ]]; then
+  REPOS_RAW=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/repos?per_page=100")
+else
+  REPOS_RAW=$(curl -s "https://api.github.com/orgs/$ORG/repos?per_page=100")
+fi
+
+REPOS=$(echo "$REPOS_RAW" | jq '[.[] | select(.name != ".github")]')
 PROJECT_COUNT=$(echo "$REPOS" | jq length)
 TOTAL_STARS=$(echo "$REPOS" | jq '[.[] .stargazers_count] | add')
 # Build repos array with needed fields
@@ -26,8 +32,13 @@ REPOS_DATA=$(echo "$REPOS" | jq '[.[] | {name: .name, description: .description,
 
 # ------------------------------------------------------------
 # Fetch org members and ensure it's an array
-ORG_MEMBERS_RAW=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/members?per_page=100")
-ORG_MEMBERS=$(echo "$ORG_MEMBERS_RAW" | jq 'if type=="array" then . else [. ] end')
+if [[ -n "$TOKEN" ]]; then
+  ORG_MEMBERS_RAW=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/members?per_page=100")
+else
+  ORG_MEMBERS_RAW=$(curl -s "https://api.github.com/orgs/$ORG/members?per_page=100")
+fi
+
+ORG_MEMBERS=$(echo "$ORG_MEMBERS_RAW" | jq 'if type=="array" then . else [] end')
 ALL_USERS=$(echo "$ORG_MEMBERS" | jq 'unique_by(.login)')
 PRIORITY_LOGINS=("RishiByte" "Pranav00076" "SharanyoBanerjee" "Yuvraj-Sarathe")
 MEMBERS_DATA="[]"
@@ -48,8 +59,7 @@ CONTRIBUTOR_COUNT=$(echo "$MEMBERS_DATA" | jq length)
 
 # ------------------------------------------------------------
 # Output summary JSON
-mkdir -p "$(dirname "$0")/public"
-cat > "$(dirname "$0")/public/github_summary.json" <<EOF
+JSON_CONTENT=$(cat <<EOF
 {
   "project_count": $PROJECT_COUNT,
   "total_stars": $TOTAL_STARS,
@@ -58,5 +68,10 @@ cat > "$(dirname "$0")/public/github_summary.json" <<EOF
   "members": $MEMBERS_DATA
 }
 EOF
+)
 
-echo "GitHub summary written to public/github_summary.json"
+mkdir -p "$(dirname "$0")/public"
+echo "$JSON_CONTENT" > "$(dirname "$0")/public/github_summary.json"
+echo "$JSON_CONTENT" > "$(dirname "$0")/github_summary.json"
+
+echo "GitHub summary written to github_summary.json and public/github_summary.json"

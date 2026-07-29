@@ -224,6 +224,104 @@
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
+     COMMUNITY NUMBERS / STATS BAR — Above Hackathon Section
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="glass-panel mb-8 sm:mb-12 relative overflow-hidden">
+  <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-70"></div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 border-y border-surface-variant/30 text-center sm:text-left">
+    
+    <!-- 1. Active Projects -->
+    <div class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="deployed_code">deployed_code</span>
+      </div>
+      <div>
+        <div id="stat-active-projects" class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface">15</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Active Projects</div>
+      </div>
+    </div>
+
+    <!-- 2. Students Engaged -->
+    <div class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="group">group</span>
+      </div>
+      <div>
+        <div class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface">400+</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Students Engaged</div>
+      </div>
+    </div>
+
+    <!-- 3. Contributors -->
+    <div class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="architecture">architecture</span>
+      </div>
+      <div>
+        <div class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface">50+</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Contributors</div>
+      </div>
+    </div>
+
+    <!-- 4. Ambassadors -->
+    <div class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="workspace_premium">workspace_premium</span>
+      </div>
+      <div>
+        <div class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface">7</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Ambassadors</div>
+      </div>
+    </div>
+
+    <!-- 5. Repository Stars -->
+    <div class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="visibility">visibility</span>
+      </div>
+      <div>
+        <div id="stat-repo-stars" class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface">19+</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Repository Stars</div>
+      </div>
+    </div>
+
+    <!-- 6. Articles Published -->
+    <div class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="article">article</span>
+      </div>
+      <div>
+        <div id="blog-count" class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface">15+</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Articles Published</div>
+      </div>
+    </div>
+
+    <!-- 7. Quiz Registrations -->
+    <a href="achievements.html" class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 border-b lg:border-b-0 border-r border-surface-variant/30 hover:bg-surface-variant/30 transition-colors cursor-pointer group">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10 group-hover:bg-primary/20 transition-colors">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="emoji_events">emoji_events</span>
+      </div>
+      <div>
+        <div class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface group-hover:text-primary transition-colors">1.6K+</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Quiz Registrations</div>
+      </div>
+    </a>
+
+    <!-- 8. Hackathon Registrations -->
+    <a href="javascript:void(0)" onclick="window.openHackathonWindow()" class="p-3 sm:p-4 lg:p-5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 hover:bg-surface-variant/30 transition-colors cursor-pointer group">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10 group-hover:bg-primary/20 transition-colors">
+        <span class="material-symbols-outlined text-base sm:text-lg" data-icon="military_tech">military_tech</span>
+      </div>
+      <div>
+        <div class="text-base sm:text-lg lg:text-xl font-headline-md font-bold text-on-surface group-hover:text-primary transition-colors">1.4K+</div>
+        <div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Hackathon Registrations</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
      NATIONAL HACKATHON 2026 — Featured Section
      Inserted seamlessly into the Omnikon design system
      ═══════════════════════════════════════════════════════════════ -->
@@ -558,64 +656,7 @@
 })();
 </script>
 
-<section class="glass-panel mb-section-gap relative overflow-hidden">
-<div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-70"></div>
-<div class="grid grid-cols-3 lg:grid-cols-6 border-y border-surface-variant/30">
-<div class="p-3 sm:p-5 lg:p-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 text-center sm:text-left border-b lg:border-b-0 border-r border-surface-variant/30">
-<div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
-<span class="material-symbols-outlined text-base sm:text-xl lg:text-2xl" data-icon="deployed_code">deployed_code</span>
-</div>
-<div>
-<div class="text-base sm:text-xl lg:text-headline-md font-headline-md font-bold text-on-surface">7</div>
-<div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Active Projects</div>
-</div>
-</div>
-<div class="p-3 sm:p-5 lg:p-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 text-center sm:text-left border-b lg:border-b-0 border-r border-surface-variant/30">
-<div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
-<span class="material-symbols-outlined text-base sm:text-xl lg:text-2xl" data-icon="group">group</span>
-</div>
-<div>
-<div class="text-base sm:text-xl lg:text-headline-md font-headline-md font-bold text-on-surface">63</div>
-<div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Students Engaged</div>
-</div>
-</div>
-<div class="p-3 sm:p-5 lg:p-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 text-center sm:text-left border-b lg:border-b-0 lg:border-r border-surface-variant/30">
-<div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
-<span class="material-symbols-outlined text-base sm:text-xl lg:text-2xl" data-icon="architecture">architecture</span>
-</div>
-<div>
-<div class="text-base sm:text-xl lg:text-headline-md font-headline-md font-bold text-on-surface">2</div>
-<div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Contributors</div>
-</div>
-</div>
-<div class="p-3 sm:p-5 lg:p-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 text-center sm:text-left border-r border-surface-variant/30">
-<div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
-<span class="material-symbols-outlined text-base sm:text-xl lg:text-2xl" data-icon="visibility">visibility</span>
-</div>
-<div>
-<div class="text-base sm:text-xl lg:text-headline-md font-headline-md font-bold text-on-surface">9</div>
-<div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Repository Stars</div>
-</div>
-</div>
-<div class="p-3 sm:p-5 lg:p-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 text-center sm:text-left border-r border-surface-variant/30">
-<div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10">
-<span class="material-symbols-outlined text-base sm:text-xl lg:text-2xl" data-icon="article">article</span>
-</div>
-<div>
-<div id="blog-count" class="text-base sm:text-xl lg:text-headline-md font-headline-md font-bold text-on-surface">...</div>
-<div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Articles Published</div>
-</div>
-</div>
-<a href="achievements.html" class="p-3 sm:p-5 lg:p-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 md:gap-6 text-center sm:text-left hover:bg-surface-variant/30 transition-colors cursor-pointer group">
-<div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 shrink-0 rounded-full border border-primary flex items-center justify-center text-primary bg-primary/10 group-hover:bg-primary/20 transition-colors">
-<span class="material-symbols-outlined text-base sm:text-xl lg:text-2xl" data-icon="emoji_events">emoji_events</span>
-</div>
-<div>
-<div class="text-base sm:text-xl lg:text-headline-md font-headline-md font-bold text-on-surface group-hover:text-primary transition-colors">1.6K+</div>
-<div class="text-[10px] sm:text-xs font-code-sm text-on-surface-variant leading-tight">Quiz Registrations</div>
-</div>
-</a>
-</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         try {
