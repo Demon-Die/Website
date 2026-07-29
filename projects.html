@@ -65,28 +65,29 @@
 <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
 </div>
 <div id="desktop-nav" class="hidden md:flex items-center gap-8"><a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="index.html">Home</a>
-<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="javascript:void(0)" onclick="window.openHackathonWindow();">🏆 Hackathon</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="achievements.html">Achievements</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="projects.html">Projects</a>
-<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="members.html">Members</a>
-<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="achievements.html">Achievements</a></div>
-<a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star Star on GitHub">
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="javascript:void(0)" onclick="window.openHackathonWindow();">🏆 Hackathon</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a></div>
+<a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star
+                Star on GitHub">
 <span class="material-symbols-outlined text-sm" data-icon="star">star</span>
                 Star on GitHub
             </button></a>
 
-<button class="md:hidden text-on-surface p-2 shrink-0 flex items-center justify-center" onclick="toggleMobileMenu()" aria-label="menu">
+<button class="md:hidden text-on-surface p-2" onclick="toggleMobileMenu()" aria-label="menu">
 <span class="material-symbols-outlined" data-icon="menu">menu</span>
 </button>
 </div>
 
 <!-- Mobile Dropdown Menu -->
 <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-[#050505]/95 backdrop-blur-md border-b border-surface-variant/30 flex-col items-center py-8 space-y-6 md:hidden shadow-2xl"><a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="index.html" onclick="toggleMobileMenu()">Home</a>
-<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="javascript:void(0)" onclick="toggleMobileMenu(); window.openHackathonWindow();">🏆 Hackathon</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="achievements.html" onclick="toggleMobileMenu()">Achievements</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="projects.html" onclick="toggleMobileMenu()">Projects</a>
-<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="blogs.html" onclick="toggleMobileMenu()">Blog</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="members.html" onclick="toggleMobileMenu()">Members</a>
-<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="achievements.html" onclick="toggleMobileMenu()">Achievements</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="javascript:void(0)" onclick="toggleMobileMenu(); window.openHackathonWindow();">🏆 Hackathon</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="blogs.html" onclick="toggleMobileMenu()">Blog</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
         <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-surface-container bg-surface/50 hover:border-primary glow-hover text-on-surface font-label-mono text-sm transition-all duration-200" aria-label="star
             Star on GitHub">
             <span class="material-symbols-outlined text-sm">star</span>
@@ -138,19 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
         projContainer.innerHTML = '';
         data.repos.forEach(repo => {
           const repoHtml = `
-            <a href="${repo.html_url}" target="_blank" class="flex items-center justify-between gap-2 p-2.5 sm:p-3 hover:bg-surface-variant/40 transition-colors border-l-2 border-transparent hover:border-primary group rounded-r-md">
-              <div class="flex items-center gap-2 min-w-0 flex-1">
-                <span class="material-symbols-outlined text-primary text-base shrink-0" data-icon="folder">folder</span>
-                <span class="text-on-surface font-label-mono text-xs sm:text-sm font-semibold truncate group-hover:text-primary transition-colors">${repo.name}</span>
-                ${repo.name.toLowerCase() === 'astrodex' ? `<span class="px-1.5 py-0.5 bg-primary/20 text-primary border border-primary/30 text-[9px] uppercase font-bold rounded shrink-0">GSSoC 2026</span>` : ''}
-                ${repo.name.toLowerCase() === 'cntrl' ? `<span class="px-1.5 py-0.5 bg-primary/20 text-primary border border-primary/30 text-[9px] uppercase font-bold rounded shrink-0">ECSoC 2026</span>` : ''}
-                ${repo.homepage ? `<button onclick="window.open('${repo.homepage}', '_blank'); event.preventDefault();" class="px-2 py-0.5 bg-primary/20 hover:bg-primary border border-primary text-white hover:text-background text-[9px] uppercase font-bold rounded z-10 relative cursor-pointer transition-all shrink-0">Live</button>` : ''}
-              </div>
-              <div class="flex items-center gap-3 shrink-0">
-                <div class="hidden md:block text-on-surface-variant text-xs font-code-sm truncate max-w-[280px]">${repo.description || ''}</div>
-                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-code-sm shrink-0">
-                  <span class="material-symbols-outlined text-xs sm:text-sm text-primary" data-icon="star">star</span> ${repo.stars}
+            <a href="${repo.html_url}" target="_blank" class="flex items-center sm:items-start gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-surface-variant transition-colors border-l-2 border-transparent hover:border-primary block group">
+              <span class="material-symbols-outlined text-primary shrink-0 sm:mt-1" data-icon="folder">folder</span>
+              <div class="flex-grow min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <div class="text-on-surface font-label-mono text-sm group-hover:text-primary transition-colors truncate">${repo.name}</div>
+                  ${repo.name.toLowerCase() === 'astrodex' ? `<span class="px-2 py-0.5 bg-primary/20 text-primary border border-primary/30 text-[10px] uppercase font-bold rounded shadow-[0_0_10px_rgba(255,42,75,0.2)]">GSSoC 2026</span>` : ''}
+                  ${repo.name.toLowerCase() === 'cntrl' ? `<span class="px-2 py-0.5 bg-primary/20 text-primary border border-primary/30 text-[10px] uppercase font-bold rounded shadow-[0_0_10px_rgba(255,42,75,0.2)]">ECSoC 2026</span>` : ''}
+                  ${repo.homepage ? `<button onclick="window.open('${repo.homepage}', '_blank'); event.preventDefault();" class="px-2.5 py-0.5 sm:px-3 sm:py-1 bg-primary/20 hover:bg-primary border border-primary text-white hover:text-background text-[10px] uppercase font-bold rounded sm:ml-1 z-10 relative cursor-pointer transition-all shadow-[0_0_10px_rgba(255,42,75,0.2)]">Live Website</button>` : ''}
                 </div>
+                <div class="hidden sm:block text-on-surface-variant text-code-sm font-code-sm mt-1">${repo.description || ''}</div>
+              </div>
+              <div class="flex items-center gap-1 text-on-surface-variant text-code-sm shrink-0">
+                <span class="material-symbols-outlined text-sm" data-icon="star">star</span> ${repo.stars}
               </div>
             </a>
           `;
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </main>
   
-  <button id="chatbot-toggle" class="fixed bottom-6 right-4 sm:right-6 z-[9999] rounded-full shadow-lg bg-primary/20 backdrop-blur-md border border-primary p-3 hover:bg-primary/30 transition" aria-label="hub">
+  <button id="chatbot-toggle" class="fixed bottom-4 right-4 rounded-full shadow-lg bg-primary/20 backdrop-blur-md border border-primary p-3 hover:bg-primary/30 transition" aria-label="hub">
     <span class="material-symbols-outlined text-2xl text-primary">hub</span>
   </button>
   
@@ -207,37 +208,39 @@ document.addEventListener('DOMContentLoaded', () => {
   
   <script type="module" src="fetch_recent_activity.js"></script>
   <script type="module" src="fetch_community_feed.js"></script>
-  <script type="module" src="chatbot.js"></script><footer class="bg-background dark:bg-background border-t border-surface-variant relative z-10 py-6 sm:py-8 md:py-12 mt-auto">
-  <div class="max-w-container-max mx-auto px-4 sm:px-gutter grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+  <script type="module" src="chatbot.js"></script>
+
+<footer class="bg-background dark:bg-background border-t border-surface-variant relative z-10 py-12 mt-auto">
+  <div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-8">
     <div>
-      <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-4">Omnikon</h3>
-      <p class="text-on-surface-variant text-xs sm:text-sm">Open Source Community for Developers.</p>
+      <h3 class="text-xl font-bold mb-4">Omnikon</h3>
+      <p class="text-on-surface-variant">Open Source Community for Developers.</p>
     </div>
     <div>
-      <h3 class="font-bold text-sm sm:text-base mb-2 sm:mb-4">Pages</h3>
-      <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-        <li><a href="index.html" class="hover:text-primary transition-colors">Home</a></li>
-        <li><a href="javascript:void(0)" onclick="window.openHackathonWindow()" class="hover:text-primary transition-colors">Hackathon</a></li>
-        <li><a href="projects.html" class="hover:text-primary transition-colors">Projects</a></li>
-        <li><a href="blogs.html" class="hover:text-primary transition-colors">Blog</a></li>
+      <h3 class="font-bold mb-4">Pages</h3>
+      <ul class="space-y-2">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="javascript:void(0)" onclick="window.openHackathonWindow()">Hackathon</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blogs.html">Blog</a></li>
       </ul>
     </div>
     <div>
-      <h3 class="font-bold text-sm sm:text-base mb-2 sm:mb-4">Community</h3>
-      <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-        <li><a href="members.html" class="hover:text-primary transition-colors">Members</a></li>
-        <li><a href="achievements.html" class="hover:text-primary transition-colors">Community</a></li>
-        <li><a href="docs.html" class="hover:text-primary transition-colors">Docs</a></li>
-        <li><a href="about.html" class="hover:text-primary transition-colors">About</a></li>
-        <li><a href="contact.html" class="hover:text-primary transition-colors">Contact</a></li>
+      <h3 class="font-bold mb-4">Community</h3>
+      <ul class="space-y-2">
+        <li><a href="members.html">Members</a></li>
+        <li><a href="achievements.html">Community</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
     <div>
-      <h3 class="font-bold text-sm sm:text-base mb-2 sm:mb-4">Socials</h3>
-      <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-        <li><a href="https://github.com/Omnikon-Org" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
-        <li><a href="https://discord.gg/yWtjK2Tb8T" target="_blank" class="hover:text-primary transition-colors">Discord</a></li>
-        <li><a href="#" target="_blank" class="hover:text-primary transition-colors">LinkedIn</a></li>
+      <h3 class="font-bold mb-4">Socials</h3>
+      <ul class="space-y-2">
+        <li><a href="https://github.com/Omnikon-Org" target="_blank">GitHub</a></li>
+        <li><a href="https://discord.gg/yWtjK2Tb8T" target="_blank">Discord</a></li>
+        <li><a href="#" target="_blank">LinkedIn</a></li>
       </ul>
     </div>
   </div>
@@ -309,4 +312,13 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 <script type="module" src="./assets/interactivity.js"></script>
 
+
+<footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
+    <div class="flex flex-wrap justify-center gap-6 mb-2">
+        <a href="privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-primary transition-colors">Terms & Conditions</a>
+        <a href="contact.html" class="hover:text-primary transition-colors">Contact Us</a>
+    </div>
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> Omnikon. All rights reserved.</p>
+</footer>
 </body></html>

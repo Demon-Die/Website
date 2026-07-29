@@ -16,13 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const heroSection = document.getElementById('hero-section');
     if (heroImg && heroSection) {
         heroSection.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 40;
-            const y = (window.innerHeight / 2 - e.pageY) / 40;
-            heroImg.style.transform = `translate(${x}px, ${y}px)`;
+            const x = (window.innerWidth / 2 - e.pageX) / 25;
+            const y = (window.innerHeight / 2 - e.pageY) / 25;
+            // The hero img has md:scale-125, so we incorporate a base scale
+            heroImg.style.transform = `translate(${x}px, ${y}px) scale(1.15)`;
             heroImg.style.transition = 'transform 0.1s ease-out';
         });
         heroSection.addEventListener('mouseleave', () => {
-            heroImg.style.transform = `translate(0px, 0px)`;
+            heroImg.style.transform = `translate(0px, 0px) scale(1.0)`;
             heroImg.style.transition = 'transform 0.5s ease-out';
         });
     }

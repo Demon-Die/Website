@@ -33,7 +33,7 @@
       return;
     }
 
-    events.slice(0, 3).forEach(event => {
+    events.slice(0, 8).forEach(event => {
       const div = document.createElement('div');
       div.className = 'flex items-start gap-4';
       
