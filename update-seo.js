@@ -87,11 +87,11 @@ const getNavLinks = (isMobile) => {
   
   return [
     '<a class="' + baseClass + '" href="index.html"' + mClick + '>Home</a>',
-    '<a class="' + baseClass + '" href="javascript:void(0)"' + hackathonClick + '>🏆 Hackathon</a>',
+    '<a class="' + baseClass + '" href="achievements.html"' + mClick + '>Achievements</a>',
     '<a class="' + baseClass + '" href="projects.html"' + mClick + '>Projects</a>',
-    '<a class="' + baseClass + '" href="blogs.html"' + mClick + '>Blog</a>',
     '<a class="' + baseClass + '" href="members.html"' + mClick + '>Members</a>',
-    '<a class="' + baseClass + '" href="achievements.html"' + mClick + '>Achievements</a>'
+    '<a class="' + baseClass + '" href="javascript:void(0)"' + hackathonClick + '>🏆 Hackathon</a>',
+    '<a class="' + baseClass + '" href="blogs.html"' + mClick + '>Blog</a>'
   ].join('\n');
 };
 

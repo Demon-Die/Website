@@ -1,0 +1,47 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Terms and Conditions | Omnikon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script type="module" src="./assets/tailwind-theme.js"></script>
+<link rel="stylesheet" href="./assets/common-styles.css">
+<meta name="description" content="Terms and Conditions for Omnikon.">
+</head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg">
+
+<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all p-4">
+    <a href="index.html" class="text-xl font-bold">Omnikon</a>
+</nav>
+
+<main class="flex-grow pt-24 pb-12 px-4 max-w-4xl mx-auto w-full">
+    <h1 class="text-4xl font-bold mb-8">Terms and Conditions</h1>
+    
+    <div class="space-y-6 text-on-surface-variant">
+        <p>Last updated: <span id="date"></span></p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">1. Acceptance of Terms</h2>
+        <p>By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.</p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">2. Intellectual Property</h2>
+        <p>The Site and its original content, features, and functionality are owned by Omnikon and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">3. Termination</h2>
+        <p>We may terminate your access to the Site, without cause or notice, which may result in the forfeiture and destruction of all information associated with you.</p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">4. Disclaimer</h2>
+        <p>This site is provided on an "as is" and "as available" basis without representations or warranties of any kind, express or implied.</p>
+    </div>
+</main>
+
+<script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+</script>
+
+<footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
+    <div class="flex flex-wrap justify-center gap-6 mb-2">
+        <a href="privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-primary transition-colors">Terms & Conditions</a>
+        <a href="contact.html" class="hover:text-primary transition-colors">Contact Us</a>
+    </div>
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> Omnikon. All rights reserved.</p>
+</footer>
+</body></html>

@@ -151,7 +151,7 @@
     if (!authWidget) {
       authWidget = document.createElement('div');
       authWidget.id = 'auth-widget';
-      authWidget.className = 'flex items-center gap-1.5 sm:gap-4 mr-1.5 sm:mr-4 shrink-0';
+      authWidget.className = 'flex items-center gap-4 mr-4';
       mobileToggle.parentNode.insertBefore(authWidget, mobileToggle);
     }
 
@@ -193,9 +193,9 @@
 
       const avatarUrl = user.photoURL || './public/LogoOmnikon.jpeg';
       authWidget.innerHTML = `
-        <div class="flex items-center gap-1.5 sm:gap-3">
-          <img class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-primary object-cover shrink-0" src="${avatarUrl}" alt="Profile">
-          <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[9px] sm:text-xs font-label-mono tracking-wider cursor-pointer whitespace-nowrap">
+        <div class="flex items-center gap-3">
+          <img class="w-8 h-8 rounded-full border border-primary object-cover" src="${avatarUrl}" alt="Profile">
+          <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer">
             [ LOGOUT ]
           </button>
         </div>
@@ -211,8 +211,8 @@
       }
 
       authWidget.innerHTML = `
-        <button id="auth-login-trigger" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 border border-primary hover:bg-primary/10 transition-all font-label-mono text-[9px] sm:text-xs text-primary tracking-widest cursor-pointer whitespace-nowrap">
-          <span class="material-symbols-outlined text-[13px] sm:text-[14px]">login</span>
+        <button id="auth-login-trigger" class="flex items-center gap-2 px-3 py-1.5 border border-primary hover:bg-primary/10 transition-all font-label-mono text-[10px] sm:text-xs text-primary tracking-widest cursor-pointer">
+          <span class="material-symbols-outlined text-[14px]">login</span>
           LOGIN
         </button>
       `;

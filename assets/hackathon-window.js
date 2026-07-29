@@ -12,7 +12,7 @@ class HackathonWindow {
     this.dragOffset = { x: 0, y: 0 };
     
     // Iframe URL
-    this.iframeUrl = 'https://hackathon-website-sooty-delta.vercel.app/';
+    this.iframeUrl = 'https://omnikonhackathon.vercel.app/';
     
     this.init();
   }

@@ -1,0 +1,52 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Privacy Policy | Omnikon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script type="module" src="./assets/tailwind-theme.js"></script>
+<link rel="stylesheet" href="./assets/common-styles.css">
+<meta name="description" content="Privacy Policy and Cookie disclosures for Omnikon.">
+</head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg">
+
+<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all p-4">
+    <a href="index.html" class="text-xl font-bold">Omnikon</a>
+</nav>
+
+<main class="flex-grow pt-24 pb-12 px-4 max-w-4xl mx-auto w-full">
+    <h1 class="text-4xl font-bold mb-8">Privacy Policy & Cookie Policy</h1>
+    
+    <div class="space-y-6 text-on-surface-variant">
+        <p>Last updated: <span id="date"></span></p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">1. Introduction</h2>
+        <p>Welcome to Omnikon. We respect your privacy and are committed to protecting your personal data.</p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">2. Advertising and Cookies</h2>
+        <p>This website uses cookies and similar technologies to provide functionality, analyze traffic, and serve targeted advertisements. We use Google AdSense to serve ads.</p>
+        <ul class="list-disc pl-6 space-y-2">
+            <li>Third party vendors, including Google, use cookies to serve ads based on a user's prior visits to your website or other websites.</li>
+            <li>Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.</li>
+            <li>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Ads Settings</a>.</li>
+        </ul>
+
+        <h2 class="text-2xl font-semibold text-on-surface">3. Information We Collect</h2>
+        <p>We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows: Identity Data, Contact Data, Technical Data, Usage Data, and Profile Data.</p>
+
+        <h2 class="text-2xl font-semibold text-on-surface">4. Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at: contact@omnikonhub.com</p>
+    </div>
+</main>
+
+<script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString();
+</script>
+
+<footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
+    <div class="flex flex-wrap justify-center gap-6 mb-2">
+        <a href="privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-primary transition-colors">Terms & Conditions</a>
+        <a href="contact.html" class="hover:text-primary transition-colors">Contact Us</a>
+    </div>
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> Omnikon. All rights reserved.</p>
+</footer>
+</body></html>

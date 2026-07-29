@@ -1,78 +1,181 @@
+/* ═══════════════════════════════════════════════════════
+   OMNIKON Hero Animation — Redesigned
+   Transparent, grid-matched, cyberpunk premium effects
+   ═══════════════════════════════════════════════════════ */
+
 #omnikon-hero-animation-container {
     position: relative;
     width: 100%;
-    background-color: #050505;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background-image: radial-gradient(circle at center, transparent 0%, #050505 100%);
-    padding: 3rem 0;
-    margin-bottom: 2rem;
-    border-radius: 12px;
+    padding: 1.5rem 0.5rem;
+    margin-bottom: 0.75rem;
+    border-radius: 16px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow:
+        0 0 60px rgba(220, 38, 38, 0.08) inset,
+        0 0 0 1px rgba(220, 38, 38, 0.06) inset;
 }
 
-/* Subtle animated noise texture */
+@media (min-width: 640px) {
+    #omnikon-hero-animation-container {
+        padding: 4rem 1rem;
+        margin-bottom: 2rem;
+    }
+}
+
+/* ── Grid overlay matching the site's grid-bg pattern ── */
 #omnikon-hero-animation-container::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.04;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, rgba(220, 38, 38, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(220, 38, 38, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
-    z-index: 1;
-    background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+    z-index: 0;
+    border-radius: inherit;
 }
 
-/* Canvas for floating particles */
+/* ── Scanline sweep overlay ──────────────────────────── */
+#omnikon-hero-animation-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.12) 3px,
+        rgba(0, 0, 0, 0.12) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+    animation: omnikon-scanlines 8s linear infinite;
+    opacity: 0.4;
+}
+
+@keyframes omnikon-scanlines {
+    0%   { background-position: 0 0; }
+    100% { background-position: 0 40px; }
+}
+
+/* ── Canvas for ember particles ─────────────────────── */
 #omnikon-particles-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     z-index: 2;
     pointer-events: none;
+    border-radius: inherit;
 }
 
+/* ── Horizontal glitch sweep bar ────────────────────── */
+#omnikon-glitch-bar {
+    position: absolute;
+    left: -10%;
+    width: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(220,38,38,0.8), transparent);
+    z-index: 4;
+    pointer-events: none;
+    animation: omnikon-glitch-sweep 6s ease-in-out infinite;
+    box-shadow: 0 0 12px rgba(220, 38, 38, 0.6);
+}
+
+@keyframes omnikon-glitch-sweep {
+    0%   { left: -10%; top: 30%; opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { left: 110%; top: 60%; opacity: 1; }
+    51%  { opacity: 0; left: -10%; top: 70%; }
+    60%  { opacity: 0.6; }
+    100% { left: 110%; top: 45%; opacity: 0; }
+}
+
+/* ── Main text container ─────────────────────────────── */
 #omnikon-hero-text {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'JetBrains Mono', 'Inter', system-ui, sans-serif;
     font-weight: 900;
-    font-size: clamp(1.8rem, 8.5vw, 10rem);
-    letter-spacing: -0.04em;
+    font-size: clamp(3rem, 12vw, 10rem);
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     display: flex;
-    gap: 2px;
+    gap: 4px;
     z-index: 3;
     position: relative;
-    transform: scaleY(1.1); /* Compressed, bold look */
-    max-width: 100%;
-    overflow: hidden;
+    /* Subtle perspective tilt */
+    transform: perspective(800px) rotateX(4deg) scaleY(1.05);
+    filter: drop-shadow(0 8px 32px rgba(220, 38, 38, 0.15));
 }
 
+/* ── Individual letter ───────────────────────────────── */
 .omnikon-letter {
     position: relative;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.06);
+    transition: transform 0.3s ease;
 }
 
-/* Molten energy fill using an overlay */
+.omnikon-letter:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+/* ── Chromatic aberration ghost (CA effect) ──────────── */
+.omnikon-letter::before {
+    content: attr(data-char);
+    position: absolute;
+    inset: 0;
+    color: rgba(0, 255, 200, 0.07);
+    transform: translate(-2px, 1px);
+    pointer-events: none;
+    font-weight: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-family: inherit;
+}
+
+.omnikon-letter::after {
+    content: attr(data-char);
+    position: absolute;
+    inset: 0;
+    color: rgba(255, 0, 80, 0.07);
+    transform: translate(2px, -1px);
+    pointer-events: none;
+    font-weight: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-family: inherit;
+}
+
+/* ── Animated fill (molten red → deep crimson) ───────── */
 .omnikon-letter-fill {
     position: absolute;
     top: 0;
     left: 0;
     color: transparent;
-    background: linear-gradient(135deg, #FF0000 0%, #DC2626 20%, #991B1B 40%, #FF0000 60%, #050505 100%);
+    background: linear-gradient(
+        135deg,
+        #ff4d4d 0%,
+        #DC2626 25%,
+        #991B1B 50%,
+        #ff2a4b 75%,
+        #7f1d1d 100%
+    );
     background-size: 400% 400%;
     background-position: 0% 0%;
     -webkit-background-clip: text;
     background-clip: text;
-    clip-path: inset(0 100% 0 0); /* hidden from right */
+    clip-path: inset(0 100% 0 0);
 }
 
-/* Glow effect */
+/* ── Glow layer ──────────────────────────────────────── */
 .omnikon-letter-glow {
     position: absolute;
     top: 0;
@@ -80,4 +183,54 @@
     color: transparent;
     -webkit-text-stroke: 1px rgba(220, 38, 38, 0);
     filter: drop-shadow(0 0 0px rgba(220, 38, 38, 0));
+}
+
+/* ── Pulsing underline accent ────────────────────────── */
+#omnikon-underline {
+    position: relative;
+    z-index: 3;
+    margin-top: 1rem;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, transparent, #DC2626, #ff4d4d, #DC2626, transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(220, 38, 38, 0.6);
+    animation: omnikon-underline-pulse 3s ease-in-out infinite;
+}
+
+@keyframes omnikon-underline-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(220,38,38,0.4); opacity: 0.8; }
+    50%       { box-shadow: 0 0 20px rgba(220,38,38,0.9); opacity: 1; }
+}
+
+/* ── Corner bracket decorations ─────────────────────── */
+#omnikon-corner-tl,
+#omnikon-corner-tr,
+#omnikon-corner-bl,
+#omnikon-corner-br {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0.4;
+    transition: opacity 0.5s;
+}
+#omnikon-hero-animation-container:hover #omnikon-corner-tl,
+#omnikon-hero-animation-container:hover #omnikon-corner-tr,
+#omnikon-hero-animation-container:hover #omnikon-corner-bl,
+#omnikon-hero-animation-container:hover #omnikon-corner-br {
+    opacity: 0.9;
+}
+
+#omnikon-corner-tl { top: 12px;  left: 12px;  border-top: 2px solid #DC2626; border-left: 2px solid #DC2626; }
+#omnikon-corner-tr { top: 12px;  right: 12px; border-top: 2px solid #DC2626; border-right: 2px solid #DC2626; }
+#omnikon-corner-bl { bottom: 12px; left: 12px;  border-bottom: 2px solid #DC2626; border-left: 2px solid #DC2626; }
+#omnikon-corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid #DC2626; border-right: 2px solid #DC2626; }
+
+/* ── Reduce motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    #omnikon-hero-animation-container::after { animation: none; }
+    #omnikon-glitch-bar { animation: none; display: none; }
+    #omnikon-underline   { animation: none; }
 }
