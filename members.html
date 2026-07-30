@@ -76,13 +76,13 @@
                 Star on GitHub
             </button></a>
 
-<button class="md:hidden text-on-surface p-2" onclick="toggleMobileMenu()" aria-label="menu">
+<button id="mobile-menu-toggle-btn" class="md:hidden text-on-surface p-1.5 sm:p-2 shrink-0 flex items-center justify-center cursor-pointer" onclick="toggleMobileMenu()" aria-label="menu">
 <span class="material-symbols-outlined" data-icon="menu">menu</span>
 </button>
 </div>
 
 <!-- Mobile Dropdown Menu -->
-<div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-[#050505]/95 backdrop-blur-md border-b border-surface-variant/30 flex-col items-center py-8 space-y-6 md:hidden shadow-2xl"><a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="index.html" onclick="toggleMobileMenu()">Home</a>
+<div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-[#050505]/95 backdrop-blur-md border-b border-surface-variant/30 flex-col items-center py-8 space-y-6 md:hidden shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto"><a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="index.html" onclick="toggleMobileMenu()">Home</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="achievements.html" onclick="toggleMobileMenu()">Achievements</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="projects.html" onclick="toggleMobileMenu()">Projects</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="members.html" onclick="toggleMobileMenu()">Members</a>
@@ -98,12 +98,15 @@
 <script>
     function toggleMobileMenu() {
         const menu = document.getElementById('mobile-menu');
+        const icon = document.querySelector('#mobile-menu-toggle-btn [data-icon="menu"], #mobile-menu-toggle-btn .material-symbols-outlined');
         if (menu.classList.contains('hidden')) {
             menu.classList.remove('hidden');
             menu.classList.add('flex');
+            if (icon) icon.textContent = 'close';
         } else {
             menu.classList.add('hidden');
             menu.classList.remove('flex');
+            if (icon) icon.textContent = 'menu';
         }
     }
 </script>

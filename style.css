@@ -778,3 +778,27 @@ h1 {
     gap: 8px;
   }
 }
+
+/* ── Mobile Viewport & Touch Safeguards ── */
+@media (max-width: 640px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card, .glass-panel {
+    max-width: 100%;
+    box-sizing: border-border-box;
+  }
+
+  /* Prevent oversized images or fixed containers from creating horizontal page scroll */
+  img, svg, canvas, video {
+    max-width: 100% !important;
+  }
+}
+

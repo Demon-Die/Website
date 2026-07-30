@@ -90,11 +90,11 @@
       "url": "https://hackathon-website-sooty-delta.vercel.app/"
     }
   }
-]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/main-CKfify-2.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/common-styles-DZufrlZj.js">
-  <link rel="modulepreload" crossorigin href="/assets/particles-Bn8_GTIR.js">
-  <link rel="modulepreload" crossorigin href="/assets/interactivity-_DcD2PZK.js">
-  <link rel="stylesheet" crossorigin href="/assets/common-styles-ClT4f7lr.css">
+]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/main-EbgHBFEk.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/common-styles-QqiiMBNJ.js">
+  <link rel="modulepreload" crossorigin href="/assets/particles-CJdnim8j.js">
+  <link rel="modulepreload" crossorigin href="/assets/interactivity-Dq3wj-mJ.js">
+  <link rel="stylesheet" crossorigin href="/assets/common-styles-B9DOf9Bj.css">
   <link rel="stylesheet" crossorigin href="/assets/particles-Bnl5njdN.css">
   <link rel="stylesheet" crossorigin href="/assets/main-XjMRtk73.css">
 </head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg overflow-x-hidden">
@@ -117,7 +117,7 @@
                 Star on GitHub
             </button></a>
 
-<button class="md:hidden text-on-surface p-1.5 sm:p-2 shrink-0 flex items-center justify-center" onclick="toggleMobileMenu()" aria-label="menu">
+<button id="mobile-menu-toggle-btn" class="md:hidden text-on-surface p-1.5 sm:p-2 shrink-0 flex items-center justify-center cursor-pointer" onclick="toggleMobileMenu()" aria-label="menu">
 <span class="material-symbols-outlined" data-icon="menu">menu</span>
 </button>
 </div>
@@ -139,12 +139,15 @@
 <script>
     function toggleMobileMenu() {
         const menu = document.getElementById('mobile-menu');
+        const icon = document.querySelector('#mobile-menu-toggle-btn [data-icon="menu"], #mobile-menu-toggle-btn .material-symbols-outlined');
         if (menu.classList.contains('hidden')) {
             menu.classList.remove('hidden');
             menu.classList.add('flex');
+            if (icon) icon.textContent = 'close';
         } else {
             menu.classList.add('hidden');
             menu.classList.remove('flex');
+            if (icon) icon.textContent = 'menu';
         }
     }
 </script>
@@ -1102,7 +1105,7 @@
                     <div class="absolute top-[60%] left-[15%] w-1 h-1 bg-[#FFFFFF] rounded-full opacity-50 blur-[0.5px] animate-[float_7s_ease-in-out_infinite] pointer-events-none" style="animation-delay: 2s;"></div>
                     
                     <!-- Logo -->
-                    <img src="/assets/LogoIssueSwipeLight-D6ZfHGb8.png" alt="IssueSwipe Logo" class="relative z-10 w-[400px] lg:w-[500px] scale-110 lg:scale-125 h-auto object-contain drop-shadow-[0_0_30px_rgba(181,109,255,0.2)] animate-float-premium group-hover:drop-shadow-[0_0_50px_rgba(181,109,255,0.4)] transition-all duration-700">
+                    <img src="/assets/LogoIssueSwipeLight-D6ZfHGb8.png" alt="IssueSwipe Logo" class="relative z-10 w-full max-w-[400px] lg:max-w-[500px] scale-100 lg:scale-110 h-auto object-contain drop-shadow-[0_0_30px_rgba(181,109,255,0.2)] animate-float-premium group-hover:drop-shadow-[0_0_50px_rgba(181,109,255,0.4)] transition-all duration-700">
                 </div>
             </div>
         </div>
