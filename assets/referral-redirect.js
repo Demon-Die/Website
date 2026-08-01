@@ -106,9 +106,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   } catch (err) {
     console.error("Tracking error:", err);
-    // Even if tracking fails (network error, adblocker blocks firestore), we still redirect.
-  }
-  
+    }
+  }, 5000);
   // Finally, redirect to Unstop
   window.location.replace(DESTINATION_URL);
 });
