@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
           }
 
-          // Load Admin Data
+          // Load Admin UI and Data
+          showAdminUI();
           loadAdminReferrals();
           
         } catch (err) {
@@ -34,23 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showAccessDenied() {
+  // Hide the main admin UI
   const main = document.querySelector('main');
-  if (main) {
-    main.innerHTML = `
-      <div class="min-h-[50vh] flex items-center justify-center bg-background p-6 text-center">
-        <div class="glass-panel p-12 max-w-md w-full border border-primary">
-          <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
-          <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
-          <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required or insufficient clearance level.</p>
-          <div class="flex flex-col gap-3">
-            <button onclick="if(window.openAuthModal) window.openAuthModal()" class="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-primary text-background font-bold transition-colors font-mono text-sm uppercase glow-hover">
-              LOGIN TO CONTINUE
-            </button>
-            <a href="/index.html" class="w-full inline-flex justify-center items-center gap-2 px-6 py-2 bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-colors font-mono text-sm uppercase glow-hover">Return to Safe Zone</a>
-          </div>
-        </div>
-      </div>
-    `;
+  if (main) main.classList.add('hidden');
+  // Show the access‑denied overlay
+  const denied = document.getElementById('admin-access-denied');
+  if (denied) {
+    denied.classList.remove('hidden');
+    denied.classList.add('flex');
+  }
+}
+
+// Helper to show the admin UI after auth succeeds
+function showAdminUI() {
+  const main = document.querySelector('main');
+  if (main) main.classList.remove('hidden');
+  const denied = document.getElementById('admin-access-denied');
+  if (denied) {
+    denied.classList.add('hidden');
+    denied.classList.remove('flex');
   }
 }
 
