@@ -1,7 +1,7 @@
 import { getDb } from './db.js';
 
 // Configuration
-const DESTINATION_URL = 'https://unstop.com/p/omnikon-national-hackathon-2026-omnikon-1715716';
+const DESTINATION_URL = 'https://unstop.com/hackathons/omnikon-national-hackathon-2026-omnikon-1715716';
 const COOKIE_NAME = 'omni_ref_click';
 const COOKIE_DAYS = 30;
 
