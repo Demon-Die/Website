@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // USERS / AMBASSADORS COLLECTION
+    match /users/{userId} {
+      // Anyone can read if they are the owner, or if they are an admin
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Users can create their own profile, but cannot assign themselves 'admin' or set verified counts
+      allow create: if isOwner(userId)
+                    && request.resource.data.role != 'admin'
+                    && request.resource.data.verifiedRegistrations == 0;
+                    
+      // Users can update basic profile info, admins can update anything
+      allow update: if isAdmin() || (
+        isOwner(userId) 
+        && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['role', 'ambassadorId', 'verifiedRegistrations', 'totalClicks', 'uniqueClicks'])
+      );
+      
+      allow delete: if isAdmin();
+    }
+
+    // REFERRALS / CLICKS COLLECTION
+    match /clicks/{clickId} {
+      // Anyone can create a click (public referral tracking)
+      allow create: if true;
+      // Only admins can view/edit all clicks
+      allow read, update, delete: if isAdmin();
+    }
+
+    // REGISTRATIONS (Actual hackathon registrations)
+    match /referrals/{refId} {
+      allow create: if true;
+      // Ambassadors can read their own referrals
+      allow read: if isAdmin() || (
+        isAuthenticated() && 
+        resource.data.ambassadorId == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.ambassadorId
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // COUNTERS (For sequential ID generation)
+    match /counters/{counterId} {
+      allow read: if true;
+      // Only admins can increment the ambassador ID counter
+      allow write: if isAdmin();
+    }
+
+    // LEADERBOARD (Publicly accessible)
+    match /leaderboard/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

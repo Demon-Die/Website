@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <td class="px-6 py-4 text-sm text-on-surface-variant">${amb.college || '---'}</td>
           <td class="px-6 py-4 text-right">
             <span class="inline-flex items-center justify-center bg-surface-variant/50 text-on-surface font-mono text-sm px-3 py-1 rounded border border-surface-variant">
-              ${amb.totalReferrals || 0}
+              ${amb.verifiedRegistrations || 0}
             </span>
           </td>
         </tr>
