@@ -185,7 +185,7 @@
     </aside>
     
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col gap-6" id="dashboard-content">
+    <div class="flex-1 flex flex-col gap-6 relative" id="dashboard-content">
       <!-- Overview Tab -->
       <div id="tab-overview">
         <h1 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Overview</h1>
@@ -218,6 +218,28 @@
           <h3 class="text-xl font-bold mb-4 border-b border-surface-variant pb-2">Recent Activity</h3>
           <div id="recent-activity-list" class="flex flex-col gap-3">
             <p class="text-sm text-on-surface-variant">Loading activity...</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Referrals Tab -->
+      <div id="tab-referrals" class="hidden">
+        <h1 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Referral History</h1>
+        <div class="glass-panel p-6">
+          <p class="text-sm text-on-surface-variant mb-6">View all incoming clicks and verified registrations from your unique referral link.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-surface-variant text-on-surface-variant">
+                  <th class="pb-2 font-medium">Date</th>
+                  <th class="pb-2 font-medium">IP Address</th>
+                  <th class="pb-2 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody id="referral-history-table">
+                <tr><td colspan="3" class="py-4 text-center text-on-surface-variant">Loading referrals...</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
