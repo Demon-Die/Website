@@ -166,23 +166,44 @@
         <button onclick="switchAdminTab('analytics')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">System Analytics</button>
       </nav>
     </aside>
-    <div class="flex-1 glass-panel p-6">
-      <h1 class="text-2xl font-bold mb-6 text-accent">Pending Verifications</h1>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="border-b border-surface-variant text-on-surface-variant">
-              <th class="pb-2 font-medium">Date</th>
-              <th class="pb-2 font-medium">Ambassador</th>
-              <th class="pb-2 font-medium">IP/Details</th>
-              <th class="pb-2 font-medium">Campaign</th>
-              <th class="pb-2 font-medium">Action</th>
-            </tr>
-          </thead>
-          <tbody id="admin-referrals-table">
-            <tr><td colspan="5" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
-          </tbody>
-        </table>
+    <div class="flex-1 glass-panel p-6 relative">
+      <div id="tab-referrals">
+        <h1 class="text-2xl font-bold mb-6 text-accent">Pending Referrals</h1>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-surface-variant text-on-surface-variant">
+                <th class="pb-2 font-medium">Date</th>
+                <th class="pb-2 font-medium">Ambassador ID</th>
+                <th class="pb-2 font-medium">IP/Details</th>
+                <th class="pb-2 font-medium">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-referrals-table">
+              <tr><td colspan="4" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="tab-ambassadors" class="hidden">
+        <h1 class="text-2xl font-bold mb-6 text-accent">Pending Ambassadors</h1>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-surface-variant text-on-surface-variant">
+                <th class="pb-2 font-medium">Date</th>
+                <th class="pb-2 font-medium">Name</th>
+                <th class="pb-2 font-medium">Email</th>
+                <th class="pb-2 font-medium">Status</th>
+                <th class="pb-2 font-medium">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-ambassadors-table">
+              <tr><td colspan="5" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

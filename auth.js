@@ -92,13 +92,13 @@
     modal.innerHTML = `
       <div class="auth-modal-content">
         <div class="flex items-center justify-between border-b border-surface-variant pb-3 mb-6">
-          <span class="text-primary font-label-mono text-sm tracking-wider font-bold">SECURE_GATE 
+          <span class="text-primary font-label-mono text-sm tracking-wider font-bold">SECURE_GATE</span> 
           <button id="auth-close" class="text-on-surface-variant hover:text-primary transition-colors text-sm">✖</button>
         </div>
-        <p class="text-on-surface-variant font-code-sm text-code-sm mb-6 uppercase tracking-wider leading-relaxed">
-          Awaiting verification token. Select a provider below to connect to the Omnikon network.
+        <p class="text-on-surface-variant font-code-sm text-code-sm mb-4 uppercase tracking-wider leading-relaxed">
+          Select a provider below to connect to the Omnikon network.
         </p>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 mb-4">
           <button id="auth-github-btn" class="group flex items-center justify-center gap-3 bg-transparent text-on-surface border border-surface-variant hover:border-primary hover:text-primary transition-all duration-200 py-3 font-label-mono text-xs glow-btn-red">
             <span class="material-symbols-outlined text-[16px]">terminal</span>
             <span class="font-bold tracking-widest">GITHUB_OAUTH</span>
@@ -107,6 +107,20 @@
             <span class="material-symbols-outlined text-[16px]">google</span>
             <span class="font-bold tracking-widest">GOOGLE_OAUTH</span>
           </button>
+        </div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="h-px bg-surface-variant flex-1"></div>
+          <span class="text-on-surface-variant font-code-sm text-[10px] uppercase">OR EMAIL</span>
+          <div class="h-px bg-surface-variant flex-1"></div>
+        </div>
+        <div class="flex flex-col gap-3">
+          <input type="email" id="auth-email-input" placeholder="ACCESS_EMAIL" class="bg-surface-elevation border border-border rounded-lg px-4 py-2 focus:outline-none focus:border-primary text-on-surface font-mono text-sm">
+          <input type="password" id="auth-password-input" placeholder="SECRET_KEY" class="bg-surface-elevation border border-border rounded-lg px-4 py-2 focus:outline-none focus:border-primary text-on-surface font-mono text-sm">
+          <div class="flex gap-2 mt-1">
+            <button id="auth-email-login" class="flex-1 py-2 bg-primary/20 hover:bg-primary/40 border border-primary text-primary font-mono text-xs font-bold transition-colors">LOGIN</button>
+            <button id="auth-email-signup" class="flex-1 py-2 bg-surface-variant/20 hover:bg-surface-variant/40 border border-surface-variant text-on-surface font-mono text-xs transition-colors">SIGN UP</button>
+          </div>
+          <p id="auth-error-msg" class="text-primary text-[10px] font-mono hidden mt-1"></p>
         </div>
       </div>
     `;
@@ -121,9 +135,40 @@
     
     document.getElementById('auth-github-btn').addEventListener('click', () => signIn('github'));
     document.getElementById('auth-google-btn').addEventListener('click', () => signIn('google'));
+    
+    document.getElementById('auth-email-login').addEventListener('click', () => signInWithEmail('login'));
+    document.getElementById('auth-email-signup').addEventListener('click', () => signInWithEmail('signup'));
+  }
+  
+  function showError(msg) {
+    const errorEl = document.getElementById('auth-error-msg');
+    errorEl.textContent = msg;
+    errorEl.classList.remove('hidden');
   }
 
-  
+  function signInWithEmail(type) {
+    const email = document.getElementById('auth-email-input').value;
+    const password = document.getElementById('auth-password-input').value;
+    const errorEl = document.getElementById('auth-error-msg');
+    errorEl.classList.add('hidden');
+    
+    if (!email || !password) {
+      showError('EMAIL AND PASSWORD REQUIRED');
+      return;
+    }
+    
+    const promise = type === 'login' 
+      ? auth.signInWithEmailAndPassword(email, password)
+      : auth.createUserWithEmailAndPassword(email, password);
+      
+    promise.then(() => {
+      modal.classList.remove('open');
+    }).catch(error => {
+      console.error('Email auth failed:', error);
+      showError(`ERR: ${error.message}`);
+    });
+  }
+
   function signIn(providerName) {
     let provider;
     if (providerName === 'github') {
@@ -133,12 +178,18 @@
     }
 
     auth.signInWithPopup(provider)
-      .then(() => {
+      .then((result) => {
+        // Linking accounts is generally handled on the backend or in Firebase Console settings.
+        // If a user with the same email exists, Firebase might throw an error we need to catch.
         modal.classList.remove('open');
       })
       .catch((error) => {
-        console.error('Sign-in failed:', error);
-        alert(`Authentication failure: ${error.message}`);
+        if (error.code === 'auth/account-exists-with-different-credential') {
+          showError('ACCOUNT ALREADY EXISTS WITH DIFFERENT PROVIDER. USE EMAIL LOGIN.');
+        } else {
+          console.error('Sign-in failed:', error);
+          showError(`ERR: ${error.message}`);
+        }
       });
   }
 

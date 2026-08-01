@@ -9,12 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
       
       firebase.auth().onAuthStateChanged(async (user) => {
         if (!user) {
-          // If not logged in, wait a bit to see if auth.js opens the modal, or redirect
-          console.log("No user found. Please log in.");
           document.getElementById('dashboard-content').innerHTML = `
-            <div class="glass-panel p-12 text-center">
-              <h2 class="text-2xl font-bold text-accent mb-4">Access Denied</h2>
-              <p class="text-on-surface-variant">You must be logged in to access the Ambassador Portal.</p>
+            <div class="min-h-[50vh] flex items-center justify-center">
+              <div class="glass-panel p-12 max-w-md w-full border border-primary text-center">
+                <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
+                <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
+                <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
+                <a href="/ambassadors.html" class="inline-flex items-center gap-2 px-6 py-2 bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-colors font-mono text-sm uppercase glow-hover">Return to Landing</a>
+              </div>
             </div>
           `;
           return;
@@ -24,14 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
           // Load ambassador data
           let profile = await getAmbassadorData(user.uid);
           
-          // If it's a new user, create a profile automatically (for MVP purposes)
           if (!profile) {
+            // Only admins should create ambassadors conceptually, but for MVP/Self-serve we create it here
+            // Note: In strict flow, admin approves them first.
             profile = await createAmbassadorProfile(user);
           }
           
           if (profile.role === 'admin') {
-            // Suggest redirecting to admin panel
-            console.log("User is admin. Can access admin panel.");
+            window.location.replace('/admin.html');
+            return;
           }
 
           renderDashboard(profile);
@@ -51,7 +54,15 @@ function renderDashboard(profile) {
   const avatarEl = document.getElementById('ambassador-avatar');
   
   if (nameEl) nameEl.textContent = profile.name || 'Ambassador';
-  if (idEl) idEl.textContent = profile.ambassadorId;
+  if (idEl) {
+    if (profile.status === 'pending') {
+      idEl.textContent = 'PENDING APPROVAL';
+      idEl.classList.add('text-accent');
+      idEl.classList.remove('text-primary');
+    } else {
+      idEl.textContent = profile.ambassadorId;
+    }
+  }
   if (avatarEl && profile.photoURL) avatarEl.src = profile.photoURL;
   
   const rankEl = document.getElementById('stat-rank');
@@ -59,16 +70,21 @@ function renderDashboard(profile) {
   const clicksEl = document.getElementById('stat-clicks');
   const convEl = document.getElementById('stat-conversion');
   
-  // For MVP, calculate rank locally or just show tier
+  // Dashboard Metrics Binding
   if (rankEl) rankEl.textContent = profile.tier || 'Bronze';
-  if (refsEl) refsEl.textContent = profile.totalReferrals || 0;
+  if (refsEl) refsEl.textContent = profile.verifiedRegistrations || 0;
   
-  // Fake clicks/conversion for now until we build link click tracking
-  const fakeClicks = (profile.totalReferrals || 0) * 8 + 12;
-  const fakeConv = profile.totalReferrals > 0 ? Math.round((profile.totalReferrals / fakeClicks) * 100) : 0;
+  const uniqueClicks = profile.uniqueClicks || 0;
+  const totalClicks = profile.totalClicks || 0;
   
-  if (clicksEl) clicksEl.textContent = fakeClicks;
-  if (convEl) convEl.textContent = fakeConv + '%';
+  if (clicksEl) clicksEl.textContent = totalClicks;
+  
+  let conversionRate = 0;
+  if (uniqueClicks > 0) {
+    conversionRate = Math.round(((profile.verifiedRegistrations || 0) / uniqueClicks) * 100);
+  }
+  
+  if (convEl) convEl.textContent = conversionRate + '%';
 }
 
 async function loadReferrals(ambassadorId) {
@@ -114,10 +130,22 @@ window.switchTab = function(tabName) {
 
 window.copyReferralLink = function() {
   const idEl = document.getElementById('ambassador-id');
-  if (!idEl || idEl.textContent === '--') return;
+  if (!idEl || idEl.textContent === '--' || idEl.textContent === 'PENDING APPROVAL') {
+    alert('Your ambassador account is pending approval.');
+    return;
+  }
   
-  const link = window.location.origin + '/index.html?ref=' + idEl.textContent;
+  const link = window.location.origin + '/r.html?id=' + idEl.textContent;
   navigator.clipboard.writeText(link).then(() => {
-    alert("Referral link copied to clipboard!\\n" + link);
+    // Show Toast
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-6 right-6 bg-surface-elevation border border-primary text-primary px-6 py-3 font-mono text-sm shadow-[0_0_15px_rgba(255,49,49,0.2)] z-50 transition-opacity duration-300';
+    toast.innerHTML = '<span class="material-symbols-outlined align-middle mr-2 text-[18px]">check_circle</span>Referral link copied.';
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
   });
 };

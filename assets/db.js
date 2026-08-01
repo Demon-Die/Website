@@ -66,6 +66,8 @@ export async function createAmbassadorProfile(user, additionalData = {}) {
     email: user.email || '',
     photoURL: user.photoURL || '',
     role: 'ambassador',
+    status: 'pending',
+    ambassadorId: null, // Will be generated upon admin approval
     college: '',
     branch: '',
     year: '',
@@ -74,8 +76,10 @@ export async function createAmbassadorProfile(user, additionalData = {}) {
     socialLinks: { linkedin: '', github: '', discord: '', x: '' },
     badges: [],
     totalReferrals: 0,
+    verifiedRegistrations: 0,
+    totalClicks: 0,
+    uniqueClicks: 0,
     tier: 'Bronze',
-    ambassadorId: 'OMNI26-AMB-' + user.uid.substring(0, 6).toUpperCase(),
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     ...additionalData
   };
@@ -116,10 +120,28 @@ export async function getActiveCampaigns() {
 // ── Leaderboard ──────────────────────────────────────────
 export async function getLeaderboard(limit = 100) {
   const db = await getDb();
+  // Fetch only active ambassadors
   const snapshot = await db.collection('users')
     .where('role', '==', 'ambassador')
-    .orderBy('totalReferrals', 'desc')
+    .where('status', '==', 'active')
+    .orderBy('verifiedRegistrations', 'desc')
     .limit(limit)
     .get();
-  return snapshot.docs.map(doc => doc.data());
+    
+  let data = snapshot.docs.map(doc => doc.data());
+  
+  // Sort ties manually in memory
+  data.sort((a, b) => {
+    if (b.verifiedRegistrations !== a.verifiedRegistrations) {
+      return (b.verifiedRegistrations || 0) - (a.verifiedRegistrations || 0);
+    }
+    if (b.uniqueClicks !== a.uniqueClicks) {
+      return (b.uniqueClicks || 0) - (a.uniqueClicks || 0);
+    }
+    const aTime = a.createdAt ? a.createdAt.toMillis() : Date.now();
+    const bTime = b.createdAt ? b.createdAt.toMillis() : Date.now();
+    return aTime - bTime; // Oldest first
+  });
+  
+  return data;
 }
