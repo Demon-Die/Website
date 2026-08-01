@@ -26,10 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
           // Load ambassador data
           let profile = await getAmbassadorData(user.uid);
           
+          const pendingApp = sessionStorage.getItem('pendingAmbassadorApp');
+          let appData = {};
+          if (pendingApp) {
+            try { appData = JSON.parse(pendingApp); } catch(e){}
+            sessionStorage.removeItem('pendingAmbassadorApp');
+          }
+          
           if (!profile) {
-            // Only admins should create ambassadors conceptually, but for MVP/Self-serve we create it here
             // Note: In strict flow, admin approves them first.
-            profile = await createAmbassadorProfile(user);
+            profile = await createAmbassadorProfile(user, appData);
+          } else if (Object.keys(appData).length > 0) {
+            // Update existing profile with new app data
+            const db = await getDb();
+            await db.collection('users').doc(user.uid).update(appData);
+            profile = { ...profile, ...appData };
           }
           
           if (profile.role === 'admin') {
