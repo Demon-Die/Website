@@ -90,6 +90,7 @@ export async function createAmbassadorProfile(user, additionalData = {}) {
 
 // ── Referral System ──────────────────────────────────────
 export async function getReferrals(ambassadorId) {
+  if (!ambassadorId) return [];
   const db = await getDb();
   const snapshot = await db.collection('referrals')
     .where('ambassadorId', '==', ambassadorId)

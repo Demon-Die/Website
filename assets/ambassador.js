@@ -100,43 +100,80 @@ function renderDashboard(profile) {
 
 async function loadReferrals(ambassadorId) {
   const container = document.getElementById('recent-activity-list');
-  if (!container) return;
+  const tableBody = document.getElementById('referral-history-table');
+  
+  if (!ambassadorId) {
+    if (container) container.innerHTML = '<p class="text-sm text-on-surface-variant">Your account is pending approval.</p>';
+    if (tableBody) tableBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-on-surface-variant">Your account is pending approval.</td></tr>';
+    return;
+  }
   
   try {
     const referrals = await getReferrals(ambassadorId);
     
     if (referrals.length === 0) {
-      container.innerHTML = '<p class="text-sm text-on-surface-variant">No referrals yet. Share your link to get started!</p>';
+      if (container) container.innerHTML = '<p class="text-sm text-on-surface-variant">No referrals yet. Share your link to get started!</p>';
+      if (tableBody) tableBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-on-surface-variant">No referrals yet. Share your link to get started!</td></tr>';
       return;
     }
     
-    container.innerHTML = referrals.map(ref => `
-      <div class="flex items-center justify-between p-3 bg-surface-variant/20 border border-surface-variant/50 rounded-lg">
-        <div>
-          <p class="font-mono text-xs text-on-surface">IP: ${ref.visitorIp || 'Hidden'}</p>
-          <p class="text-[10px] text-on-surface-variant">${new Date(ref.timestamp?.toDate()).toLocaleString()}</p>
+    // Fill Recent Activity (Overview)
+    if (container) {
+      container.innerHTML = referrals.slice(0, 5).map(ref => `
+        <div class="flex items-center justify-between p-3 bg-surface-variant/20 border border-surface-variant/50 rounded-lg">
+          <div>
+            <p class="font-mono text-xs text-on-surface">IP: ${ref.visitorIp || 'Hidden'}</p>
+            <p class="text-[10px] text-on-surface-variant">${new Date(ref.timestamp?.toDate()).toLocaleString()}</p>
+          </div>
+          <div>
+            ${ref.status === 'verified' 
+              ? '<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
+              : '<span class="px-2 py-1 bg-accent/20 text-accent text-[10px] font-bold rounded uppercase">Pending</span>'}
+          </div>
         </div>
-        <div>
-          ${ref.status === 'verified' 
-            ? '<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
-            : '<span class="px-2 py-1 bg-accent/20 text-accent text-[10px] font-bold rounded uppercase">Pending</span>'}
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
+    
+    // Fill Referral History Table (Referrals Tab)
+    if (tableBody) {
+      tableBody.innerHTML = referrals.map(ref => `
+        <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
+          <td class="py-3 text-xs text-on-surface-variant">${new Date(ref.timestamp?.toDate()).toLocaleDateString()}</td>
+          <td class="py-3 font-mono text-xs">${ref.visitorIp || 'Unknown'}</td>
+          <td class="py-3">
+            ${ref.status === 'verified' 
+              ? '<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
+              : '<span class="px-2 py-1 bg-accent/20 text-accent text-[10px] font-bold rounded uppercase">Pending</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
     
   } catch (err) {
     console.error("Error loading referrals:", err);
-    container.innerHTML = '<p class="text-sm text-accent">Error loading activity.</p>';
+    if (container) container.innerHTML = '<p class="text-sm text-accent">Error loading activity.</p>';
+    if (tableBody) tableBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-accent">Error loading activity.</td></tr>';
   }
 }
 
 // Attach to window so HTML inline onclick can access it
 window.switchTab = function(tabName) {
-  console.log("Switching to tab:", tabName);
-  // For MVP, just alert. To be fully implemented.
-  if (tabName !== 'overview') {
+  const tabs = ['overview', 'referrals'];
+  if (!tabs.includes(tabName)) {
     alert(tabName.toUpperCase() + " section is under construction for the upcoming campaign.");
+    return;
   }
+  
+  tabs.forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) {
+      if (t === tabName) {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    }
+  });
 };
 
 window.copyReferralLink = function() {
