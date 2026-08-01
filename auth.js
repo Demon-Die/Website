@@ -126,11 +126,15 @@
     `;
     document.body.appendChild(modal);
 
-    
     document.getElementById('auth-close').addEventListener('click', () => modal.classList.remove('open'));
     modal.addEventListener('click', (e) => {
       if (e.target === modal) modal.classList.remove('open');
     });
+
+    // Expose open function globally
+    window.openAuthModal = function() {
+      modal.classList.add('open');
+    };
 
     
     document.getElementById('auth-github-btn').addEventListener('click', () => signIn('github'));
