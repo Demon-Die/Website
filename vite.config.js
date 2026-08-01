@@ -18,7 +18,11 @@ export default defineConfig({
         err404: resolve(__dirname, '404err.html'),
         projects: resolve(__dirname, 'projects.html'),
         members: resolve(__dirname, 'members.html'),
-        achievements: resolve(__dirname, 'achievements.html')
+        achievements: resolve(__dirname, 'achievements.html'),
+        ambassadors: resolve(__dirname, 'ambassadors.html'),
+        admin: resolve(__dirname, 'admin.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
+        leaderboard: resolve(__dirname, 'leaderboard.html')
       }
     }
   }
