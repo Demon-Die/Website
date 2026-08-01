@@ -1,11 +1,11 @@
 {
   "name": "website",
   "version": "1.0.0",
-  "description": "[![GitHub](https://img.shields.io/badge/GitHub-Demon--Die-181717?style=for-the-badge&logo=github)](https://github.com/Demon-Die) [![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/4waT35Hxs) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/Demon-Die/Website?tab=MIT-1-ov-file)",
+  "description": "[![GitHub](https://img.shields.io/badge/GitHub-Demon--Die-181717?style=for-the-badge&logo=github)](https://github.com/Omnikon-Org) [![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/yWtjK2Tb8T) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/Omnikon-Org/Website?tab=MIT-1-ov-file)",
   "main": "auth.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node generate-env.js && vite",
+    "build": "node generate-env.js && vite build",
     "preview": "vite preview"
   },
   "repository": {
@@ -21,6 +21,23 @@
   },
   "homepage": "https://github.com/Pranav00076/Website#readme",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie": "^0.6.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.1.2",
+    "bcrypt": "^6.0.0",
+    "cheerio": "^1.2.0",
+    "cookie": "^2.0.1",
+    "jsonwebtoken": "^9.0.3",
+    "prisma": "^5.22.0",
+    "resend": "^6.18.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2",
     "vite": "^8.0.16"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "gsap": "^3.15.0",
+    "motion": "^12.42.2"
   }
 }

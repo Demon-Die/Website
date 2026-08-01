@@ -84,3 +84,34 @@ tailwind.config = {
         }
     }
 }
+
+// Page Transition Logic
+document.addEventListener('DOMContentLoaded', () => {
+    // We bind to document to capture all clicks
+    document.addEventListener('click', (e) => {
+        // Find closest anchor tag
+        const link = e.target.closest('a');
+        
+        // If it's a valid local link (not external, not new tab, not an anchor link)
+        if (
+            link && 
+            link.href && 
+            link.host === window.location.host && 
+            link.target !== '_blank' &&
+            !link.hasAttribute('download') &&
+            !link.href.includes('#') &&
+            !link.href.startsWith('javascript:')
+        ) {
+            e.preventDefault();
+            const targetUrl = link.href;
+            
+            // Add exiting animation class
+            document.body.classList.add('page-exiting');
+            
+            // Wait for animation to finish before navigating (0.3s matches CSS)
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 300);
+        }
+    });
+});

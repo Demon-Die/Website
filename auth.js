@@ -96,7 +96,7 @@
           <button id="auth-close" class="text-on-surface-variant hover:text-primary transition-colors text-sm">✖</button>
         </div>
         <p class="text-on-surface-variant font-code-sm text-code-sm mb-6 uppercase tracking-wider leading-relaxed">
-          Awaiting verification token. Select a provider below to connect to the DemonDie network.
+          Awaiting verification token. Select a provider below to connect to the Omnikon network.
         </p>
         <div class="flex flex-col gap-4">
           <button id="auth-github-btn" class="group flex items-center justify-center gap-3 bg-transparent text-on-surface border border-surface-variant hover:border-primary hover:text-primary transition-all duration-200 py-3 font-label-mono text-xs glow-btn-red">
@@ -191,10 +191,10 @@
         }
       }
 
-      const avatarUrl = user.photoURL || './public/LogoDemonDie.jpeg';
+      const avatarUrl = user.photoURL || './public/LogoOmnikon.jpeg';
       authWidget.innerHTML = `
         <div class="flex items-center gap-3">
-          <img class="w-[72px] h-[72px] rounded-full border border-primary object-cover" src="${avatarUrl}" alt="Profile">
+          <img class="w-8 h-8 rounded-full border border-primary object-cover" src="${avatarUrl}" alt="Profile">
           <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer">
             [ LOGOUT ]
           </button>

@@ -7,7 +7,7 @@
       await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
     }
 
-    const token = window.env?.GIT_DEMONDIE_ALL || window.env?.GITHUB_TOKEN;
+    const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;
     container.innerHTML = '';
 
     const renderItem = (userLogin, userAvatar, title, timeStr, link) => {
@@ -76,7 +76,7 @@
       try {
         const query = `
           query {
-            repository(owner: "Demon-Die", name: "Website") {
+            repository(owner: "Omnikon-Org", name: "Website") {
               discussions(first: 8, orderBy: {field: CREATED_AT, direction: DESC}) {
                 nodes {
                   title
@@ -123,16 +123,16 @@
     let data;
     try {
       const headers = token ? { Authorization: `token ${token}` } : {};
-      let resp = await fetch('https://api.github.com/search/issues?q=org:Demon-Die+sort:created-desc', { headers });
+      let resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc', { headers });
       if (!resp.ok && resp.status === 401 && token) {
         console.warn('GitHub search issues returned 401 with token, retrying anonymously...');
-        resp = await fetch('https://api.github.com/search/issues?q=org:Demon-Die+sort:created-desc');
+        resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
       }
       if (!resp.ok) throw new Error('GitHub search issues failed');
       data = await resp.json();
     } catch (e) {
       console.warn('Authenticated search failed, trying final anonymous request...', e);
-      const resp = await fetch('https://api.github.com/search/issues?q=org:Demon-Die+sort:created-desc');
+      const resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
       if (!resp.ok) throw new Error('Anonymous backup search failed');
       data = await resp.json();
     }

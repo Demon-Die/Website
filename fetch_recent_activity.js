@@ -7,21 +7,21 @@
       await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
     }
 
-    const token = window.env?.GIT_DEMONDIE_ALL || window.env?.GITHUB_TOKEN;
+    const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;
     let events;
 
     try {
       const headers = token ? { Authorization: `token ${token}` } : {};
-      let resp = await fetch('https://api.github.com/orgs/Demon-Die/events', { headers });
+      let resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events', { headers });
       if (!resp.ok && resp.status === 401 && token) {
         console.warn('GitHub events request returned 401 with token, retrying anonymously...');
-        resp = await fetch('https://api.github.com/orgs/Demon-Die/events');
+        resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
       }
       if (!resp.ok) throw new Error('GitHub events request failed');
       events = await resp.json();
     } catch (e) {
       console.warn('Authenticated fetch failed, trying final anonymous request...', e);
-      const resp = await fetch('https://api.github.com/orgs/Demon-Die/events');
+      const resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
       if (!resp.ok) throw new Error('Anonymous backup request failed');
       events = await resp.json();
     }
@@ -86,7 +86,7 @@
       const p = document.createElement('p');
       p.className = 'text-on-surface font-code-sm text-code-sm';
       const actor = event.actor?.login || 'Someone';
-      const repoName = event.repo?.name ? event.repo.name.replace('Demon-Die/', '') : '';
+      const repoName = event.repo?.name ? event.repo.name.replace('Omnikon-Org/', '') : '';
       
       p.innerHTML = `<span class="text-primary">${actor}</span> ${actionText}${detailText} <span class="text-on-surface-variant font-bold">${repoName}</span>`;
       content.appendChild(p);

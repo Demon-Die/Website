@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fetch_github_data.sh - Retrieves live data for the Demon-Die GitHub organization
+# fetch_github_data.sh - Retrieves live data for the Omnikon GitHub organization
 # Requires jq to be installed.
 
 # Load the PAT from .env (strip spaces around =)
@@ -9,47 +9,37 @@ if [[ ! -f "$ENV_FILE" ]]; then
   exit 1
 fi
 # Extract token value (supports spaces around =)
-TOKEN=$(grep -E "^GIT_DEMONDIE_ALL" "$ENV_FILE" | cut -d'=' -f2- | tr -d ' \"')
+TOKEN=$(grep -E "^GIT_OMNIKON_ALL" "$ENV_FILE" | cut -d'=' -f2- | tr -d ' \"')
 if [[ -z "$TOKEN" ]]; then
   echo "Error: GitHub token not found in .env"
   exit 1
 fi
-ORG="Demon-Die"
+ORG="Omnikon-Org"
 
 # ------------------------------------------------------------
 # Fetch organization repositories (first 100, pagination if needed)
-REPOS=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/repos?per_page=100")
+if [[ -n "$TOKEN" ]]; then
+  REPOS_RAW=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/repos?per_page=100")
+else
+  REPOS_RAW=$(curl -s "https://api.github.com/orgs/$ORG/repos?per_page=100")
+fi
+
+REPOS=$(echo "$REPOS_RAW" | jq '[.[] | select(.name != ".github")]')
 PROJECT_COUNT=$(echo "$REPOS" | jq length)
 TOTAL_STARS=$(echo "$REPOS" | jq '[.[] .stargazers_count] | add')
 # Build repos array with needed fields
-REPOS_DATA=$(echo "$REPOS" | jq '[.[] | {name: .name, description: .description, stars: .stargazers_count, html_url: .html_url}]')
+REPOS_DATA=$(echo "$REPOS" | jq '[.[] | {name: .name, description: .description, stars: .stargazers_count, html_url: .html_url, homepage: .homepage}]')
 
 # ------------------------------------------------------------
-# Aggregate all unique contributors across all repositories using JSON array merging
-ALL_CONTRIBS="[]"
-for REPO_NAME in $(echo "$REPOS" | jq -r '.[].name'); do
-  PAGE=1
-  while true; do
-    ContribResp=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/repos/$ORG/$REPO_NAME/contributors?per_page=100&page=$PAGE")
-    COUNT=$(echo "$ContribResp" | jq length)
-    if [[ $COUNT -eq 0 ]]; then
-      break
-    fi
-    # Merge this page's contributors into the accumulator (ensure array)
-    ALL_CONTRIBS=$(printf '%s
-%s' "$ALL_CONTRIBS" "$ContribResp" | jq -s 'add')
-    ((PAGE++))
-  done
-done
-
-# Deduplicate contributors
-UNIQUE_CONTRIBS=$(echo "$ALL_CONTRIBS" | jq 'unique_by(.login)')
 # Fetch org members and ensure it's an array
-ORG_MEMBERS_RAW=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/members?per_page=100")
-ORG_MEMBERS=$(echo "$ORG_MEMBERS_RAW" | jq 'if type=="array" then . else [. ] end')
-# Merge contributors and org members, deduplicate again
-ALL_USERS=$(printf '%s
-%s' "$UNIQUE_CONTRIBS" "$ORG_MEMBERS" | jq -s 'add | unique_by(.login)')
+if [[ -n "$TOKEN" ]]; then
+  ORG_MEMBERS_RAW=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/orgs/$ORG/members?per_page=100")
+else
+  ORG_MEMBERS_RAW=$(curl -s "https://api.github.com/orgs/$ORG/members?per_page=100")
+fi
+
+ORG_MEMBERS=$(echo "$ORG_MEMBERS_RAW" | jq 'if type=="array" then . else [] end')
+ALL_USERS=$(echo "$ORG_MEMBERS" | jq 'unique_by(.login)')
 PRIORITY_LOGINS=("RishiByte" "Pranav00076" "SharanyoBanerjee" "Yuvraj-Sarathe")
 MEMBERS_DATA="[]"
 # Add priority members first
@@ -69,7 +59,7 @@ CONTRIBUTOR_COUNT=$(echo "$MEMBERS_DATA" | jq length)
 
 # ------------------------------------------------------------
 # Output summary JSON
-cat > "$(dirname "$0")/github_summary.json" <<EOF
+JSON_CONTENT=$(cat <<EOF
 {
   "project_count": $PROJECT_COUNT,
   "total_stars": $TOTAL_STARS,
@@ -78,5 +68,10 @@ cat > "$(dirname "$0")/github_summary.json" <<EOF
   "members": $MEMBERS_DATA
 }
 EOF
+)
 
-echo "GitHub summary written to github_summary.json"
+mkdir -p "$(dirname "$0")/public"
+echo "$JSON_CONTENT" > "$(dirname "$0")/public/github_summary.json"
+echo "$JSON_CONTENT" > "$(dirname "$0")/github_summary.json"
+
+echo "GitHub summary written to github_summary.json and public/github_summary.json"

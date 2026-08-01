@@ -1,94 +1,217 @@
-# DemonDie Website
+<div align="center">
 
-[![GitHub](https://img.shields.io/badge/GitHub-Demon--Die-181717?style=for-the-badge&logo=github)](https://github.com/Demon-Die)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/4waT35Hxs)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/Demon-Die/Website?tab=MIT-1-ov-file)
+# 🔺 Omnikon Website
 
-Professional static website for the DemonDie organization.
+**The official website of the Omnikon open-source organization.**
 
-Designed with Google Stitch, Connected by hands, Styled with TailwindCss.
+A modern, fast, and responsive platform that brings together Omnikon's projects, contributors, blogs, and community into one place.
 
-## 🚀 Projects Highlight
+<p>
+  <a href="https://github.com/Omnikon-Org/Website/stargazers">
+    <img src="https://img.shields.io/github/stars/Omnikon-Org/Website?style=for-the-badge&logo=github" alt="GitHub Stars">
+  </a>
+  <a href="https://github.com/Omnikon-Org/Website/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/Omnikon-Org/Website?style=for-the-badge" alt="License">
+  </a>
+  <a href="https://github.com/Omnikon-Org/Website/issues">
+    <img src="https://img.shields.io/github/issues/Omnikon-Org/Website?style=for-the-badge" alt="Issues">
+  </a>
+  <a href="https://github.com/Omnikon-Org/Website/pulls">
+    <img src="https://img.shields.io/github/issues-pr/Omnikon-Org/Website?style=for-the-badge" alt="Pull Requests">
+  </a>
+</p>
 
-### Demon Tech Roadmap
-Community-driven learning roadmaps for students and aspiring developers. Designed to help learners navigate technology careers through structured, beginner-friendly roadmaps, curated resources, and practical project recommendations.
-- Repository: [github.com/Demon-Die/DemonTechRoadmap](https://github.com/Demon-Die/DemonTechRoadmap)
-- Website: [demon-tech-roadmap.vercel.app](https://demon-tech-roadmap.vercel.app/)
+<p>
+  <a href="https://omnikon.org">🌐 Live Website</a>
+  •
+  <a href="https://github.com/Omnikon-Org">GitHub</a>
+  •
+  <a href="https://discord.gg/yWtjK2Tb8T">Discord</a>
+  •
+  <a href="https://x.com/OmnikonOrg">X</a>
+  •
+  <a href="https://www.linkedin.com/company/omnikon-org">LinkedIn</a>
+</p>
 
-### UnVibe
-UnVibe trains developers to truly understand code, not just generate it.
-- Repository: [github.com/Demon-Die/unvibe](https://github.com/Demon-Die/unvibe)
+**Code. Create. Conquer.**
 
-### SyncCanvas
-An AI-powered collaborative whiteboard for real-time brainstorming, diagramming, and team collaboration on an infinite canvas.
-- Repository: [github.com/Demon-Die/SyncCanvas](https://github.com/Demon-Die/SyncCanvas)
+</div>
 
 ---
 
-## 💻 Local Development
+# 🚀 About
 
-This repository is a static website, so there is no Node install or build step required. The site relies on the Tailwind CDN and Vanilla CSS.
+The **Omnikon Website** is the official web platform for the Omnikon open-source organization.
 
-### 1. Environment Setup
-To run the website fully (including GitHub stats, Supabase integration, and Firebase Authentication), you need to configure your environment variables. 
-Copy the provided `.env.example` or create a new `env.json` and `.env` file in the root directory with your Firebase, Supabase, and GitHub configuration:
+Built with performance, scalability, and simplicity in mind, it serves as the central hub for the community by showcasing projects, contributors, blogs, announcements, and organization updates. The website integrates with GitHub and modern backend services to deliver dynamic content while maintaining a fast and responsive user experience.
 
-```json
-{
-  "FIREBASE_API_KEY": "YOUR_API_KEY",
-  "FIREBASE_AUTH_DOMAIN": "YOUR_AUTH_DOMAIN",
-  "FIREBASE_PROJECT_ID": "YOUR_PROJECT_ID",
-  "FIREBASE_STORAGE_BUCKET": "YOUR_STORAGE_BUCKET",
-  "FIREBASE_MESSAGING_SENDER_ID": "YOUR_MESSAGING_SENDER_ID",
-  "FIREBASE_APP_ID": "YOUR_APP_ID",
-  "GIT_DEMONDIE_ALL": "YOUR_GITHUB_TOKEN",
-  "SUPABASE_URL": "YOUR_SUPABASE_URL",
-  "SUPABASE_ANON_KEY": "YOUR_SUPABASE_KEY"
-}
-```
+Whether you're discovering Omnikon for the first time or contributing to one of our projects, this repository powers the experience that connects everything together.
 
-### 2. Start Local Server
-Because the website fetches local JSON and module files, you must serve it over HTTP (opening `index.html` directly in the browser may cause CORS issues).
+---
+
+# ✨ Features
+
+* 🌐 Modern and responsive user interface
+* 📦 Showcase of Omnikon projects
+* 👥 Dynamic contributor profiles
+* 📊 Live GitHub organization statistics
+* 📝 Community blog platform
+* 🔐 Secure authentication with Google and GitHub
+* ⚡ Real-time GitHub API integration
+* 📱 Mobile-first responsive design
+* 🔍 SEO-optimized production build
+* 🚀 Fast builds powered by Vite
+
+---
+
+# ⚡ Quick Start
+
+Clone the repository:
 
 ```bash
-# Clone the repo
-git clone https://github.com/Demon-Die/Website.git
+git clone https://github.com/Omnikon-Org/Website.git
 cd Website
-
-# Start a local web server (e.g. using npx)
-npx -y http-server -p 8080
 ```
-Open `http://localhost:8080` in your browser.
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open your browser and visit:
+
+```text
+http://localhost:5173
+```
 
 ---
 
-## ▶️ Features & Usage
-- **Dynamic Content**: Fetches recent activity, contributor stats, and repository details directly via the GitHub API.
-- **Firebase Authentication**: Integrated Google & GitHub OAuth. Authorized maintainers can log in to access admin-only features (e.g., adding blogs).
-- **Responsive Layout**: Designed to adapt perfectly to mobile, tablet, and desktop screens.
+# 📦 Installation
+
+### Prerequisites
+
+* Node.js 18 or later
+* npm 9 or later
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Start the development server
+
+```bash
+npm run dev
+```
+
+### Create a production build
+
+```bash
+npm run build
+```
+
+### Preview the production build
+
+```bash
+npm run preview
+```
 
 ---
 
-## 🤝 Contributing
-We welcome contributions! To get started:
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feat/awesome-feature`).
-3. Make your changes – keep the existing design language consistent.
-4. Open a Pull Request describing the improvement.
+# 📜 Available Scripts
 
-Please follow the existing code style (Tailwind utility classes, BEM-like naming, and the custom color palette defined in the `<script id="tailwind-config">`).
-
----
-
-## 📄 License
-Distributed under the **MIT License**. See the `LICENSE` file for details.
+| Command           | Description                           |
+| ----------------- | ------------------------------------- |
+| `npm run dev`     | Starts the development server         |
+| `npm run build`   | Builds the application for production |
+| `npm run preview` | Previews the production build locally |
 
 ---
 
-## 📧 Contact & Community
-- **GitHub Org:** https://github.com/Demon-Die
-- **Discord:** https://discord.gg/4waT35Hxs
-- **Twitter:** https://x.com/DemonDieOrg
-- **LinkedIn:** https://www.linkedin.com/in/demondie-org/
+# 🤝 Contributing
 
-*Join us, build together, and make open-source learning fun!*
+We welcome contributions from developers of all experience levels.
+
+If you'd like to improve the website, fix a bug, or introduce a new feature, we'd love to review your contribution.
+
+### Getting Started
+
+1. Fork this repository.
+2. Create a new branch.
+
+```bash
+git checkout -b feature/your-feature
+```
+
+3. Commit your changes.
+
+```bash
+git commit -m "feat: add your feature"
+```
+
+4. Push your branch.
+
+```bash
+git push origin feature/your-feature
+```
+
+5. Open a Pull Request describing your changes.
+
+Please keep pull requests focused, follow the existing coding style, and ensure your changes have been tested before submitting.
+
+If you've found a bug or have an idea for an improvement, feel free to open an issue.
+
+---
+
+# 🌍 Community
+
+Stay connected with Omnikon.
+
+* 🌐 **Website:** https://omnikon.org
+* 💻 **GitHub:** https://github.com/Omnikon-Org
+* 💬 **Discord:** https://discord.gg/yWtjK2Tb8T
+* 🐦 **X (Twitter):** https://x.com/OmnikonOrg
+* 💼 **LinkedIn:** https://www.linkedin.com/company/omnikon-org
+
+---
+
+# ❤️ Support
+
+If you find this project useful, you can support it by:
+
+* ⭐ Starring this repository
+* 🍴 Forking the project
+* 🐞 Reporting bugs
+* 💡 Suggesting new features
+* 🤝 Contributing to the codebase
+* 📢 Sharing Omnikon with the community
+
+Every contribution, whether it's code, documentation, or feedback, helps us improve the project.
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+See the [LICENSE](LICENSE) file for more information.
+
+---
+
+<div align="center">
+
+### Built with ❤️ by the Omnikon Community
+
+**Code. Create. Conquer.**
+
+If you like this project, consider giving it a ⭐ on GitHub.
+
+</div>
