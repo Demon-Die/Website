@@ -34,16 +34,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showAccessDenied() {
-  document.body.innerHTML = `
-    <div class="min-h-screen flex items-center justify-center bg-background p-6 text-center">
-      <div class="glass-panel p-12 max-w-md w-full border border-primary">
-        <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
-        <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
-        <p class="text-on-surface-variant font-mono text-sm mb-6">Insufficient clearance level. This incident has been logged.</p>
-        <a href="/index.html" class="inline-flex items-center gap-2 px-6 py-2 bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-colors font-mono text-sm uppercase glow-hover">Return to Safe Zone</a>
+  const main = document.querySelector('main');
+  if (main) {
+    main.innerHTML = `
+      <div class="min-h-[50vh] flex items-center justify-center bg-background p-6 text-center">
+        <div class="glass-panel p-12 max-w-md w-full border border-primary">
+          <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
+          <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
+          <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required or insufficient clearance level.</p>
+          <div class="flex flex-col gap-3">
+            <button onclick="if(window.openAuthModal) window.openAuthModal()" class="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-primary text-background font-bold transition-colors font-mono text-sm uppercase glow-hover">
+              LOGIN TO CONTINUE
+            </button>
+            <a href="/index.html" class="w-full inline-flex justify-center items-center gap-2 px-6 py-2 bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-colors font-mono text-sm uppercase glow-hover">Return to Safe Zone</a>
+          </div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 }
 
 async function loadAdminReferrals() {
