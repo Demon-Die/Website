@@ -184,7 +184,7 @@ window.approveAmbassador = async function(userId) {
       }
       
       const paddedCount = String(newCount).padStart(4, '0');
-      const newId = \`OMNI26-AMB-\${paddedCount}\`;
+      const newId = `OMNI26-AMB-${paddedCount}`;
       
       transaction.set(counterRef, { count: newCount }, { merge: true });
       transaction.update(userRef, { 
