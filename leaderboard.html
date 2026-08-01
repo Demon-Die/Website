@@ -17,7 +17,7 @@
     
     
 
-<title>Omnikon | Open Source Community for Developers</title>
+<title>Leaderboard | Omnikon</title>
 
 <meta name="keywords" content="Omnikon, Open Source, Hackathons, AI, Machine Learning, Programming, Student Developers, GitHub, Developer Community, Coding, Web Development, React, Next.js, TypeScript">
 
@@ -101,7 +101,7 @@
 <nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
 <div class="flex justify-between items-center w-full px-3 sm:px-gutter h-16 max-w-container-max mx-auto overflow-hidden">
 <div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
-<img src="/LogoOmnikon.jpeg" alt="Omnikon Logo" class="" style="width: 40px; height: 40px; max-width: 40px; max-height: 40px; flex-shrink: 0;">
+<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
 <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
 </div>
 <div id="desktop-nav" class="hidden md:flex items-center gap-8"><a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="index.html">Home</a>
@@ -109,8 +109,8 @@
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="projects.html">Projects</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="members.html">Members</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="javascript:void(0)" onclick="window.openHackathonWindow();">🏆 Hackathon</a>
-<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="ambassadors.html">Ambassadors</a>
-<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a></div>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="ambassadors.html">Ambassador</a></div>
 <a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star
                 Star on GitHub">
 <span class="material-symbols-outlined text-sm" data-icon="star">star</span>
@@ -128,8 +128,8 @@
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="projects.html" onclick="toggleMobileMenu()">Projects</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="members.html" onclick="toggleMobileMenu()">Members</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="javascript:void(0)" onclick="toggleMobileMenu(); window.openHackathonWindow();">🏆 Hackathon</a>
-<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="ambassadors.html" onclick="toggleMobileMenu()">Ambassadors</a>
-<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="blogs.html" onclick="toggleMobileMenu()">Blog</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="blogs.html" onclick="toggleMobileMenu()">Blog</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="ambassadors.html" onclick="toggleMobileMenu()">Ambassador</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
         <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-surface-container bg-surface/50 hover:border-primary glow-hover text-on-surface font-label-mono text-sm transition-all duration-200" aria-label="star
             Star on GitHub">
             <span class="material-symbols-outlined text-sm">star</span>
@@ -153,217 +153,35 @@
     }
 </script>
 </nav>
+<main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter min-h-screen">
 
-<main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter relative min-h-screen" id="app-root">
-  <section class="max-w-5xl mx-auto mt-12 mb-24">
-    <div class="text-center mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Ambassador Leaderboard</h1>
-    </div>
+  <div class="text-center mb-12">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Global Leaderboard</h1>
+    <p class="text-on-surface-variant max-w-xl mx-auto">The top performing ambassadors across the nation.</p>
+  </div>
+  
+  <div class="glass-panel max-w-4xl mx-auto overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="bg-surface-elevation">
+        <tr class="border-b border-surface-variant">
+          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">Rank</th>
+          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">Ambassador</th>
+          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">College</th>
+          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider text-right">Verified Refs</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body" class="divide-y divide-surface-variant/50">
+        <tr><td colspan="4" class="py-8 text-center text-on-surface-variant">Loading rankings...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <script type="module" src="./assets/leaderboard.js"></script>
 
-    <div class="glass-panel rounded-2xl overflow-hidden border border-border">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-surface-elevation/50 border-b border-border text-on-surface-variant text-sm uppercase tracking-wider">
-              <th class="p-4 font-semibold text-center w-20">Rank</th>
-              <th class="p-4 font-semibold">Ambassador</th>
-              <th class="p-4 font-semibold">College</th>
-              <th class="p-4 font-semibold text-right">Unique Visitors</th>
-              <th class="p-4 font-semibold text-right">Total Clicks</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboard-body" class="divide-y divide-border/50">
-            <tr>
-              <td colspan="5" class="p-8 text-center text-on-surface-variant">
-                <span class="inline-block w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mb-2"></span>
-                <p>Loading leaderboard data...</p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
 </main>
 
-<script>
-  async function loadLeaderboard() {
-    const tbody = document.getElementById('leaderboard-body');
-    
-    try {
-      const res = await fetch('/api/leaderboard');
-      const data = await res.json();
-
-      if (!data.leaderboard || data.leaderboard.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-on-surface-variant">No data available yet.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = data.leaderboard.map((row) => `
-        <tr class="hover:bg-surface-elevation/30 transition-colors ${row.rank <= 3 ? 'bg-primary/5' : ''}">
-          <td class="p-4 text-center">
-            ${row.rank === 1 ? '<span class="text-2xl">🥇</span>' : 
-              row.rank === 2 ? '<span class="text-2xl">🥈</span>' : 
-              row.rank === 3 ? '<span class="text-2xl">🥉</span>' : 
-              `<span class="font-mono font-bold text-on-surface-variant">${row.rank}</span>`}
-          </td>
-          <td class="p-4">
-            <div class="font-bold text-on-surface">${row.name}</div>
-          </td>
-          <td class="p-4 text-on-surface-variant">${row.college}</td>
-          <td class="p-4 text-right font-mono text-primary font-bold">${row.uniqueVisitors}</td>
-          <td class="p-4 text-right font-mono text-on-surface-variant">${row.totalClicks}</td>
-        </tr>
-      `).join('');
-    } catch (err) {
-      tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-red-400">Failed to load leaderboard data.</td></tr>';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', loadLeaderboard);
-</script>
-  
-  <button id="chatbot-toggle" class="fixed bottom-4 right-4 rounded-full shadow-lg bg-primary/20 backdrop-blur-md border border-primary p-3 hover:bg-primary/30 transition" aria-label="hub">
-    <span class="material-symbols-outlined text-2xl text-primary">hub</span>
-  </button>
-  
-  <div id="chatbot-modal" class="hidden"></div>
-  
-  <script>
-    window.env = {};
-    (async function() {
-      try {
-        const responseJson = await fetch('env-public.json');
-        if (responseJson.ok) {
-          window.env = await responseJson.json();
-        }
-        
-        
-      } catch (e) {
-        console.warn('Environment loading error:', e);
-      } finally {
-        window.envLoaded = true;
-        window.dispatchEvent(new CustomEvent('envLoaded'));
-      }
-    })();
-  </script>
-  
-  <script type="module" src="fetch_recent_activity.js"></script>
-  <script type="module" src="fetch_community_feed.js"></script>
-  <script type="module" src="chatbot.js"></script>
-
-<footer class="bg-background dark:bg-background border-t border-surface-variant relative z-10 py-8 sm:py-12 mt-auto">
-  <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-10">
-    <div class="col-span-2 md:col-span-1 mb-2 md:mb-0">
-      <h3 class="text-xl font-bold mb-2 sm:mb-4">Omnikon</h3>
-      <p class="text-on-surface-variant text-xs sm:text-sm">Open Source Community for Developers.</p>
-    </div>
-    <div>
-      <h3 class="font-bold text-sm sm:text-base mb-3 sm:mb-4">Pages</h3>
-      <ul class="space-y-2 text-xs sm:text-sm text-on-surface-variant">
-        <li><a href="index.html" class="hover:text-primary transition-colors">Home</a></li>
-        <li><a href="javascript:void(0)" onclick="window.openHackathonWindow()" class="hover:text-primary transition-colors">Hackathon</a></li>
-        <li><a href="projects.html" class="hover:text-primary transition-colors">Projects</a></li>
-        <li><a href="blogs.html" class="hover:text-primary transition-colors">Blog</a></li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="font-bold text-sm sm:text-base mb-3 sm:mb-4">Community</h3>
-      <ul class="space-y-2 text-xs sm:text-sm text-on-surface-variant">
-        <li><a href="members.html" class="hover:text-primary transition-colors">Members</a></li>
-        <li><a href="achievements.html" class="hover:text-primary transition-colors">Community</a></li>
-        <li><a href="docs.html" class="hover:text-primary transition-colors">Docs</a></li>
-        <li><a href="about.html" class="hover:text-primary transition-colors">About</a></li>
-        <li><a href="contact.html" class="hover:text-primary transition-colors">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="font-bold text-sm sm:text-base mb-3 sm:mb-4">Socials</h3>
-      <ul class="space-y-2 text-xs sm:text-sm text-on-surface-variant">
-        <li><a href="https://github.com/Omnikon-Org" target="_blank" class="hover:text-primary transition-colors">GitHub</a></li>
-        <li><a href="https://discord.gg/yWtjK2Tb8T" target="_blank" class="hover:text-primary transition-colors">Discord</a></li>
-        <li><a href="https://www.instagram.com/omnikonorg/" target="_blank" class="hover:text-primary transition-colors">Instagram</a></li>
-        <li><a href="https://x.com/omnikonorg" target="_blank" class="hover:text-primary transition-colors">X (Twitter)</a></li>
-        <li><a href="#" target="_blank" class="hover:text-primary transition-colors">LinkedIn</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="border-t border-surface-variant/40 pt-6 px-4 text-center text-xs sm:text-sm font-label-mono text-on-surface-variant">
-    <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-6 mb-2">
-      <a href="privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
-      <span class="text-surface-variant/40">•</span>
-      <a href="terms.html" class="hover:text-primary transition-colors">Terms &amp; Conditions</a>
-      <span class="text-surface-variant/40">•</span>
-      <a href="contact.html" class="hover:text-primary transition-colors">Contact Us</a>
-    </div>
-    <p>&copy; <script>document.write(new Date().getFullYear())</script> Omnikon. All rights reserved.</p>
-  </div>
-</footer>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const sections = document.querySelectorAll("section[id], footer[id]");
-  const navLinks = document.querySelectorAll("nav a");
-
-  const observerOptions = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.5,
-  };
-
-  const setActiveLink = (id) => {
-    navLinks.forEach(link => {
-      const href = link.getAttribute("href");
-      let isActive = false;
-      if (href === `#${id}`) isActive = true;
-      else if (id === 'projects' && href === 'projects.html') isActive = true;
-      else if (id === 'contributors' && href === 'members.html') isActive = true;
-      else if (id === 'community' && href === 'achievements.html') isActive = true;
-      else if (id === 'home' && (href === '#home' || href === 'index.html' || href === './index.html')) isActive = true;
-      
-      if (isActive) {
-        link.classList.add("text-primary", "border-b-2", "border-primary");
-      } else {
-        link.classList.remove("text-primary", "border-b-2", "border-primary");
-      }
-    });
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        setActiveLink(entry.target.id);
-      }
-    });
-  }, observerOptions);
-
-  sections.forEach(section => observer.observe(section));
-
-  navLinks.forEach(link => {
-    link.addEventListener("click", () => {
-      const href = link.getAttribute("href");
-      let id = href;
-      if (href.startsWith('#')) id = href.substring(1);
-      else if (href === 'projects.html') id = 'projects';
-      else if (href === 'members.html') id = 'contributors';
-      else if (href === 'achievements.html') id = 'community';
-      else if (href === 'index.html' || href === './index.html') id = 'home';
-      setActiveLink(id);
-    });
-  });
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY < 50) {
-      setActiveLink("home");
-    }
-  });
-});
-</script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script type="module" src="auth.js"></script>
 <script type="module" src="./particles.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-<script type="module" src="./assets/interactivity.js"></script>
-
 </body></html>

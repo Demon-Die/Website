@@ -1,8 +1,6 @@
 {
   "name": "omnikon-website",
   "routes": [
-    { "src": "/r/([^/]+)", "dest": "/api/referral?id=$1" },
-    { "src": "/ref/([^/]+)", "dest": "/api/referral?id=$1" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "status": 404, "dest": "/404err.html" }
   ]
