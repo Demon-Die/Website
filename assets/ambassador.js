@@ -8,24 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
       clearInterval(checkAuth);
       
       firebase.auth().onAuthStateChanged(async (user) => {
+        const dashboardContent = document.getElementById('dashboard-content');
+        const accessDeniedScreen = document.getElementById('access-denied-screen');
+        
         if (!user) {
-          document.getElementById('dashboard-content').innerHTML = `
-            <div class="min-h-[50vh] flex items-center justify-center">
-              <div class="glass-panel p-12 max-w-md w-full border border-primary text-center">
-                <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
-                <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
-                <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
-                <div class="flex flex-col gap-3">
-                  <button onclick="if(window.openAuthModal) window.openAuthModal()" class="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-primary text-background font-bold transition-colors font-mono text-sm uppercase glow-hover">
-                    LOGIN TO CONTINUE
-                  </button>
-                  <a href="/ambassadors.html" class="w-full inline-flex justify-center items-center gap-2 px-6 py-2 bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-colors font-mono text-sm uppercase glow-hover">Return to Landing</a>
-                </div>
-              </div>
-            </div>
-          `;
+          if (dashboardContent) dashboardContent.classList.add('hidden');
+          if (accessDeniedScreen) accessDeniedScreen.classList.remove('hidden');
+          if (accessDeniedScreen) accessDeniedScreen.classList.add('flex');
           return;
         }
+
+        if (dashboardContent) dashboardContent.classList.remove('hidden');
+        if (accessDeniedScreen) accessDeniedScreen.classList.add('hidden');
+        if (accessDeniedScreen) accessDeniedScreen.classList.remove('flex');
 
         try {
           // Load ambassador data
