@@ -147,7 +147,7 @@ async function loadPendingAmbassadors() {
   
   try {
     const db = await getDb();
-    const snapshot = await db.collection('users').where('role', '==', 'ambassador').where('status', '==', 'pending').get();
+    const snapshot = await db.collection('users').where('status', '==', 'pending').get();
     
     if (snapshot.empty) {
       tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-on-surface-variant">No pending ambassadors.</td></tr>';
