@@ -3,6 +3,7 @@ import {
   getAmbassadorData, 
   createAmbassadorProfile, 
   getReferrals, 
+  getClicksCount,
   getActiveCampaigns, 
   getAnnouncements, 
   updateUserProfile 
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           currentProfile = profile;
-          renderDashboard(profile);
+          await renderDashboard(profile);
           loadReferrals(profile.ambassadorId);
           loadAnnouncements();
           loadCampaigns(profile.ambassadorId);
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 100);
 });
 
-function renderDashboard(profile) {
+async function renderDashboard(profile) {
   const nameEl = document.getElementById('ambassador-name');
   const idEl = document.getElementById('ambassador-id');
   const avatarEl = document.getElementById('ambassador-avatar');
@@ -91,7 +92,6 @@ function renderDashboard(profile) {
   const clicksEl = document.getElementById('stat-clicks');
   const convEl = document.getElementById('stat-conversion');
   
-  // Calculate tier based on verified registrations
   const verifiedCount = profile.verifiedRegistrations || 0;
   let computedTier = 'Bronze';
   if (verifiedCount >= 50) computedTier = 'Diamond';
@@ -102,16 +102,22 @@ function renderDashboard(profile) {
   if (rankEl) rankEl.textContent = computedTier;
   if (refsEl) refsEl.textContent = verifiedCount;
   
-  const uniqueClicks = profile.uniqueClicks || 0;
-  const totalClicks = profile.totalClicks || 0;
+  let dbClicks = 0;
+  let referralsList = [];
+  if (profile.ambassadorId) {
+    dbClicks = await getClicksCount(profile.ambassadorId);
+    referralsList = await getReferrals(profile.ambassadorId);
+  }
+
+  const profileClicks = profile.totalClicks || profile.uniqueClicks || 0;
+  // Effective total clicks count: max of db clicks, profile stored clicks, referrals count, and verified count
+  const effectiveClicks = Math.max(dbClicks, profileClicks, referralsList.length, verifiedCount);
   
-  if (clicksEl) clicksEl.textContent = totalClicks;
+  if (clicksEl) clicksEl.textContent = effectiveClicks;
   
   let conversionRate = 0;
-  if (totalClicks > 0) {
-    conversionRate = Math.round((verifiedCount / totalClicks) * 100);
-  } else if (uniqueClicks > 0) {
-    conversionRate = Math.round((verifiedCount / uniqueClicks) * 100);
+  if (effectiveClicks > 0) {
+    conversionRate = Math.round((verifiedCount / effectiveClicks) * 100);
   }
   
   if (convEl) convEl.textContent = conversionRate + '%';
