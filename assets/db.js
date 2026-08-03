@@ -88,6 +88,14 @@ export async function createAmbassadorProfile(user, additionalData = {}) {
   return userData;
 }
 
+export async function updateUserProfile(uid, profileData) {
+  const db = await getDb();
+  await db.collection('users').doc(uid).update({
+    ...profileData,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
 // ── Referral System ──────────────────────────────────────
 export async function getReferrals(ambassadorId) {
   if (!ambassadorId) return [];
@@ -114,14 +122,119 @@ export async function updateReferralStatus(referralId, status) {
 // ── Campaigns ────────────────────────────────────────────
 export async function getActiveCampaigns() {
   const db = await getDb();
-  const snapshot = await db.collection('campaigns').where('status', '==', 'active').get();
+  try {
+    const snapshot = await db.collection('campaigns').where('status', '==', 'active').get();
+    let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    if (data.length === 0) {
+      // Fallback default campaign if DB is empty
+      data = [{
+        id: 'default-hackathon-2026',
+        title: 'Omnikon National Tech Hackathon 2026',
+        description: 'Empower student developers by referring participants to the premier national hackathon.',
+        target: 20,
+        reward: 'Exclusive Swag & Certificate',
+        status: 'active',
+        multiplier: '1.5x'
+      }];
+    }
+    return data;
+  } catch (e) {
+    return [{
+      id: 'default-hackathon-2026',
+      title: 'Omnikon National Tech Hackathon 2026',
+      description: 'Empower student developers by referring participants to the premier national hackathon.',
+      target: 20,
+      reward: 'Exclusive Swag & Certificate',
+      status: 'active',
+      multiplier: '1.5x'
+    }];
+  }
+}
+
+export async function getAllCampaigns() {
+  const db = await getDb();
+  const snapshot = await db.collection('campaigns').get();
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function createCampaign(campaignData) {
+  const db = await getDb();
+  const docRef = await db.collection('campaigns').add({
+    ...campaignData,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  return docRef.id;
+}
+
+export async function updateCampaignStatus(campaignId, status) {
+  const db = await getDb();
+  await db.collection('campaigns').doc(campaignId).update({ status });
+}
+
+// ── Announcements ────────────────────────────────────────
+export async function getAnnouncements() {
+  const db = await getDb();
+  try {
+    const snapshot = await db.collection('announcements').orderBy('createdAt', 'desc').get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (e) {
+    return [];
+  }
+}
+
+export async function createAnnouncement(announcementData) {
+  const db = await getDb();
+  const docRef = await db.collection('announcements').add({
+    ...announcementData,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  return docRef.id;
+}
+
+export async function deleteAnnouncement(announcementId) {
+  const db = await getDb();
+  await db.collection('announcements').doc(announcementId).delete();
+}
+
+// ── System Analytics ─────────────────────────────────────
+export async function getSystemAnalytics() {
+  const db = await getDb();
+  try {
+    const usersSnap = await db.collection('users').get();
+    const referralsSnap = await db.collection('referrals').get();
+    const clicksSnap = await db.collection('clicks').get();
+
+    const totalAmbassadors = usersSnap.docs.filter(doc => doc.data().role === 'ambassador').length;
+    const pendingAmbassadors = usersSnap.docs.filter(doc => doc.data().role === 'ambassador' && doc.data().status === 'pending').length;
+    const totalClicks = clicksSnap.size;
+    const totalReferrals = referralsSnap.size;
+    const verifiedReferrals = referralsSnap.docs.filter(doc => doc.data().status === 'verified').length;
+    const conversionRate = totalClicks > 0 ? ((verifiedReferrals / totalClicks) * 100).toFixed(1) : '0.0';
+
+    return {
+      totalAmbassadors,
+      pendingAmbassadors,
+      totalClicks,
+      totalReferrals,
+      verifiedReferrals,
+      conversionRate
+    };
+  } catch (e) {
+    console.error("Error computing analytics:", e);
+    return {
+      totalAmbassadors: 0,
+      pendingAmbassadors: 0,
+      totalClicks: 0,
+      totalReferrals: 0,
+      verifiedReferrals: 0,
+      conversionRate: '0.0'
+    };
+  }
 }
 
 // ── Leaderboard ──────────────────────────────────────────
 export async function getLeaderboard(limit = 100) {
   const db = await getDb();
-  // Fetch only active ambassadors
   const snapshot = await db.collection('users')
     .where('role', '==', 'ambassador')
     .where('status', '==', 'active')
@@ -131,7 +244,6 @@ export async function getLeaderboard(limit = 100) {
     
   let data = snapshot.docs.map(doc => doc.data());
   
-  // Sort ties manually in memory
   data.sort((a, b) => {
     if (b.verifiedRegistrations !== a.verifiedRegistrations) {
       return (b.verifiedRegistrations || 0) - (a.verifiedRegistrations || 0);
@@ -141,7 +253,7 @@ export async function getLeaderboard(limit = 100) {
     }
     const aTime = a.createdAt ? a.createdAt.toMillis() : Date.now();
     const bTime = b.createdAt ? b.createdAt.toMillis() : Date.now();
-    return aTime - bTime; // Oldest first
+    return aTime - bTime;
   });
   
   return data;
