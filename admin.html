@@ -154,6 +154,15 @@
 </script>
 </nav>
 <main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter min-h-screen">
+    <!-- Loading Screen (Visible while auth resolves) -->
+    <div id="admin-loading-screen" class="flex items-center justify-center min-h-[50vh] p-6">
+      <div class="text-center flex flex-col items-center">
+        <div class="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-accent font-mono text-sm uppercase tracking-wider animate-pulse">VERIFYING_ADMIN_CLEARANCE...</p>
+      </div>
+    </div>
+
+    <!-- Access Denied Screen (Hidden by default) -->
     <div id="admin-access-denied" class="hidden flex items-center justify-center min-h-[50vh] bg-background p-6">
       <div class="glass-panel p-12 max-w-md w-full border border-primary text-center">
         <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
@@ -166,7 +175,8 @@
       </div>
     </div>
 
-  <div class="flex flex-col md:flex-row gap-6">
+  <!-- Admin Main Content (Hidden until authenticated as admin) -->
+  <div id="admin-content" class="hidden flex flex-col md:flex-row gap-6">
     <aside class="w-full md:w-64 glass-panel p-6 shrink-0 flex flex-col gap-4">
       <h2 class="text-xl font-bold font-headline-mono text-accent mb-2">ADMIN_OVERRIDE</h2>
       <nav class="flex flex-col gap-2">

@@ -47,9 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showAccessDenied() {
-  const main = document.querySelector('main');
-  if (main) main.classList.add('hidden');
+  const loading = document.getElementById('admin-loading-screen');
+  const content = document.getElementById('admin-content');
   const denied = document.getElementById('admin-access-denied');
+  
+  if (loading) loading.classList.add('hidden');
+  if (content) {
+    content.classList.add('hidden');
+    content.classList.remove('flex');
+  }
   if (denied) {
     denied.classList.remove('hidden');
     denied.classList.add('flex');
@@ -57,12 +63,18 @@ function showAccessDenied() {
 }
 
 function showAdminUI() {
-  const main = document.querySelector('main');
-  if (main) main.classList.remove('hidden');
+  const loading = document.getElementById('admin-loading-screen');
+  const content = document.getElementById('admin-content');
   const denied = document.getElementById('admin-access-denied');
+  
+  if (loading) loading.classList.add('hidden');
   if (denied) {
     denied.classList.add('hidden');
     denied.classList.remove('flex');
+  }
+  if (content) {
+    content.classList.remove('hidden');
+    content.classList.add('flex');
   }
 }
 

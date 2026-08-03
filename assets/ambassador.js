@@ -19,17 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
       firebase.auth().onAuthStateChanged(async (user) => {
         const dashboardContent = document.getElementById('dashboard-content');
         const accessDeniedScreen = document.getElementById('access-denied-screen');
+        const loadingScreen = document.getElementById('dashboard-loading-screen');
         
+        if (loadingScreen) loadingScreen.classList.add('hidden');
+
         if (!user) {
           if (dashboardContent) dashboardContent.classList.add('hidden');
-          if (accessDeniedScreen) accessDeniedScreen.classList.remove('hidden');
-          if (accessDeniedScreen) accessDeniedScreen.classList.add('flex');
+          if (accessDeniedScreen) {
+            accessDeniedScreen.classList.remove('hidden');
+            accessDeniedScreen.classList.add('flex');
+          }
           return;
         }
-
-        if (dashboardContent) dashboardContent.classList.remove('hidden');
-        if (accessDeniedScreen) accessDeniedScreen.classList.add('hidden');
-        if (accessDeniedScreen) accessDeniedScreen.classList.remove('flex');
 
         try {
           let profile = await getAmbassadorData(user.uid);
@@ -43,15 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
           
           if (!profile) {
             profile = await createAmbassadorProfile(user, appData);
-          } else if (Object.keys(appData).length > 0) {
-            const db = await getDb();
-            await db.collection('users').doc(user.uid).update(appData);
-            profile = { ...profile, ...appData };
           }
           
           if (profile.role === 'admin') {
             window.location.replace('/admin.html');
             return;
+          }
+
+          if (dashboardContent) dashboardContent.classList.remove('hidden');
+          if (accessDeniedScreen) {
+            accessDeniedScreen.classList.add('hidden');
+            accessDeniedScreen.classList.remove('flex');
           }
 
           currentProfile = profile;
