@@ -273,6 +273,8 @@
     document.getElementById('ambassador-apply-form')?.addEventListener('submit', (e) => {
       e.preventDefault();
       
+      if (window.showGlobalLoader) window.showGlobalLoader('SUBMITTING_APPLICATION...');
+      
       const formData = {
         college: document.getElementById('apply-college').value,
         branch: document.getElementById('apply-branch').value,

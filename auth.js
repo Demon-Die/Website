@@ -145,6 +145,7 @@
   }
   
   function showError(msg) {
+    if (window.hideGlobalLoader) window.hideGlobalLoader();
     const errorEl = document.getElementById('auth-error-msg');
     errorEl.textContent = msg;
     errorEl.classList.remove('hidden');
@@ -161,12 +162,17 @@
       return;
     }
     
+    if (window.showGlobalLoader) {
+      window.showGlobalLoader(type === 'login' ? 'AUTHENTICATING_EMAIL...' : 'CREATING_ACCOUNT...');
+    }
+
     const promise = type === 'login' 
       ? auth.signInWithEmailAndPassword(email, password)
       : auth.createUserWithEmailAndPassword(email, password);
       
     promise.then(() => {
       modal.classList.remove('open');
+      if (window.hideGlobalLoader) window.hideGlobalLoader();
     }).catch(error => {
       console.error('Email auth failed:', error);
       showError(`ERR: ${error.message}`);
@@ -181,11 +187,16 @@
       provider = new firebase.auth.GoogleAuthProvider();
     }
 
+    if (window.showGlobalLoader) {
+      window.showGlobalLoader('INITIATING_OAUTH...');
+    }
+
     auth.signInWithPopup(provider)
       .then((result) => {
         // Linking accounts is generally handled on the backend or in Firebase Console settings.
         // If a user with the same email exists, Firebase might throw an error we need to catch.
         modal.classList.remove('open');
+        if (window.hideGlobalLoader) window.hideGlobalLoader();
       })
       .catch((error) => {
         if (error.code === 'auth/account-exists-with-different-credential') {
@@ -259,11 +270,13 @@
       if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
           try {
+            if (window.showGlobalLoader) window.showGlobalLoader('LOGGING_OUT...');
             await auth.signOut();
             sessionStorage.clear();
             window.location.href = '/index.html';
           } catch(err) {
             console.error("Logout error:", err);
+            if (window.hideGlobalLoader) window.hideGlobalLoader();
           }
         });
       }
