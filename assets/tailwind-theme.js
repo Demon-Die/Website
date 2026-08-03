@@ -49,7 +49,8 @@ tailwind.config = {
                 "tertiary-fixed-dim": "#c8c6c5",
                 "on-tertiary-fixed": "#1c1b1b",
                 "on-secondary-container": "#b7b5b4",
-                "on-tertiary-container": "#2a2a29"
+                "on-tertiary-container": "#2a2a29",
+                "surface-elevation": "#141416"
             },
             "borderRadius": {
                 "DEFAULT": "0.75rem",

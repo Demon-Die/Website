@@ -98,7 +98,7 @@
   }
 ]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script></head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg overflow-x-hidden">
 
-<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
+<nav class="fixed top-0 left-0 right-0 w-full z-50 bg-[#050505]/80 backdrop-blur-md border-b border-surface-variant/30 transition-all">
 <div class="flex justify-between items-center w-full px-3 sm:px-gutter h-16 max-w-container-max mx-auto overflow-hidden">
 <div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
 <img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
@@ -169,12 +169,12 @@
         </div>
       </div>
       
-      <nav class="flex flex-col gap-2">
-        <button id="btn-tab-overview" onclick="switchTab('overview')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-primary/20 border-l-2 border-primary transition-colors">Overview</button>
-        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
-        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
-        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
-        <button id="btn-tab-profile" onclick="switchTab('profile')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
+      <nav class="flex flex-row overflow-x-auto md:flex-col gap-2 pb-2 md:pb-0 scrollbar-none whitespace-nowrap">
+        <button id="btn-tab-overview" onclick="switchTab('overview')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface bg-primary/20 border-l-2 md:border-l-2 border-primary transition-colors">Overview</button>
+        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
+        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
+        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
+        <button id="btn-tab-profile" onclick="switchTab('profile')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
       </nav>
       
       <div class="mt-auto pt-6 border-t border-surface-variant/50">
