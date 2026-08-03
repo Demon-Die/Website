@@ -263,7 +263,7 @@
             [ LOGOUT ]
           </button>
         </div>
-      `;`;
+      `;
       const logoutBtn = document.getElementById('auth-logout-btn');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
