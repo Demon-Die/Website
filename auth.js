@@ -257,7 +257,15 @@
       `;
       const logoutBtn = document.getElementById('auth-logout-btn');
       if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => auth.signOut());
+        logoutBtn.addEventListener('click', async () => {
+          try {
+            await auth.signOut();
+            sessionStorage.clear();
+            window.location.href = '/index.html';
+          } catch(err) {
+            console.error("Logout error:", err);
+          }
+        });
       }
     } else {
       if (addBlogBtn) {
