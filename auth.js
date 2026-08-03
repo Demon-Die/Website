@@ -211,13 +211,11 @@
   
   function updateAuthWidget(user) {
     const mobileToggle = document.querySelector('nav button.md\\:hidden, header button.md\\:hidden');
-    if (!mobileToggle) return;
-
-    let authWidget = document.getElementById('auth-widget');
+    if (!mobileToggle) return;    let authWidget = document.getElementById('auth-widget');
     if (!authWidget) {
       authWidget = document.createElement('div');
       authWidget.id = 'auth-widget';
-      authWidget.className = 'flex items-center gap-4 mr-4';
+      authWidget.className = 'flex items-center gap-2 sm:gap-4 mr-2 sm:mr-4 shrink-0';
       mobileToggle.parentNode.insertBefore(authWidget, mobileToggle);
     }
 
@@ -225,7 +223,7 @@
 
     if (user) {
       if (addBlogBtn) {
-        const displayName = (user.displayName || '').toLowerCase().replace(/\\s+/g, '');
+        const displayName = (user.displayName || '').toLowerCase().replace(/\s+/g, '');
         const emailPrefix = (user.email || '').split('@')[0].toLowerCase();
         const screenName = (user.reloadUserInfo && user.reloadUserInfo.screenName) ? user.reloadUserInfo.screenName.toLowerCase() : '';
         const allowedAdmins = ['rishibyte', 'pranav00076', 'pranavthawait', 'sharanyobanerjee', 'yuvraj', 'yuvraj-sarathe'];
@@ -238,7 +236,7 @@
             if (provider.providerId === 'github.com') {
               
               const providerEmailPrefix = (provider.email || '').split('@')[0].toLowerCase();
-              const providerName = (provider.displayName || '').toLowerCase().replace(/\\s+/g, '');
+              const providerName = (provider.displayName || '').toLowerCase().replace(/\s+/g, '');
               const providerUid = provider.uid; 
               if (allowedAdmins.includes(providerEmailPrefix) || allowedAdmins.includes(providerName) || providerUid === "108343166" || providerUid === "140939527" || providerUid === "140889218" || providerUid === "96338573") {
                 isAdmin = true;
@@ -259,13 +257,13 @@
 
       const avatarUrl = user.photoURL || './public/LogoOmnikon.jpeg';
       authWidget.innerHTML = `
-        <div class="flex items-center gap-3">
-          <img class="w-8 h-8 rounded-full border border-primary object-cover" src="${avatarUrl}" alt="Profile">
-          <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer">
+        <div class="flex items-center gap-1.5 sm:gap-3">
+          <img class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-primary object-cover shrink-0" src="${avatarUrl}" alt="Profile">
+          <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer whitespace-nowrap">
             [ LOGOUT ]
           </button>
         </div>
-      `;
+      `;`;
       const logoutBtn = document.getElementById('auth-logout-btn');
       if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
