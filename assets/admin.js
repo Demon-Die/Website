@@ -11,7 +11,8 @@ import {
   getSystemAnalytics,
   getLeaderboard,
   getClicksCount,
-  getReferrals
+  getReferrals,
+  getAllAmbassadors
 } from './db.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,6 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
           showAdminUI();
           loadAdminReferrals();
+          
+          // Auto-refresh active admin view every 10 seconds
+          if (window.adminPollInterval) clearInterval(window.adminPollInterval);
+          window.adminPollInterval = setInterval(() => {
+            const activeTab = document.querySelector('[id^="tab-"]:not(.hidden)');
+            if (activeTab) {
+              const tabName = activeTab.id.replace('tab-', '');
+              if (tabName === 'referrals') loadAdminReferrals();
+              if (tabName === 'ambassadors') loadPendingAmbassadors();
+              if (tabName === 'analytics') loadSystemAnalytics();
+            }
+          }, 10000);
           
         } catch (err) {
           console.error("Admin error:", err);
@@ -117,19 +130,38 @@ async function loadAdminReferrals() {
   if (!tbody) return;
   
   try {
-    const referrals = await getAllReferrals();
+    const [referrals, ambassadors] = await Promise.all([
+      getAllReferrals(),
+      getAllAmbassadors()
+    ]);
     
     if (referrals.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-on-surface-variant">No referrals found in database.</td></tr>';
       return;
     }
     
+    const ambMap = {};
+    ambassadors.forEach(a => {
+      if (a.ambassadorId) ambMap[a.ambassadorId] = a;
+    });
+
     tbody.innerHTML = referrals.map(ref => {
       const dateStr = ref.timestamp ? new Date(ref.timestamp.toDate()).toLocaleDateString() : 'Recent';
+      const amb = ambMap[ref.ambassadorId];
+      const ambName = amb ? amb.name : (ref.ambassadorId === 'DEMO' ? 'Demo Account' : 'Unknown Ambassador');
+
       return `
       <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
         <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
-        <td class="px-4 py-3 font-mono text-xs text-accent whitespace-nowrap font-bold">${ref.ambassadorId}</td>
+        <td class="px-4 py-3 whitespace-nowrap">
+          <button onclick="openAmbassadorDetailModal('${ref.ambassadorId}', 'ambassadorId')" class="text-left group cursor-pointer">
+            <div class="font-bold text-xs text-on-surface group-hover:text-accent transition-colors flex items-center gap-1">
+              ${ambName}
+              <span class="material-symbols-outlined text-[13px] text-accent opacity-60 group-hover:opacity-100 transition-opacity">info</span>
+            </div>
+            <div class="font-mono text-[11px] text-accent font-semibold">${ref.ambassadorId}</div>
+          </button>
+        </td>
         <td class="px-4 py-3 font-mono text-xs whitespace-nowrap">${ref.visitorIp || 'Unknown'}</td>
         <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${ref.campaignId || 'Hackathon 2026'}</td>
         <td class="px-4 py-3 text-right whitespace-nowrap">
@@ -214,9 +246,18 @@ async function loadPendingAmbassadors() {
       return `
       <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
         <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
-        <td class="px-4 py-3 font-mono text-xs text-on-surface whitespace-nowrap font-bold">${data.name || 'N/A'}</td>
+        <td class="px-4 py-3 whitespace-nowrap">
+          <button onclick="openAmbassadorDetailModal('${doc.id}', 'uid')" class="text-left font-bold font-mono text-xs text-on-surface hover:text-accent transition-colors cursor-pointer flex items-center gap-1 group">
+            <span class="group-hover:underline">${data.name || 'N/A'}</span>
+            <span class="material-symbols-outlined text-[13px] text-accent opacity-60 group-hover:opacity-100 transition-opacity">info</span>
+          </button>
+        </td>
         <td class="px-4 py-3 font-mono text-xs text-on-surface-variant whitespace-nowrap">${data.email || 'N/A'}</td>
-        <td class="px-4 py-3 font-mono text-xs text-primary whitespace-nowrap font-bold">${ambassadorId || 'PENDING'}</td>
+        <td class="px-4 py-3 font-mono text-xs text-primary whitespace-nowrap font-bold">
+          <button onclick="openAmbassadorDetailModal('${doc.id}', 'uid')" class="hover:underline cursor-pointer">
+            ${ambassadorId || 'PENDING'}
+          </button>
+        </td>
         <td class="px-4 py-3 font-mono text-xs text-primary whitespace-nowrap font-bold text-center">${effectiveClicks}</td>
         <td class="px-4 py-3 font-mono text-xs text-accent whitespace-nowrap font-bold text-center">${verifiedCount}</td>
         <td class="px-4 py-3 font-mono text-xs whitespace-nowrap text-center">
@@ -438,7 +479,11 @@ async function loadSystemAnalytics() {
       leaderboardTable.innerHTML = leaderboard.map((user, idx) => `
         <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
           <td class="py-3 font-bold font-mono text-xs text-primary">#${idx + 1}</td>
-          <td class="py-3 font-mono text-xs text-on-surface">${user.name || 'Anonymous'}</td>
+          <td class="py-3 font-mono text-xs">
+            <button onclick="openAmbassadorDetailModal('${user.ambassadorId}', 'ambassadorId')" class="font-bold text-on-surface hover:text-accent underline transition-colors text-left cursor-pointer">
+              ${user.name || 'Anonymous'}
+            </button>
+          </td>
           <td class="py-3 font-mono text-xs text-accent">${user.ambassadorId}</td>
           <td class="py-3 font-bold text-xs">${user.verifiedRegistrations || 0}</td>
         </tr>
@@ -448,3 +493,200 @@ async function loadSystemAnalytics() {
     console.error("Error loading analytics:", err);
   }
 }
+
+// ── Ambassador Details Modal ──────────────────────────────
+function formatYearText(y) {
+  if (!y) return 'Not Provided';
+  const map = { '1': '1st Year', '2': '2nd Year', '3': '3rd Year', '4': '4th Year', '5': '5th Year / Other' };
+  return map[y] || y;
+}
+
+window.openAmbassadorDetailModal = async function(identifier, type = 'ambassadorId') {
+  const modal = document.getElementById('ambassador-detail-modal');
+  const modalBody = document.getElementById('ambassador-modal-body');
+  if (!modal || !modalBody) return;
+
+  modalBody.innerHTML = '<div class="py-12 text-center text-accent font-mono animate-pulse">LOADING_AMBASSADOR_DOSSIER...</div>';
+  
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  setTimeout(() => {
+    modal.classList.remove('opacity-0');
+    const inner = modal.querySelector('div');
+    if (inner) inner.classList.remove('scale-95');
+  }, 10);
+
+  try {
+    const db = await getDb();
+    let user = null;
+
+    if (type === 'uid') {
+      const doc = await db.collection('users').doc(identifier).get();
+      if (doc.exists) user = { uid: doc.id, id: doc.id, ...doc.data() };
+    } else if (type === 'ambassadorId') {
+      const snap = await db.collection('users').where('ambassadorId', '==', identifier).limit(1).get();
+      if (!snap.empty) {
+        const doc = snap.docs[0];
+        user = { uid: doc.id, id: doc.id, ...doc.data() };
+      }
+    }
+
+    if (!user) {
+      if (identifier === 'DEMO') {
+        user = {
+          name: 'Demo Account',
+          email: 'demo@omnikonhub.com',
+          ambassadorId: 'DEMO',
+          college: 'Omnikon Sandbox University',
+          branch: 'Computer Science & AI',
+          year: '3',
+          phone: '+91 9999999999',
+          bio: 'Test account for demonstration and link testing.',
+          socialLinks: { linkedin: 'https://linkedin.com', github: 'https://github.com', discord: 'demo#0000', x: '' },
+          status: 'active',
+          verifiedRegistrations: 0,
+          totalClicks: 1
+        };
+      } else {
+        modalBody.innerHTML = `<div class="py-8 text-center text-primary font-mono">Ambassador profile not found for ID: ${identifier}</div>`;
+        return;
+      }
+    }
+
+    renderAmbassadorDossier(user);
+  } catch (err) {
+    console.error("Error opening ambassador modal:", err);
+    modalBody.innerHTML = `<div class="py-8 text-center text-primary font-mono">Error loading details: ${err.message}</div>`;
+  }
+};
+
+window.closeAmbassadorDetailModal = function() {
+  const modal = document.getElementById('ambassador-detail-modal');
+  if (!modal) return;
+  modal.classList.add('opacity-0');
+  const inner = modal.querySelector('div');
+  if (inner) inner.classList.add('scale-95');
+  setTimeout(() => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }, 300);
+};
+
+function renderAmbassadorDossier(user) {
+  const modalBody = document.getElementById('ambassador-modal-body');
+  if (!modalBody) return;
+
+  const isPending = user.status === 'pending';
+  const yearText = formatYearText(user.year);
+  const social = user.socialLinks || {};
+
+  const verified = user.verifiedRegistrations || 0;
+  let tier = 'Bronze';
+  if (verified >= 50) tier = 'Cyber Master';
+  else if (verified >= 30) tier = 'Platinum';
+  else if (verified >= 15) tier = 'Gold';
+  else if (verified >= 5) tier = 'Silver';
+
+  modalBody.innerHTML = `
+    <!-- Top Header Card -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-primary/20 border border-primary text-primary flex items-center justify-center font-bold text-xl font-mono shrink-0 overflow-hidden">
+          ${user.photoURL ? `<img src="${user.photoURL}" class="w-full h-full object-cover">` : (user.name ? user.name.charAt(0).toUpperCase() : 'A')}
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-on-surface">${user.name || 'Anonymous Ambassador'}</h3>
+          <p class="text-xs font-mono text-on-surface-variant">${user.email || 'No email provided'}</p>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="px-2 py-0.5 bg-primary/20 text-primary font-mono text-[10px] font-bold rounded uppercase">${user.ambassadorId || 'PENDING ID'}</span>
+            ${isPending 
+              ? '<span class="px-2 py-0.5 bg-accent/20 text-accent font-mono text-[10px] font-bold rounded uppercase">Pending Approval</span>' 
+              : '<span class="px-2 py-0.5 bg-green-500/20 text-green-400 font-mono text-[10px] font-bold rounded uppercase">Active Ambassador</span>'}
+          </div>
+        </div>
+      </div>
+      
+      ${isPending ? `
+        <button onclick="approveAmbassadorFromModal('${user.uid}')" class="px-4 py-2 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-bold font-mono rounded uppercase glow-hover">
+          Approve Ambassador
+        </button>
+      ` : ''}
+    </div>
+
+    <!-- Academic & Personal Details Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
+        <h4 class="text-xs font-mono text-accent uppercase font-bold mb-3 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">school</span> ACADEMIC DETAILS
+        </h4>
+        <div class="space-y-2 text-xs">
+          <div>
+            <span class="text-on-surface-variant font-mono">College / University:</span>
+            <p class="font-semibold text-on-surface text-sm">${user.college || 'Not Provided'}</p>
+          </div>
+          <div>
+            <span class="text-on-surface-variant font-mono">Branch / Major:</span>
+            <p class="font-semibold text-on-surface text-sm">${user.branch || 'Not Provided'}</p>
+          </div>
+          <div>
+            <span class="text-on-surface-variant font-mono">Year of Study:</span>
+            <p class="font-semibold text-on-surface text-sm">${yearText}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
+        <h4 class="text-xs font-mono text-accent uppercase font-bold mb-3 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">contact_phone</span> CONTACT & SOCIALS
+        </h4>
+        <div class="space-y-2 text-xs">
+          <div>
+            <span class="text-on-surface-variant font-mono">Phone / WhatsApp:</span>
+            <p class="font-semibold text-on-surface text-sm">${user.phone || 'Not Provided'}</p>
+          </div>
+          <div>
+            <span class="text-on-surface-variant font-mono">Social Profiles:</span>
+            <div class="flex flex-wrap gap-2 mt-1">
+              ${social.linkedin ? `<a href="${social.linkedin}" target="_blank" class="px-2 py-1 bg-surface-variant/30 hover:bg-primary/20 text-on-surface hover:text-primary rounded text-[11px] font-mono transition-colors flex items-center gap-1">LinkedIn <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>` : ''}
+              ${social.github ? `<a href="${social.github.startsWith('http') ? social.github : 'https://github.com/' + social.github}" target="_blank" class="px-2 py-1 bg-surface-variant/30 hover:bg-primary/20 text-on-surface hover:text-primary rounded text-[11px] font-mono transition-colors flex items-center gap-1">GitHub <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>` : ''}
+              ${social.discord ? `<span class="px-2 py-1 bg-surface-variant/30 text-on-surface rounded text-[11px] font-mono">Discord: ${social.discord}</span>` : ''}
+              ${social.x ? `<a href="${social.x}" target="_blank" class="px-2 py-1 bg-surface-variant/30 hover:bg-primary/20 text-on-surface hover:text-primary rounded text-[11px] font-mono transition-colors flex items-center gap-1">X / Twitter <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>` : ''}
+              ${!social.linkedin && !social.github && !social.discord && !social.x ? '<p class="text-on-surface-variant">No social links provided</p>' : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Bio / Statement -->
+    <div class="p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
+      <h4 class="text-xs font-mono text-accent uppercase font-bold mb-2 flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">description</span> APPLICATION BIO / PITCH
+      </h4>
+      <p class="text-xs text-on-surface leading-relaxed italic bg-surface-variant/10 p-3 rounded border border-surface-variant/20">
+        "${user.bio || 'No application statement or bio provided.'}"
+      </p>
+    </div>
+
+    <!-- Performance Stats -->
+    <div class="grid grid-cols-3 gap-3 p-4 bg-surface-variant/20 border border-primary/30 rounded-lg text-center">
+      <div>
+        <p class="text-[10px] font-mono text-on-surface-variant">TOTAL CLICKS</p>
+        <p class="text-xl font-bold font-mono text-primary">${user.totalClicks || user.uniqueClicks || 0}</p>
+      </div>
+      <div>
+        <p class="text-[10px] font-mono text-on-surface-variant">VERIFIED REFS</p>
+        <p class="text-xl font-bold font-mono text-accent">${verified}</p>
+      </div>
+      <div>
+        <p class="text-[10px] font-mono text-on-surface-variant">CURRENT TIER</p>
+        <p class="text-xl font-bold font-mono text-on-surface">${tier}</p>
+      </div>
+    </div>
+  `;
+}
+
+window.approveAmbassadorFromModal = async function(uid) {
+  closeAmbassadorDetailModal();
+  await window.approveAmbassador(uid);
+};

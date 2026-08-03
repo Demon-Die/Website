@@ -88,6 +88,17 @@ export async function createAmbassadorProfile(user, additionalData = {}) {
   return userData;
 }
 
+export async function getAllAmbassadors() {
+  const db = await getDb();
+  try {
+    const snapshot = await db.collection('users').where('role', '==', 'ambassador').get();
+    return snapshot.docs.map(doc => ({ uid: doc.id, id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error("Error fetching all ambassadors:", err);
+    return [];
+  }
+}
+
 export async function updateUserProfile(uid, profileData) {
   const db = await getDb();
   await db.collection('users').doc(uid).update({
