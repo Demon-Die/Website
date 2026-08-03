@@ -97,7 +97,7 @@ async function renderDashboard(profile) {
   
   const verifiedCount = profile.verifiedRegistrations || 0;
   let computedTier = 'Bronze';
-  if (verifiedCount >= 50) computedTier = 'Diamond';
+  if (verifiedCount >= 50) computedTier = 'Cyber Master';
   else if (verifiedCount >= 30) computedTier = 'Platinum';
   else if (verifiedCount >= 15) computedTier = 'Gold';
   else if (verifiedCount >= 5) computedTier = 'Silver';
