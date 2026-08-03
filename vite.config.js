@@ -22,7 +22,8 @@ export default defineConfig({
         ambassadors: resolve(__dirname, 'ambassadors.html'),
         dashboard: resolve(__dirname, 'dashboard.html'),
         admin: resolve(__dirname, 'admin.html'),
-        leaderboard: resolve(__dirname, 'leaderboard.html')
+        leaderboard: resolve(__dirname, 'leaderboard.html'),
+        r: resolve(__dirname, 'r.html')
       }
     }
   }
