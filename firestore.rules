@@ -42,8 +42,9 @@ service cloud.firestore {
     match /clicks/{clickId} {
       // Anyone can create a click (public referral tracking)
       allow create: if true;
-      // Only admins can view/edit all clicks
-      allow read, update, delete: if isAdmin();
+      // Authenticated users and admins can read click logs
+      allow read: if isAuthenticated();
+      allow update, delete: if isAdmin();
     }
 
     // REGISTRATIONS (Actual hackathon registrations)

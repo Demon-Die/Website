@@ -9,7 +9,9 @@ import {
   createAnnouncement, 
   deleteAnnouncement, 
   getSystemAnalytics,
-  getLeaderboard
+  getLeaderboard,
+  getClicksCount,
+  getReferrals
 } from './db.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -110,20 +112,23 @@ async function loadAdminReferrals() {
       return;
     }
     
-    tbody.innerHTML = referrals.map(ref => `
+    tbody.innerHTML = referrals.map(ref => {
+      const dateStr = ref.timestamp ? new Date(ref.timestamp.toDate()).toLocaleDateString() : 'Recent';
+      return `
       <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
-        <td class="py-3 text-xs text-on-surface-variant">${ref.timestamp ? new Date(ref.timestamp.toDate()).toLocaleDateString() : 'Recent'}</td>
-        <td class="py-3 font-mono text-xs text-accent">${ref.ambassadorId}</td>
-        <td class="py-3 font-mono text-xs">${ref.visitorIp || 'Unknown'}</td>
-        <td class="py-3 text-xs text-on-surface-variant">${ref.campaignId || 'Hackathon 2026'}</td>
-        <td class="py-3">
+        <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
+        <td class="px-4 py-3 font-mono text-xs text-accent whitespace-nowrap font-bold">${ref.ambassadorId}</td>
+        <td class="px-4 py-3 font-mono text-xs whitespace-nowrap">${ref.visitorIp || 'Unknown'}</td>
+        <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${ref.campaignId || 'Hackathon 2026'}</td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
           ${ref.status === 'verified' 
-            ? '<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
+            ? '<span class="px-2.5 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
             : `<button onclick="verifyReferral('${ref.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase">Approve</button>`
           }
         </td>
       </tr>
-    `).join('');
+      `;
+    }).join('');
     
   } catch (err) {
     console.error("Error loading referrals:", err);
@@ -146,7 +151,8 @@ window.verifyReferral = async function(referralId) {
       if (!userSnap.empty) {
         const userDoc = userSnap.docs[0];
         await userDoc.ref.update({
-          verifiedRegistrations: window.firebase.firestore.FieldValue.increment(1)
+          verifiedRegistrations: window.firebase.firestore.FieldValue.increment(1),
+          totalClicks: window.firebase.firestore.FieldValue.increment(1)
         });
       }
     }
@@ -169,32 +175,57 @@ async function loadPendingAmbassadors() {
     const snapshot = await db.collection('users').where('role', '==', 'ambassador').get();
     
     if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-on-surface-variant">No ambassadors registered yet.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-on-surface-variant">No ambassadors registered yet.</td></tr>';
       return;
     }
-    
-    tbody.innerHTML = snapshot.docs.map(doc => {
+
+    const rows = await Promise.all(snapshot.docs.map(async (doc) => {
       const data = doc.data();
       const isPending = data.status === 'pending';
+      const ambassadorId = data.ambassadorId;
+      
+      let dbClicks = 0;
+      let userRefs = [];
+      if (ambassadorId) {
+        dbClicks = await getClicksCount(ambassadorId);
+        userRefs = await getReferrals(ambassadorId);
+      }
+      
+      const verifiedCount = data.verifiedRegistrations || 0;
+      const profileClicks = data.totalClicks || data.uniqueClicks || 0;
+      const effectiveClicks = Math.max(dbClicks, profileClicks, userRefs.length, verifiedCount);
+      
+      const dateStr = data.createdAt 
+        ? (data.createdAt.toDate ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Recent')
+        : 'Recent';
+
       return `
       <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
-        <td class="py-3 text-xs text-on-surface-variant">${data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Recent'}</td>
-        <td class="py-3 font-mono text-xs text-on-surface">${data.name || 'N/A'}</td>
-        <td class="py-3 font-mono text-xs">${data.email || 'N/A'}</td>
-        <td class="py-3 font-mono text-xs text-primary">${data.ambassadorId || 'PENDING'}</td>
-        <td class="py-3 font-mono text-xs ${isPending ? 'text-accent' : 'text-primary'}">${data.status || 'pending'}</td>
-        <td class="py-3">
+        <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
+        <td class="px-4 py-3 font-mono text-xs text-on-surface whitespace-nowrap font-bold">${data.name || 'N/A'}</td>
+        <td class="px-4 py-3 font-mono text-xs text-on-surface-variant whitespace-nowrap">${data.email || 'N/A'}</td>
+        <td class="px-4 py-3 font-mono text-xs text-primary whitespace-nowrap font-bold">${ambassadorId || 'PENDING'}</td>
+        <td class="px-4 py-3 font-mono text-xs text-primary whitespace-nowrap font-bold text-center">${effectiveClicks}</td>
+        <td class="px-4 py-3 font-mono text-xs text-accent whitespace-nowrap font-bold text-center">${verifiedCount}</td>
+        <td class="px-4 py-3 font-mono text-xs whitespace-nowrap text-center">
+          ${isPending 
+            ? '<span class="px-2.5 py-1 bg-accent/20 text-accent font-bold rounded uppercase text-[10px]">Pending</span>'
+            : '<span class="px-2.5 py-1 bg-primary/20 text-primary font-bold rounded uppercase text-[10px]">Active</span>'}
+        </td>
+        <td class="px-4 py-3 text-right whitespace-nowrap">
           ${isPending 
             ? `<button onclick="approveAmbassador('${doc.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase">Approve</button>`
-            : `<span class="text-xs text-on-surface-variant font-mono">Active</span>`}
+            : `<span class="text-[10px] font-mono text-on-surface-variant">Approved</span>`}
         </td>
       </tr>
       `;
-    }).join('');
+    }));
+
+    tbody.innerHTML = rows.join('');
     
   } catch (err) {
     console.error("Error loading ambassadors:", err);
-    tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-primary">Error loading data.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-primary">Error loading data.</td></tr>';
   }
 }
 

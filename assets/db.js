@@ -96,22 +96,58 @@ export async function updateUserProfile(uid, profileData) {
   });
 }
 
-// ── Referral System ──────────────────────────────────────
+// ── Referral System & Clicks ─────────────────────────────
+export async function getClicksCount(ambassadorId) {
+  if (!ambassadorId) return 0;
+  const db = await getDb();
+  try {
+    const snapshot = await db.collection('clicks')
+      .where('ambassadorId', '==', ambassadorId)
+      .get();
+    return snapshot.size;
+  } catch (err) {
+    console.error("Error fetching click count:", err);
+    return 0;
+  }
+}
+
 export async function getReferrals(ambassadorId) {
   if (!ambassadorId) return [];
   const db = await getDb();
-  const snapshot = await db.collection('referrals')
-    .where('ambassadorId', '==', ambassadorId)
-    .orderBy('timestamp', 'desc')
-    .get();
-    
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const snapshot = await db.collection('referrals')
+      .where('ambassadorId', '==', ambassadorId)
+      .get();
+      
+    let docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // Sort in memory to avoid Firestore Composite Index requirements
+    docs.sort((a, b) => {
+      const aTime = a.timestamp ? (a.timestamp.toMillis ? a.timestamp.toMillis() : new Date(a.timestamp).getTime()) : 0;
+      const bTime = b.timestamp ? (b.timestamp.toMillis ? b.timestamp.toMillis() : new Date(b.timestamp).getTime()) : 0;
+      return bTime - aTime;
+    });
+    return docs;
+  } catch (err) {
+    console.error("Error fetching referrals:", err);
+    return [];
+  }
 }
 
 export async function getAllReferrals() {
   const db = await getDb();
-  const snapshot = await db.collection('referrals').orderBy('timestamp', 'desc').get();
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const snapshot = await db.collection('referrals').get();
+    let docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    docs.sort((a, b) => {
+      const aTime = a.timestamp ? (a.timestamp.toMillis ? a.timestamp.toMillis() : new Date(a.timestamp).getTime()) : 0;
+      const bTime = b.timestamp ? (b.timestamp.toMillis ? b.timestamp.toMillis() : new Date(b.timestamp).getTime()) : 0;
+      return bTime - aTime;
+    });
+    return docs;
+  } catch (err) {
+    console.error("Error fetching all referrals:", err);
+    return [];
+  }
 }
 
 export async function updateReferralStatus(referralId, status) {
@@ -126,7 +162,6 @@ export async function getActiveCampaigns() {
     const snapshot = await db.collection('campaigns').where('status', '==', 'active').get();
     let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     if (data.length === 0) {
-      // Fallback default campaign if DB is empty
       data = [{
         id: 'default-hackathon-2026',
         title: 'Omnikon National Tech Hackathon 2026',
@@ -153,8 +188,13 @@ export async function getActiveCampaigns() {
 
 export async function getAllCampaigns() {
   const db = await getDb();
-  const snapshot = await db.collection('campaigns').get();
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const snapshot = await db.collection('campaigns').get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error("Error fetching all campaigns:", err);
+    return [];
+  }
 }
 
 export async function createCampaign(campaignData) {
@@ -175,8 +215,14 @@ export async function updateCampaignStatus(campaignId, status) {
 export async function getAnnouncements() {
   const db = await getDb();
   try {
-    const snapshot = await db.collection('announcements').orderBy('createdAt', 'desc').get();
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const snapshot = await db.collection('announcements').get();
+    let docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    docs.sort((a, b) => {
+      const aTime = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt).getTime()) : 0;
+      const bTime = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt).getTime()) : 0;
+      return bTime - aTime;
+    });
+    return docs;
   } catch (e) {
     return [];
   }
@@ -209,7 +255,7 @@ export async function getSystemAnalytics() {
     const totalClicks = clicksSnap.size;
     const totalReferrals = referralsSnap.size;
     const verifiedReferrals = referralsSnap.docs.filter(doc => doc.data().status === 'verified').length;
-    const conversionRate = totalClicks > 0 ? ((verifiedReferrals / totalClicks) * 100).toFixed(1) : '0.0';
+    const conversionRate = totalClicks > 0 ? ((verifiedReferrals / totalClicks) * 100).toFixed(1) : (verifiedReferrals > 0 ? '100.0' : '0.0');
 
     return {
       totalAmbassadors,
@@ -235,26 +281,29 @@ export async function getSystemAnalytics() {
 // ── Leaderboard ──────────────────────────────────────────
 export async function getLeaderboard(limit = 100) {
   const db = await getDb();
-  const snapshot = await db.collection('users')
-    .where('role', '==', 'ambassador')
-    .where('status', '==', 'active')
-    .orderBy('verifiedRegistrations', 'desc')
-    .limit(limit)
-    .get();
+  try {
+    const snapshot = await db.collection('users')
+      .where('role', '==', 'ambassador')
+      .where('status', '==', 'active')
+      .get();
+      
+    let data = snapshot.docs.map(doc => doc.data());
     
-  let data = snapshot.docs.map(doc => doc.data());
-  
-  data.sort((a, b) => {
-    if (b.verifiedRegistrations !== a.verifiedRegistrations) {
-      return (b.verifiedRegistrations || 0) - (a.verifiedRegistrations || 0);
-    }
-    if (b.uniqueClicks !== a.uniqueClicks) {
-      return (b.uniqueClicks || 0) - (a.uniqueClicks || 0);
-    }
-    const aTime = a.createdAt ? a.createdAt.toMillis() : Date.now();
-    const bTime = b.createdAt ? b.createdAt.toMillis() : Date.now();
-    return aTime - bTime;
-  });
-  
-  return data;
+    data.sort((a, b) => {
+      if ((b.verifiedRegistrations || 0) !== (a.verifiedRegistrations || 0)) {
+        return (b.verifiedRegistrations || 0) - (a.verifiedRegistrations || 0);
+      }
+      if ((b.uniqueClicks || 0) !== (a.uniqueClicks || 0)) {
+        return (b.uniqueClicks || 0) - (a.uniqueClicks || 0);
+      }
+      const aTime = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : 0) : 0;
+      const bTime = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : 0) : 0;
+      return aTime - bTime;
+    });
+    
+    return data.slice(0, limit);
+  } catch (err) {
+    console.error("Error in getLeaderboard:", err);
+    return [];
+  }
 }
