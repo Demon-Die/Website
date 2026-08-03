@@ -156,30 +156,49 @@
 <main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter min-h-screen">
 
   <div class="flex flex-col md:flex-row gap-6">
-    <!-- Sidebar -->
-    <aside class="w-full md:w-64 glass-panel p-6 shrink-0 flex flex-col gap-4 relative overflow-hidden">
+    <!-- Sidebar / Topbar on Mobile -->
+    <aside class="w-full md:w-64 glass-panel p-4 sm:p-6 shrink-0 flex flex-col gap-3 relative overflow-hidden">
       <div class="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl rounded-full pointer-events-none"></div>
-      <h2 class="text-xl font-bold font-headline-mono text-on-surface mb-2">PORTAL_ACCESS</h2>
       
-      <div class="flex items-center gap-3 mb-6">
-        <img id="ambassador-avatar" src="/LogoOmnikon.jpeg" class="w-12 h-12 rounded-full border border-primary object-cover">
-        <div>
-          <p id="ambassador-name" class="font-bold text-sm text-on-surface">Loading...</p>
-          <p id="ambassador-id" class="text-xs text-primary font-mono">--</p>
+      <div class="flex items-center justify-between mb-1">
+        <h2 class="text-lg sm:text-xl font-bold font-headline-mono text-on-surface">PORTAL_ACCESS</h2>
+        <button onclick="refreshDashboardData()" title="Refresh Live Data" class="p-1.5 bg-surface-variant/30 hover:bg-primary/20 text-on-surface hover:text-primary rounded transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">refresh</span>
+        </button>
+      </div>
+      
+      <div class="flex items-center gap-3 p-3 bg-surface-variant/15 border border-surface-variant/30 rounded-lg mb-2">
+        <img id="ambassador-avatar" src="/LogoOmnikon.jpeg" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-primary object-cover shrink-0">
+        <div class="min-w-0 flex-1">
+          <p id="ambassador-name" class="font-bold text-xs sm:text-sm text-on-surface truncate">Loading...</p>
+          <p id="ambassador-id" class="text-[11px] sm:text-xs text-primary font-mono truncate">--</p>
         </div>
       </div>
       
-      <nav class="flex flex-row overflow-x-auto md:flex-col gap-2 pb-2 md:pb-0 scrollbar-none whitespace-nowrap">
-        <button id="btn-tab-overview" onclick="switchTab('overview')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface bg-primary/20 border-l-2 md:border-l-2 border-primary transition-colors">Overview</button>
-        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
-        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
-        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
-        <button id="btn-tab-profile" onclick="switchTab('profile')" class="shrink-0 text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
+      <nav class="flex flex-row overflow-x-auto md:flex-col gap-1.5 sm:gap-2 pb-2 md:pb-0 scrollbar-none whitespace-nowrap -mx-4 px-4 md:mx-0 md:px-0">
+        <button id="btn-tab-overview" onclick="switchTab('overview')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface bg-primary/20 border-b-2 md:border-b-0 md:border-l-2 border-primary transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">dashboard</span> Overview
+        </button>
+        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">history</span> Referrals
+        </button>
+        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">campaign</span> Campaigns
+        </button>
+        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">military_tech</span> Rewards
+        </button>
+        <button id="btn-tab-profile" onclick="switchTab('profile')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">person</span> Profile
+        </button>
       </nav>
       
-      <div class="mt-auto pt-6 border-t border-surface-variant/50">
-        <button onclick="copyReferralLink()" class="w-full py-2 bg-primary/10 hover:bg-primary/20 border border-primary text-primary text-sm font-mono transition-colors glow-hover">
-          <span class="material-symbols-outlined text-[14px] align-middle mr-1">content_copy</span> COPY REF LINK
+      <div class="mt-auto pt-4 border-t border-surface-variant/50 flex gap-2">
+        <button onclick="copyReferralLink()" class="flex-1 py-2.5 px-3 bg-primary/10 hover:bg-primary/20 border border-primary text-primary text-xs sm:text-sm font-mono transition-colors glow-hover flex items-center justify-center gap-1.5 rounded">
+          <span class="material-symbols-outlined text-sm">content_copy</span> COPY REF LINK
+        </button>
+        <button onclick="refreshDashboardData()" title="Refresh Live Data" class="py-2.5 px-3 bg-surface-elevation border border-surface-variant text-on-surface-variant hover:text-primary hover:border-primary text-xs font-mono transition-colors flex items-center justify-center rounded">
+          <span class="material-symbols-outlined text-sm">refresh</span>
         </button>
       </div>
     </aside>
@@ -194,10 +213,10 @@
 
     <!-- Access Denied Screen (Hidden by default) -->
     <div id="access-denied-screen" class="hidden flex-1 items-center justify-center">
-      <div class="glass-panel p-12 max-w-md w-full border border-primary text-center">
-        <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
-        <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
-        <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
+      <div class="glass-panel p-8 sm:p-12 max-w-md w-full border border-primary text-center">
+        <span class="material-symbols-outlined text-5xl sm:text-6xl text-primary mb-4 block">warning</span>
+        <h2 class="text-xl sm:text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
+        <p class="text-on-surface-variant font-mono text-xs sm:text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
         <div class="flex flex-col gap-3">
           <button onclick="if(window.openAuthModal) window.openAuthModal()" class="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-primary text-background font-bold transition-colors font-mono text-sm uppercase glow-hover">
             LOGIN TO CONTINUE
@@ -211,29 +230,34 @@
     <div class="hidden flex-1 flex flex-col gap-6 relative" id="dashboard-content">
       <!-- Overview Tab -->
       <div id="tab-overview">
-        <h1 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Overview</h1>
+        <div class="flex items-center justify-between mb-4 sm:mb-6">
+          <h1 class="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Overview</h1>
+          <button onclick="refreshDashboardData()" class="sm:hidden p-2 bg-primary/10 border border-primary/40 text-primary rounded flex items-center gap-1 text-xs font-mono">
+            <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+          </button>
+        </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <!-- Stat Cards -->
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-4 sm:p-5 relative overflow-hidden group">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">CURRENT RANK</p>
-            <h3 class="text-3xl font-bold text-on-surface" id="stat-rank">--</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1">CURRENT RANK</p>
+            <h3 class="text-xl sm:text-3xl font-bold text-on-surface" id="stat-rank">--</h3>
           </div>
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-4 sm:p-5 relative overflow-hidden group">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">VERIFIED REFS</p>
-            <h3 class="text-3xl font-bold text-primary" id="stat-refs">--</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1">VERIFIED REFS</p>
+            <h3 class="text-xl sm:text-3xl font-bold text-primary" id="stat-refs">--</h3>
           </div>
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-4 sm:p-5 relative overflow-hidden group">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">TOTAL CLICKS</p>
-            <h3 class="text-3xl font-bold text-on-surface" id="stat-clicks">--</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1">TOTAL CLICKS</p>
+            <h3 class="text-xl sm:text-3xl font-bold text-on-surface" id="stat-clicks">--</h3>
           </div>
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-4 sm:p-5 relative overflow-hidden group">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">CONVERSION</p>
-            <h3 class="text-3xl font-bold text-accent" id="stat-conversion">--%</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1">CONVERSION</p>
+            <h3 class="text-xl sm:text-3xl font-bold text-accent" id="stat-conversion">--%</h3>
           </div>
         </div>
         

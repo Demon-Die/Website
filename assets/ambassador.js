@@ -65,6 +65,21 @@ document.addEventListener('DOMContentLoaded', () => {
           loadRewardsAndBadges(profile);
           loadProfileForm(profile);
           
+          // Auto-refresh stats every 10s in background
+          if (window.ambassadorPollInterval) clearInterval(window.ambassadorPollInterval);
+          window.ambassadorPollInterval = setInterval(async () => {
+            if (currentProfile && currentProfile.uid) {
+              try {
+                const fresh = await getAmbassadorData(currentProfile.uid);
+                if (fresh) currentProfile = fresh;
+                await renderDashboard(currentProfile);
+                if (currentProfile.ambassadorId) {
+                  loadReferrals(currentProfile.ambassadorId);
+                }
+              } catch(e){}
+            }
+          }, 10000);
+          
         } catch (err) {
           console.error("Dashboard error:", err);
         }
@@ -385,6 +400,25 @@ window.switchTab = function(tabName) {
       }
     }
   });
+};
+
+window.refreshDashboardData = async function() {
+  if (!currentProfile || !currentProfile.uid) return;
+  try {
+    showToast("Refreshing live stats...");
+    const freshProfile = await getAmbassadorData(currentProfile.uid);
+    if (freshProfile) currentProfile = freshProfile;
+    await renderDashboard(currentProfile);
+    if (currentProfile.ambassadorId) {
+      await loadReferrals(currentProfile.ambassadorId);
+      loadCampaigns(currentProfile.ambassadorId);
+    }
+    loadAnnouncements();
+    loadRewardsAndBadges(currentProfile);
+    showToast("Dashboard stats updated!");
+  } catch (err) {
+    console.error("Refresh error:", err);
+  }
 };
 
 window.copyReferralLink = function() {
