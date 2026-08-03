@@ -170,14 +170,15 @@
     <aside class="w-full md:w-64 glass-panel p-6 shrink-0 flex flex-col gap-4">
       <h2 class="text-xl font-bold font-headline-mono text-accent mb-2">ADMIN_OVERRIDE</h2>
       <nav class="flex flex-col gap-2">
-        <button onclick="switchAdminTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-surface-variant/50 border-l-2 border-accent">Verify Referrals</button>
-        <button onclick="switchAdminTab('ambassadors')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">Manage Ambassadors</button>
-        <button onclick="switchAdminTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">Campaigns</button>
-        <button onclick="switchAdminTab('announcements')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">Announcements</button>
-        <button onclick="switchAdminTab('analytics')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">System Analytics</button>
+        <button id="btn-admin-tab-referrals" onclick="switchAdminTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-surface-variant/50 border-l-2 border-accent">Verify Referrals</button>
+        <button id="btn-admin-tab-ambassadors" onclick="switchAdminTab('ambassadors')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">Manage Ambassadors</button>
+        <button id="btn-admin-tab-campaigns" onclick="switchAdminTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">Campaigns</button>
+        <button id="btn-admin-tab-announcements" onclick="switchAdminTab('announcements')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">Announcements</button>
+        <button id="btn-admin-tab-analytics" onclick="switchAdminTab('analytics')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent">System Analytics</button>
       </nav>
     </aside>
     <div class="flex-1 glass-panel p-6 relative">
+      <!-- Verify Referrals Tab -->
       <div id="tab-referrals">
         <h1 class="text-2xl font-bold mb-6 text-accent">Pending Referrals</h1>
         <div class="overflow-x-auto">
@@ -187,18 +188,20 @@
                 <th class="pb-2 font-medium">Date</th>
                 <th class="pb-2 font-medium">Ambassador ID</th>
                 <th class="pb-2 font-medium">IP/Details</th>
+                <th class="pb-2 font-medium">Campaign</th>
                 <th class="pb-2 font-medium">Action</th>
               </tr>
             </thead>
             <tbody id="admin-referrals-table">
-              <tr><td colspan="4" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
+              <tr><td colspan="5" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
       
+      <!-- Manage Ambassadors Tab -->
       <div id="tab-ambassadors" class="hidden">
-        <h1 class="text-2xl font-bold mb-6 text-accent">Pending Ambassadors</h1>
+        <h1 class="text-2xl font-bold mb-6 text-accent">Ambassador Directory & Applications</h1>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
             <thead>
@@ -206,14 +209,96 @@
                 <th class="pb-2 font-medium">Date</th>
                 <th class="pb-2 font-medium">Name</th>
                 <th class="pb-2 font-medium">Email</th>
+                <th class="pb-2 font-medium">Ambassador ID</th>
                 <th class="pb-2 font-medium">Status</th>
                 <th class="pb-2 font-medium">Action</th>
               </tr>
             </thead>
             <tbody id="admin-ambassadors-table">
-              <tr><td colspan="5" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
+              <tr><td colspan="6" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Campaigns Tab -->
+      <div id="tab-campaigns" class="hidden">
+        <h1 class="text-2xl font-bold mb-4 text-accent">Campaign Management</h1>
+        
+        <form id="admin-campaign-form" onsubmit="handleCreateCampaign(event)" class="glass-panel p-5 mb-6 flex flex-col gap-4 border border-surface-variant/40">
+          <h3 class="text-sm font-bold text-on-surface font-mono">LAUNCH NEW CAMPAIGN</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input type="text" id="campaign-title" placeholder="Campaign Title (e.g. AI Hackathon Drive)" required class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+            <input type="number" id="campaign-target" placeholder="Target Referrals (e.g. 15)" required class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+            <input type="text" id="campaign-multiplier" placeholder="Multiplier (e.g. 2x Points)" class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input type="text" id="campaign-reward" placeholder="Reward Description (e.g. Swag Kit + VIP Pass)" required class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+            <input type="text" id="campaign-description" placeholder="Short Campaign Description" class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+          </div>
+          <button type="submit" class="w-full py-2 bg-accent/20 border border-accent text-accent font-bold text-xs font-mono tracking-wider uppercase hover:bg-accent hover:text-background transition-colors">
+            CREATE CAMPAIGN
+          </button>
+        </form>
+
+        <h3 class="text-sm font-bold text-on-surface font-mono mb-3">EXISTING CAMPAIGNS</h3>
+        <div id="admin-campaigns-list" class="flex flex-col gap-3">
+          <p class="text-sm text-on-surface-variant">Loading campaigns...</p>
+        </div>
+      </div>
+
+      <!-- Announcements Tab -->
+      <div id="tab-announcements" class="hidden">
+        <h1 class="text-2xl font-bold mb-4 text-accent">Ambassador Announcements Broadcast</h1>
+        
+        <form id="admin-announce-form" onsubmit="handleCreateAnnouncement(event)" class="glass-panel p-5 mb-6 flex flex-col gap-4 border border-surface-variant/40">
+          <h3 class="text-sm font-bold text-on-surface font-mono">POST ANNOUNCEMENT</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input type="text" id="announce-title" placeholder="Announcement Title" required class="md:col-span-2 bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+            <select id="announce-priority" class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent">
+              <option value="INFO">INFO / GENERAL</option>
+              <option value="URGENT">URGENT</option>
+              <option value="REWARD">REWARD / MILESTONE</option>
+              <option value="EVENT">EVENT / DEADLINE</option>
+            </select>
+          </div>
+          <textarea id="announce-message" rows="3" placeholder="Message broadcasted to all ambassador dashboards..." required class="bg-surface-elevation border border-surface-variant/50 rounded p-2.5 text-xs text-on-surface focus:outline-none focus:border-accent"></textarea>
+          <button type="submit" class="w-full py-2 bg-accent/20 border border-accent text-accent font-bold text-xs font-mono tracking-wider uppercase hover:bg-accent hover:text-background transition-colors">
+            BROADCAST ANNOUNCEMENT
+          </button>
+        </form>
+
+        <h3 class="text-sm font-bold text-on-surface font-mono mb-3">PAST ANNOUNCEMENTS</h3>
+        <div id="admin-announcements-list" class="flex flex-col gap-3">
+          <p class="text-sm text-on-surface-variant">Loading announcements...</p>
+        </div>
+      </div>
+
+      <!-- System Analytics Tab -->
+      <div id="tab-analytics" class="hidden">
+        <h1 class="text-2xl font-bold mb-4 text-accent">System Analytics & Platform Performance</h1>
+        
+        <div id="analytics-stats-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <p class="text-sm text-on-surface-variant">Loading platform analytics...</p>
+        </div>
+
+        <div class="glass-panel p-6 border border-surface-variant/40">
+          <h3 class="text-lg font-bold text-on-surface mb-4">Top Performing Ambassadors Leaderboard</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-surface-variant text-on-surface-variant">
+                  <th class="pb-2 font-medium">Rank</th>
+                  <th class="pb-2 font-medium">Name</th>
+                  <th class="pb-2 font-medium">Ambassador ID</th>
+                  <th class="pb-2 font-medium">Verified Registrations</th>
+                </tr>
+              </thead>
+              <tbody id="analytics-leaderboard-table">
+                <tr><td colspan="4" class="py-4 text-center text-on-surface-variant">Loading leaderboard preview...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

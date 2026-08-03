@@ -170,11 +170,11 @@
       </div>
       
       <nav class="flex flex-col gap-2">
-        <button onclick="switchTab('overview')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-surface-variant/50 hover:bg-primary/20 border-l-2 border-primary transition-colors">Overview</button>
-        <button onclick="switchTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
-        <button onclick="switchTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
-        <button onclick="switchTab('rewards')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
-        <button onclick="switchTab('profile')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
+        <button id="btn-tab-overview" onclick="switchTab('overview')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-primary/20 border-l-2 border-primary transition-colors">Overview</button>
+        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
+        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
+        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
+        <button id="btn-tab-profile" onclick="switchTab('profile')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
       </nav>
       
       <div class="mt-auto pt-6 border-t border-surface-variant/50">
@@ -229,10 +229,23 @@
           </div>
         </div>
         
-        <div class="glass-panel p-6 mb-6">
-          <h3 class="text-xl font-bold mb-4 border-b border-surface-variant pb-2">Recent Activity</h3>
-          <div id="recent-activity-list" class="flex flex-col gap-3">
-            <p class="text-sm text-on-surface-variant">Loading activity...</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="glass-panel p-6">
+            <h3 class="text-xl font-bold mb-4 border-b border-surface-variant pb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary">history</span> Recent Activity
+            </h3>
+            <div id="recent-activity-list" class="flex flex-col gap-3">
+              <p class="text-sm text-on-surface-variant">Loading activity...</p>
+            </div>
+          </div>
+          
+          <div class="glass-panel p-6">
+            <h3 class="text-xl font-bold mb-4 border-b border-surface-variant pb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-accent">campaign</span> Platform Announcements
+            </h3>
+            <div id="announcements-feed" class="flex flex-col gap-3">
+              <p class="text-sm text-on-surface-variant">Loading announcements...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -247,16 +260,106 @@
               <thead>
                 <tr class="border-b border-surface-variant text-on-surface-variant">
                   <th class="pb-2 font-medium">Date</th>
-                  <th class="pb-2 font-medium">IP Address</th>
+                  <th class="pb-2 font-medium">IP / Visitor ID</th>
+                  <th class="pb-2 font-medium">Campaign</th>
                   <th class="pb-2 font-medium">Status</th>
                 </tr>
               </thead>
               <tbody id="referral-history-table">
-                <tr><td colspan="3" class="py-4 text-center text-on-surface-variant">Loading referrals...</td></tr>
+                <tr><td colspan="4" class="py-4 text-center text-on-surface-variant">Loading referrals...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
+      </div>
+
+      <!-- Campaigns Tab -->
+      <div id="tab-campaigns" class="hidden">
+        <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Active Campaigns</h1>
+        <p class="text-sm text-on-surface-variant mb-6">Promote active hackathons and initiatives using targeted campaign links to earn bonus referral points.</p>
+        <div id="campaigns-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <p class="text-sm text-on-surface-variant">Loading active campaigns...</p>
+        </div>
+      </div>
+
+      <!-- Rewards & Badges Tab -->
+      <div id="tab-rewards" class="hidden">
+        <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Rewards & Milestone Tiers</h1>
+        <p class="text-sm text-on-surface-variant mb-6">Unlock exclusive rewards, swag kits, and certificates as you increase your verified registrations.</p>
+        <div id="rewards-tier-list" class="flex flex-col gap-4">
+          <p class="text-sm text-on-surface-variant">Loading reward tiers...</p>
+        </div>
+      </div>
+
+      <!-- Profile Settings Tab -->
+      <div id="tab-profile" class="hidden">
+        <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Profile Settings</h1>
+        <p class="text-sm text-on-surface-variant mb-6">Update your personal details, academic institution, and social links for certificate issuance and team contact.</p>
+        
+        <form id="profile-settings-form" onsubmit="saveProfile(event)" class="glass-panel p-6 flex flex-col gap-6 max-w-3xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">FULL NAME</label>
+              <input type="text" id="profile-name" required class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">EMAIL ADDRESS (READ-ONLY)</label>
+              <input type="email" id="profile-email" disabled class="w-full bg-surface-variant/20 border border-surface-variant/30 rounded p-3 text-sm text-on-surface-variant cursor-not-allowed">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">COLLEGE / UNIVERSITY</label>
+              <input type="text" id="profile-college" placeholder="e.g. IIT Bombay" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">BRANCH / DEGREE</label>
+              <input type="text" id="profile-branch" placeholder="e.g. Computer Science" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">GRADUATION YEAR</label>
+              <input type="text" id="profile-year" placeholder="e.g. 2026" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">PHONE / WHATSAPP NUMBER</label>
+              <input type="tel" id="profile-phone" placeholder="+91 9876543210" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">BIO / SHORT DESCRIPTION</label>
+              <input type="text" id="profile-bio" placeholder="Passionate developer & open-source enthusiast" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+          </div>
+
+          <div class="border-t border-surface-variant/40 pt-4">
+            <h4 class="text-sm font-bold text-on-surface mb-4">Social Media & Coding Profiles</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">LINKEDIN URL</label>
+                <input type="url" id="profile-linkedin" placeholder="https://linkedin.com/in/username" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">GITHUB USERNAME / URL</label>
+                <input type="text" id="profile-github" placeholder="username" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">DISCORD TAG</label>
+                <input type="text" id="profile-discord" placeholder="username#0000" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">TWITTER / X HANDLE</label>
+                <input type="text" id="profile-x" placeholder="@handle" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-primary text-background font-bold text-sm font-mono tracking-wider uppercase hover:bg-primary/90 transition-colors glow-hover mt-2">
+            SAVE PROFILE CHANGES
+          </button>
+        </form>
       </div>
     </div>
   </div>

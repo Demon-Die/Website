@@ -7,32 +7,36 @@ const COOKIE_DAYS = 30;
 
 // Simple SHA-256 hash function using Web Crypto API
 async function hashString(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  try {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch (e) {
+    return 'anon-' + Math.random().toString(36).substring(2, 10);
+  }
 }
 
 // Cookie Helpers
 function setCookie(name, value, days) {
   const d = new Date();
-  d.setTime(d.getTime() + (days*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  let expires = "expires=" + d.toUTCString();
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
 function getCookie(name) {
   let nameEQ = name + "=";
   let ca = document.cookie.split(';');
-  for(let i=0;i < ca.length;i++) {
+  for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
   }
   return null;
 }
 
-// Fetch IP for hashing (using a free public API for IP, but NOT storing raw IP)
+// Fetch IP for hashing
 async function fetchIp() {
   try {
     const res = await fetch('https://api.ipify.org?format=json');
@@ -43,71 +47,64 @@ async function fetchIp() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function doRedirect() {
   const urlParams = new URLSearchParams(window.location.search);
   const ambassadorId = urlParams.get('id');
+  const campaign = urlParams.get('campaign') || 'Omnikon Hackathon 2026';
   
   if (!ambassadorId) {
-    // No ID? Just redirect immediately.
     window.location.replace(DESTINATION_URL);
     return;
   }
 
+  // Safety fallback: Redirect after 1.8 seconds max even if DB hangs
+  const fallbackTimer = setTimeout(() => {
+    window.location.replace(DESTINATION_URL);
+  }, 1800);
+
   try {
     const db = await getDb();
     
-    // Check if we've already tracked this ambassador click recently for this user
     const existingCookie = getCookie(COOKIE_NAME);
     const existingLocal = localStorage.getItem('omniReferralVisited');
-    
     const isDuplicate = (existingCookie === ambassadorId) || (existingLocal === ambassadorId);
     
+    const rawIp = await fetchIp();
+    const ipHash = await hashString(rawIp + (navigator.userAgent || ''));
+    
+    // Log click event to clicks collection
+    await db.collection('clicks').add({
+      ambassadorId: ambassadorId,
+      timestamp: window.firebase.firestore.FieldValue.serverTimestamp(),
+      ipHash: ipHash,
+      userAgent: navigator.userAgent || 'Unknown',
+      referrer: document.referrer || 'direct',
+      platform: navigator.platform || 'Unknown'
+    });
+    
     if (!isDuplicate) {
-      // 1. Get IP and hash it
-      const rawIp = await fetchIp();
-      const ipHash = await hashString(rawIp + navigator.userAgent); // Salted with UserAgent
-      
-      // 2. Track click in Firestore
-      const clickData = {
+      // Log referral entry to referrals collection
+      await db.collection('referrals').add({
         ambassadorId: ambassadorId,
-        timestamp: window.firebase.firestore.FieldValue.serverTimestamp(),
-        ipHash: ipHash,
-        userAgent: navigator.userAgent,
-        referrer: document.referrer || 'direct',
-        platform: navigator.platform
-      };
+        visitorIp: ipHash ? ipHash.substring(0, 12) : 'Anonymous',
+        status: 'pending',
+        campaignId: campaign,
+        timestamp: window.firebase.firestore.FieldValue.serverTimestamp()
+      });
       
-      await db.collection('clicks').add(clickData);
-      
-      // Also atomically increment the total/unique clicks on the ambassador's user document
-      // We need to find the user doc by ambassadorId
-      const userSnap = await db.collection('users').where('ambassadorId', '==', ambassadorId).limit(1).get();
-      if (!userSnap.empty) {
-        const userDoc = userSnap.docs[0];
-        await userDoc.ref.update({
-          totalClicks: window.firebase.firestore.FieldValue.increment(1),
-          uniqueClicks: window.firebase.firestore.FieldValue.increment(1) // Assuming unique since cookie/local prevented duplicate
-        });
-      }
-      
-      // 3. Set cookie and local storage to prevent duplicate unique counts
       setCookie(COOKIE_NAME, ambassadorId, COOKIE_DAYS);
       localStorage.setItem('omniReferralVisited', ambassadorId);
-    } else {
-      // It's a duplicate unique click. We can optionally log it as a non-unique click
-      // but let's just increment totalClicks for the ambassador to show engagement
-      const userSnap = await db.collection('users').where('ambassadorId', '==', ambassadorId).limit(1).get();
-      if (!userSnap.empty) {
-        const userDoc = userSnap.docs[0];
-        await userDoc.ref.update({
-          totalClicks: window.firebase.firestore.FieldValue.increment(1)
-        });
-      }
     }
   } catch (err) {
     console.error("Tracking error:", err);
-    }
-  }, 5000);
-  // Finally, redirect to Unstop
-  window.location.replace(DESTINATION_URL);
-});
+  } finally {
+    clearTimeout(fallbackTimer);
+    window.location.replace(DESTINATION_URL);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', doRedirect);
+} else {
+  doRedirect();
+}
