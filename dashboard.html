@@ -1,0 +1,408 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<link rel="apple-touch-icon" sizes="180x180" href="./favicon_io/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon_io/favicon-32x32.png?v=1">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon_io/favicon-16x16.png?v=1">
+<link rel="manifest" href="./favicon_io/site.webmanifest?v=1">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script type="module" src="./assets/tailwind-theme.js"></script>
+    <link rel="stylesheet" href="./assets/common-styles.css">
+    <link rel="stylesheet" href="./assets/hero-animation.css">
+    <script type="module" src="./assets/hero-animation.js"></script>
+    
+    
+
+<title>Ambassador Dashboard | Omnikon</title>
+
+<meta name="keywords" content="Omnikon, Open Source, Hackathons, AI, Machine Learning, Programming, Student Developers, GitHub, Developer Community, Coding, Web Development, React, Next.js, TypeScript">
+
+<meta name="theme-color" content="#050505">
+
+<!-- Open Graph -->
+
+
+
+
+
+
+
+<!-- Twitter Card -->
+
+
+
+
+
+<!-- Structured Data -->
+
+
+<link rel="icon" type="image/png" sizes="192x192" href="./favicon_io/android-chrome-192x192.png?v=1">
+<link rel="icon" type="image/png" sizes="512x512" href="./favicon_io/android-chrome-512x512.png?v=1">
+<meta name="description" content="Omnikon is an open-source community empowering developers through hackathons, open-source projects, AI, web development, and collaborative learning.">
+<link rel="canonical" href="https://omnikonhub.com/">
+<meta property="og:title" content="Omnikon | Open Source Community for Developers">
+<meta property="og:description" content="Omnikon is an open-source community empowering developers through hackathons, open-source projects, AI, web development, and collaborative learning.">
+<meta property="og:url" content="https://omnikonhub.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Omnikon | Open Source Community for Developers">
+<meta name="twitter:description" content="Omnikon is an open-source community empowering developers through hackathons, open-source projects, AI, web development, and collaborative learning.">
+<meta name="robots" content="index, follow">
+<meta name="view-transition" content="same-origin">
+<link rel="stylesheet" href="./assets/hackathon-window.css">
+<script type="module" src="./assets/hackathon-window.js"></script><script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Omnikon",
+    "url": "https://omnikonhub.com",
+    "logo": "https://omnikonhub.com/public/LogoOmnikon.jpeg",
+    "email": "contact@omnikonhub.com",
+    "sameAs": [
+      "https://github.com/Omnikon-Org",
+      "https://discord.gg/yWtjK2Tb8T"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "contact@omnikonhub.com",
+      "contactType": "customer support"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://omnikonhub.com",
+    "name": "Omnikon",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://omnikonhub.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Omnikon National Tech Hackathon 2026",
+    "startDate": "2026-08-01T00:00:00Z",
+    "endDate": "2026-08-02T23:59:59Z",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "VirtualLocation",
+      "url": "https://hackathon-website-sooty-delta.vercel.app/"
+    }
+  }
+]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script></head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg overflow-x-hidden">
+
+<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
+<div class="flex justify-between items-center w-full px-3 sm:px-gutter h-16 max-w-container-max mx-auto overflow-hidden">
+<div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
+<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
+<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
+</div>
+<div id="desktop-nav" class="hidden md:flex items-center gap-8"><a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="index.html">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="achievements.html">Achievements</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="projects.html">Projects</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="members.html">Members</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="javascript:void(0)" onclick="window.openHackathonWindow();">🏆 Hackathon</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="ambassadors.html">Ambassador</a></div>
+<a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star
+                Star on GitHub">
+<span class="material-symbols-outlined text-sm" data-icon="star">star</span>
+                Star on GitHub
+            </button></a>
+
+<button id="mobile-menu-toggle-btn" class="md:hidden text-on-surface p-1.5 sm:p-2 shrink-0 flex items-center justify-center cursor-pointer" onclick="toggleMobileMenu()" aria-label="menu">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+
+<!-- Mobile Dropdown Menu -->
+<div id="mobile-menu" class="hidden absolute top-16 left-0 w-full bg-[#050505]/95 backdrop-blur-md border-b border-surface-variant/30 flex-col items-center py-8 space-y-6 md:hidden shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto"><a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="index.html" onclick="toggleMobileMenu()">Home</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="achievements.html" onclick="toggleMobileMenu()">Achievements</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="projects.html" onclick="toggleMobileMenu()">Projects</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="members.html" onclick="toggleMobileMenu()">Members</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="javascript:void(0)" onclick="toggleMobileMenu(); window.openHackathonWindow();">🏆 Hackathon</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="blogs.html" onclick="toggleMobileMenu()">Blog</a>
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="ambassadors.html" onclick="toggleMobileMenu()">Ambassador</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
+        <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-surface-container bg-surface/50 hover:border-primary glow-hover text-on-surface font-label-mono text-sm transition-all duration-200" aria-label="star
+            Star on GitHub">
+            <span class="material-symbols-outlined text-sm">star</span>
+            Star on GitHub
+        </button>
+    </a></div>
+
+<script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.querySelector('#mobile-menu-toggle-btn [data-icon="menu"], #mobile-menu-toggle-btn .material-symbols-outlined');
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            menu.classList.add('flex');
+            if (icon) icon.textContent = 'close';
+        } else {
+            menu.classList.add('hidden');
+            menu.classList.remove('flex');
+            if (icon) icon.textContent = 'menu';
+        }
+    }
+</script>
+</nav>
+<main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter min-h-screen">
+
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 glass-panel p-6 shrink-0 flex flex-col gap-4 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl rounded-full pointer-events-none"></div>
+      <h2 class="text-xl font-bold font-headline-mono text-on-surface mb-2">PORTAL_ACCESS</h2>
+      
+      <div class="flex items-center gap-3 mb-6">
+        <img id="ambassador-avatar" src="/LogoOmnikon.jpeg" class="w-12 h-12 rounded-full border border-primary object-cover">
+        <div>
+          <p id="ambassador-name" class="font-bold text-sm text-on-surface">Loading...</p>
+          <p id="ambassador-id" class="text-xs text-primary font-mono">--</p>
+        </div>
+      </div>
+      
+      <nav class="flex flex-col gap-2">
+        <button id="btn-tab-overview" onclick="switchTab('overview')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-primary/20 border-l-2 border-primary transition-colors">Overview</button>
+        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
+        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
+        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
+        <button id="btn-tab-profile" onclick="switchTab('profile')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
+      </nav>
+      
+      <div class="mt-auto pt-6 border-t border-surface-variant/50">
+        <button onclick="copyReferralLink()" class="w-full py-2 bg-primary/10 hover:bg-primary/20 border border-primary text-primary text-sm font-mono transition-colors glow-hover">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">content_copy</span> COPY REF LINK
+        </button>
+      </div>
+    </aside>
+    
+    <!-- Access Denied Screen (Hidden by default) -->
+    <div id="access-denied-screen" class="hidden flex-1 items-center justify-center">
+      <div class="glass-panel p-12 max-w-md w-full border border-primary text-center">
+        <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
+        <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
+        <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
+        <div class="flex flex-col gap-3">
+          <button onclick="if(window.openAuthModal) window.openAuthModal()" class="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-primary text-background font-bold transition-colors font-mono text-sm uppercase glow-hover">
+            LOGIN TO CONTINUE
+          </button>
+          <a href="/ambassadors.html" class="w-full inline-flex justify-center items-center gap-2 px-6 py-2 bg-primary/20 border border-primary text-primary hover:bg-primary/30 transition-colors font-mono text-sm uppercase glow-hover">Return to Landing</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col gap-6 relative" id="dashboard-content">
+      <!-- Overview Tab -->
+      <div id="tab-overview">
+        <h1 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Overview</h1>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <!-- Stat Cards -->
+          <div class="glass-panel p-5 relative overflow-hidden group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
+            <p class="text-xs text-on-surface-variant font-mono mb-1">CURRENT RANK</p>
+            <h3 class="text-3xl font-bold text-on-surface" id="stat-rank">--</h3>
+          </div>
+          <div class="glass-panel p-5 relative overflow-hidden group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
+            <p class="text-xs text-on-surface-variant font-mono mb-1">VERIFIED REFS</p>
+            <h3 class="text-3xl font-bold text-primary" id="stat-refs">--</h3>
+          </div>
+          <div class="glass-panel p-5 relative overflow-hidden group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
+            <p class="text-xs text-on-surface-variant font-mono mb-1">TOTAL CLICKS</p>
+            <h3 class="text-3xl font-bold text-on-surface" id="stat-clicks">--</h3>
+          </div>
+          <div class="glass-panel p-5 relative overflow-hidden group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
+            <p class="text-xs text-on-surface-variant font-mono mb-1">CONVERSION</p>
+            <h3 class="text-3xl font-bold text-accent" id="stat-conversion">--%</h3>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="glass-panel p-6">
+            <h3 class="text-xl font-bold mb-4 border-b border-surface-variant pb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary">history</span> Recent Activity
+            </h3>
+            <div id="recent-activity-list" class="flex flex-col gap-3">
+              <p class="text-sm text-on-surface-variant">Loading activity...</p>
+            </div>
+          </div>
+          
+          <div class="glass-panel p-6">
+            <h3 class="text-xl font-bold mb-4 border-b border-surface-variant pb-2 flex items-center gap-2">
+              <span class="material-symbols-outlined text-accent">campaign</span> Platform Announcements
+            </h3>
+            <div id="announcements-feed" class="flex flex-col gap-3">
+              <p class="text-sm text-on-surface-variant">Loading announcements...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Referrals Tab -->
+      <div id="tab-referrals" class="hidden">
+        <h1 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Referral History</h1>
+        <div class="glass-panel p-6">
+          <p class="text-sm text-on-surface-variant mb-6">View all incoming clicks and verified registrations from your unique referral link.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-surface-variant text-on-surface-variant">
+                  <th class="pb-2 font-medium">Date</th>
+                  <th class="pb-2 font-medium">IP / Visitor ID</th>
+                  <th class="pb-2 font-medium">Campaign</th>
+                  <th class="pb-2 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody id="referral-history-table">
+                <tr><td colspan="4" class="py-4 text-center text-on-surface-variant">Loading referrals...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campaigns Tab -->
+      <div id="tab-campaigns" class="hidden">
+        <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Active Campaigns</h1>
+        <p class="text-sm text-on-surface-variant mb-6">Promote active hackathons and initiatives using targeted campaign links to earn bonus referral points.</p>
+        <div id="campaigns-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <p class="text-sm text-on-surface-variant">Loading active campaigns...</p>
+        </div>
+      </div>
+
+      <!-- Rewards & Badges Tab -->
+      <div id="tab-rewards" class="hidden">
+        <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Rewards & Milestone Tiers</h1>
+        <p class="text-sm text-on-surface-variant mb-6">Unlock exclusive rewards, swag kits, and certificates as you increase your verified registrations.</p>
+        <div id="rewards-tier-list" class="flex flex-col gap-4">
+          <p class="text-sm text-on-surface-variant">Loading reward tiers...</p>
+        </div>
+      </div>
+
+      <!-- Profile Settings Tab -->
+      <div id="tab-profile" class="hidden">
+        <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Profile Settings</h1>
+        <p class="text-sm text-on-surface-variant mb-6">Update your personal details, academic institution, and social links for certificate issuance and team contact.</p>
+        
+        <form id="profile-settings-form" onsubmit="saveProfile(event)" class="glass-panel p-6 flex flex-col gap-6 max-w-3xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">FULL NAME</label>
+              <input type="text" id="profile-name" required class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">EMAIL ADDRESS (READ-ONLY)</label>
+              <input type="email" id="profile-email" disabled class="w-full bg-surface-variant/20 border border-surface-variant/30 rounded p-3 text-sm text-on-surface-variant cursor-not-allowed">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">COLLEGE / UNIVERSITY</label>
+              <input type="text" id="profile-college" placeholder="e.g. IIT Bombay" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">BRANCH / DEGREE</label>
+              <input type="text" id="profile-branch" placeholder="e.g. Computer Science" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">GRADUATION YEAR</label>
+              <input type="text" id="profile-year" placeholder="e.g. 2026" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">PHONE / WHATSAPP NUMBER</label>
+              <input type="tel" id="profile-phone" placeholder="+91 9876543210" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+            <div>
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">BIO / SHORT DESCRIPTION</label>
+              <input type="text" id="profile-bio" placeholder="Passionate developer & open-source enthusiast" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+            </div>
+          </div>
+
+          <div class="border-t border-surface-variant/40 pt-4">
+            <h4 class="text-sm font-bold text-on-surface mb-4">Social Media & Coding Profiles</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">LINKEDIN URL</label>
+                <input type="url" id="profile-linkedin" placeholder="https://linkedin.com/in/username" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">GITHUB USERNAME / URL</label>
+                <input type="text" id="profile-github" placeholder="username" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">DISCORD TAG</label>
+                <input type="text" id="profile-discord" placeholder="username#0000" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-on-surface-variant mb-1">TWITTER / X HANDLE</label>
+                <input type="text" id="profile-x" placeholder="@handle" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-primary text-background font-bold text-sm font-mono tracking-wider uppercase hover:bg-primary/90 transition-colors glow-hover mt-2">
+            SAVE PROFILE CHANGES
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="./assets/ambassador.js"></script>
+
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="./particles.js"></script>
+
+  <script>
+    window.env = {};
+    (async function() {
+      try {
+        const responseJson = await fetch('env-public.json');
+        if (responseJson.ok) {
+          window.env = await responseJson.json();
+        }
+        
+        try {
+          const responseEnv = await fetch('.env');
+          if (responseEnv.ok) {
+            const text = await responseEnv.text();
+            text.split('\n').forEach(line => {
+              const parts = line.split('=');
+              if (parts.length >= 2) {
+                const key = parts[0].trim();
+                const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
+                window.env[key] = val;
+              }
+            });
+          }
+        } catch(err) { /* .env missing on prod */ }
+      } catch (e) {
+        console.warn('Environment loading error:', e);
+      } finally {
+        window.envLoaded = true;
+        window.dispatchEvent(new CustomEvent('envLoaded'));
+      }
+    })();
+  </script>
+
+</body></html>

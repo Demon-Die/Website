@@ -1,7 +1,8 @@
 {
-  "name": "omnikon-website",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "status": 404, "dest": "/404err.html" }
+  "rewrites": [
+    {
+      "source": "/omnikon-ref-:id",
+      "destination": "/r.html?id=:id"
+    }
   ]
 }
