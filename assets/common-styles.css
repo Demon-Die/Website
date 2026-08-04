@@ -2,7 +2,7 @@
 
 /* --- CORE FOUC PROTECTIONS --- */
 /* Prevent layout trash before Tailwind CDN compiles */
-[hidden], .hidden { display: none; }
+[hidden], .hidden { display: none !important; }
 img { max-width: 100%; height: auto; }
 img[src*="LogoOmnikon"], img[alt*="Omnikon Logo"] {
     max-width: 40px !important;
@@ -25,6 +25,8 @@ img[alt*="Avatar"], img[src*="avatar"], .avatar-box, #ambassador-avatar {
 /* ----------------------------- */
 html {
     scroll-behavior: smooth;
+    background-color: #050505;
+    min-height: 100vh;
 }
 
 /* Page Transition Animations */
