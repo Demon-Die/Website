@@ -32,19 +32,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       return `
         <tr class="border-b border-surface-variant/30 ${rowStyles}">
-          <td class="px-6 py-4 font-mono text-sm ${rankStyles}">
+          <td class="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs sm:text-sm ${rankStyles} whitespace-nowrap">
             ${icon}#${rank}
           </td>
-          <td class="px-6 py-4 flex items-center gap-3">
-            <img src="${amb.photoURL || '/LogoOmnikon.jpeg'}" class="w-8 h-8 rounded-full border border-surface-variant object-cover">
-            <div>
-              <p class="font-bold text-on-surface">${amb.name || 'Anonymous'}</p>
-              <p class="text-[10px] text-primary font-mono">${amb.ambassadorId || '---'}</p>
+          <td class="px-3 sm:px-6 py-3 sm:py-4">
+            <div class="flex items-center gap-2 sm:gap-3">
+              <img src="${amb.photoURL || '/LogoOmnikon.jpeg'}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-surface-variant object-cover shrink-0" alt="Avatar">
+              <div class="min-w-0">
+                <p class="font-bold text-on-surface text-xs sm:text-sm truncate">${amb.name || 'Anonymous'}</p>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[10px] text-primary font-mono">${amb.ambassadorId || '---'}</span>
+                  <span class="text-[10px] text-on-surface-variant md:hidden font-sans truncate max-w-[140px] sm:max-w-[200px]">• ${amb.college || '---'}</span>
+                </div>
+              </div>
             </div>
           </td>
-          <td class="px-6 py-4 text-sm text-on-surface-variant">${amb.college || '---'}</td>
-          <td class="px-6 py-4 text-right">
-            <span class="inline-flex items-center justify-center bg-surface-variant/50 text-on-surface font-mono text-sm px-3 py-1 rounded border border-surface-variant">
+          <td class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-on-surface-variant hidden md:table-cell">${amb.college || '---'}</td>
+          <td class="px-3 sm:px-6 py-3 sm:py-4 text-right whitespace-nowrap">
+            <span class="inline-flex items-center justify-center bg-surface-variant/50 text-on-surface font-mono text-xs sm:text-sm px-2.5 sm:px-3 py-0.5 sm:py-1 rounded border border-surface-variant font-bold">
               ${amb.verifiedRegistrations || 0}
             </span>
           </td>

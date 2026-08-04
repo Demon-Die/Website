@@ -110,8 +110,7 @@
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="members.html">Members</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="javascript:void(0)" onclick="window.openHackathonWindow();">🏆 Hackathon</a>
 <a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="blogs.html">Blog</a>
-<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="ambassadors.html">Ambassador</a>
-<a class="text-primary font-bold font-label-mono text-label-mono text-xs" href="leaderboard.html">Leaderboard</a></div>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="ambassadors.html">Ambassador</a></div>
 <a href="https://github.com/Omnikon-Org" target="_blank"><button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="star
                 Star on GitHub">
 <span class="material-symbols-outlined text-sm" data-icon="star">star</span>
@@ -130,8 +129,7 @@
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="members.html" onclick="toggleMobileMenu()">Members</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="javascript:void(0)" onclick="toggleMobileMenu(); window.openHackathonWindow();">🏆 Hackathon</a>
 <a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="blogs.html" onclick="toggleMobileMenu()">Blog</a>
-<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="ambassadors.html" onclick="toggleMobileMenu()">Ambassador</a>
-<a class="text-primary font-bold font-label-mono text-lg transition-colors" href="leaderboard.html" onclick="toggleMobileMenu()">Leaderboard</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
+<a class="text-on-surface-variant hover:text-primary font-label-mono text-lg transition-colors" href="ambassadors.html" onclick="toggleMobileMenu()">Ambassador</a><a href="https://github.com/Omnikon-Org" target="_blank" class="w-11/12 mt-4" onclick="toggleMobileMenu()">
         <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border border-surface-container bg-surface/50 hover:border-primary glow-hover text-on-surface font-label-mono text-sm transition-all duration-200" aria-label="star
             Star on GitHub">
             <span class="material-symbols-outlined text-sm">star</span>
@@ -155,27 +153,29 @@
     }
 </script>
 </nav>
-<main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter min-h-screen">
+<main class="pt-20 sm:pt-24 pb-section-gap max-w-container-max mx-auto px-3 sm:px-gutter min-h-screen">
 
-  <div class="text-center mb-12">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Global Leaderboard</h1>
-    <p class="text-on-surface-variant max-w-xl mx-auto">The top performing ambassadors across the nation.</p>
+  <div class="text-center mb-8 sm:mb-12">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Global Leaderboard</h1>
+    <p class="text-on-surface-variant text-sm sm:text-base max-w-xl mx-auto">The top performing ambassadors across the nation.</p>
   </div>
   
-  <div class="glass-panel max-w-4xl mx-auto overflow-hidden">
-    <table class="w-full text-left">
-      <thead class="bg-surface-elevation">
-        <tr class="border-b border-surface-variant">
-          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">Rank</th>
-          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">Ambassador</th>
-          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">College</th>
-          <th class="px-6 py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider text-right">Verified Refs</th>
-        </tr>
-      </thead>
-      <tbody id="leaderboard-body" class="divide-y divide-surface-variant/50">
-        <tr><td colspan="4" class="py-8 text-center text-on-surface-variant">Loading rankings...</td></tr>
-      </tbody>
-    </table>
+  <div class="glass-panel max-w-4xl mx-auto overflow-hidden rounded-xl">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-surface-elevation">
+          <tr class="border-b border-surface-variant">
+            <th class="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">Rank</th>
+            <th class="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider">Ambassador</th>
+            <th class="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider hidden md:table-cell">College</th>
+            <th class="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-on-surface-variant uppercase tracking-wider text-right">Verified Refs</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body" class="divide-y divide-surface-variant/50">
+          <tr><td colspan="4" class="py-8 text-center text-on-surface-variant font-mono">Loading rankings...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <script type="module" src="./assets/leaderboard.js"></script>
 
