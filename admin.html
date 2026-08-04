@@ -207,7 +207,13 @@
     <div class="flex-1 glass-panel p-4 sm:p-6 relative overflow-hidden">
       <!-- Verify Referrals Tab -->
       <div id="tab-referrals">
-        <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-accent">Pending Referrals</h1>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <h1 class="text-xl sm:text-2xl font-bold text-accent">Pending Referrals</h1>
+          <button id="btn-approve-all-referrals" onclick="approveAllPendingReferrals()" class="w-full sm:w-auto justify-center px-4 py-2.5 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-mono font-bold rounded uppercase flex items-center gap-2 cursor-pointer shadow-sm">
+            <span class="material-symbols-outlined text-sm">done_all</span>
+            <span>Approve All Referrals</span>
+          </button>
+        </div>
         <!-- Desktop Table View -->
         <div class="hidden md:block overflow-x-auto border border-surface-variant/30 rounded-lg">
           <table class="w-full text-left text-sm min-w-[650px]">

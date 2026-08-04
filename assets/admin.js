@@ -254,6 +254,18 @@ async function loadAdminReferrals() {
         </div>
         `;
       }).join('');
+    const pendingCount = referrals.filter(r => r.status === 'pending').length;
+    const approveAllBtn = document.getElementById('btn-approve-all-referrals');
+    if (approveAllBtn) {
+      if (pendingCount > 0) {
+        approveAllBtn.disabled = false;
+        approveAllBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        approveAllBtn.innerHTML = `<span class="material-symbols-outlined text-sm">done_all</span><span>Approve All Referrals (${pendingCount})</span>`;
+      } else {
+        approveAllBtn.disabled = true;
+        approveAllBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        approveAllBtn.innerHTML = `<span class="material-symbols-outlined text-sm">done_all</span><span>No Pending Referrals</span>`;
+      }
     }
     
   } catch (err) {
@@ -290,6 +302,67 @@ window.verifyReferral = async function(referralId) {
   } catch (err) {
     console.error("Error verifying:", err);
     showToast("Failed to verify referral.", "error");
+  }
+};
+
+window.approveAllPendingReferrals = async function() {
+  const btn = document.getElementById('btn-approve-all-referrals');
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add('opacity-50', 'cursor-not-allowed');
+  }
+
+  try {
+    const db = await getDb();
+    const snapshot = await db.collection('referrals')
+      .where('status', '==', 'pending')
+      .get();
+
+    if (snapshot.empty) {
+      showToast("No pending referrals to approve.", "info");
+      return;
+    }
+
+    const pendingDocs = snapshot.docs;
+    const countToApprove = pendingDocs.length;
+    const batch = db.batch();
+    const ambCountMap = {};
+
+    pendingDocs.forEach(doc => {
+      batch.update(doc.ref, { status: 'verified' });
+      const ambId = doc.data().ambassadorId;
+      if (ambId) {
+        ambCountMap[ambId] = (ambCountMap[ambId] || 0) + 1;
+      }
+    });
+
+    await batch.commit();
+
+    for (const [ambId, count] of Object.entries(ambCountMap)) {
+      try {
+        const userSnap = await db.collection('users').where('ambassadorId', '==', ambId).limit(1).get();
+        if (!userSnap.empty) {
+          await userSnap.docs[0].ref.update({
+            verifiedRegistrations: window.firebase.firestore.FieldValue.increment(count),
+            totalClicks: window.firebase.firestore.FieldValue.increment(count)
+          });
+        }
+      } catch (err) {
+        console.error(`Error updating ambassador ${ambId}:`, err);
+      }
+    }
+
+    showToast(`Successfully approved ${countToApprove} referral${countToApprove > 1 ? 's' : ''}!`);
+    await loadAdminReferrals();
+
+  } catch (err) {
+    console.error("Error approving all pending referrals:", err);
+    showToast("Failed to approve pending referrals: " + err.message, "error");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
   }
 };
 
