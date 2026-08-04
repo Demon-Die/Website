@@ -5,10 +5,7 @@ export async function getDb() {
   
   // Wait for environment variables to load
   if (!window.envLoaded) {
-    await Promise.race([
-      new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true })),
-      new Promise(resolve => setTimeout(resolve, 3000))
-    ]);
+    await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
   }
 
   // Ensure Firebase app is initialized (auth.js normally does this, but we check just in case)
