@@ -16,11 +16,20 @@ import {
 } from './db.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const slowLoadingTimer = setTimeout(() => {
+    const timeoutBox = document.getElementById('admin-loading-timeout');
+    const loadingScreen = document.getElementById('admin-loading-screen');
+    if (timeoutBox && loadingScreen && !loadingScreen.classList.contains('hidden')) {
+      timeoutBox.classList.remove('hidden');
+    }
+  }, 3500);
+
   const checkAuth = setInterval(async () => {
     if (window.firebase && firebase.auth) {
       clearInterval(checkAuth);
       
       firebase.auth().onAuthStateChanged(async (user) => {
+        clearTimeout(slowLoadingTimer);
         if (!user) {
           showAccessDenied();
           return;
