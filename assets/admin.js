@@ -254,6 +254,8 @@ async function loadAdminReferrals() {
         </div>
         `;
       }).join('');
+    }
+
     const pendingCount = referrals.filter(r => r.status === 'pending').length;
     const approveAllBtn = document.getElementById('btn-approve-all-referrals');
     if (approveAllBtn) {
