@@ -44,13 +44,12 @@
 
   
   async function initFirebase() {
+    
     if (!window.envLoaded) {
-      await Promise.race([
-        new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true })),
-        new Promise(resolve => setTimeout(resolve, 3000))
-      ]);
+      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
     }
 
+    
     if (!window.env?.FIREBASE_API_KEY) {
       console.warn('Firebase configuration missing in environment.');
       return;
@@ -66,13 +65,16 @@
     };
 
     try {
+      
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
       }
       auth = firebase.auth();
 
+      
       mountAuthUI();
 
+      
       auth.onAuthStateChanged((user) => {
         updateAuthWidget(user);
       });
@@ -81,7 +83,9 @@
     }
   }
 
+  
   function mountAuthUI() {
+    
     modal = document.createElement('div');
     modal.className = 'auth-modal-overlay';
     modal.id = 'auth-modal';
@@ -118,9 +122,6 @@
           </div>
           <p id="auth-error-msg" class="text-primary text-[10px] font-mono hidden mt-1"></p>
         </div>
-        <p class="text-[10px] text-on-surface-variant/70 font-mono mt-4 text-center leading-tight">
-          Authenticating taking time or not logged in? Please refresh after some time.
-        </p>
       </div>
     `;
     document.body.appendChild(modal);
@@ -135,6 +136,7 @@
       modal.classList.add('open');
     };
 
+    
     document.getElementById('auth-github-btn').addEventListener('click', () => signIn('github'));
     document.getElementById('auth-google-btn').addEventListener('click', () => signIn('google'));
     
@@ -145,7 +147,7 @@
   function showError(msg) {
     if (window.hideGlobalLoader) window.hideGlobalLoader();
     const errorEl = document.getElementById('auth-error-msg');
-    errorEl.innerHTML = `${msg}<br><span class="text-[9px] text-on-surface-variant/80 mt-1 block">Taking too much time? Please refresh the page after some time.</span>`;
+    errorEl.textContent = msg;
     errorEl.classList.remove('hidden');
   }
 
@@ -191,6 +193,8 @@
 
     auth.signInWithPopup(provider)
       .then((result) => {
+        // Linking accounts is generally handled on the backend or in Firebase Console settings.
+        // If a user with the same email exists, Firebase might throw an error we need to catch.
         modal.classList.remove('open');
         if (window.hideGlobalLoader) window.hideGlobalLoader();
       })

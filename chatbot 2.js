@@ -152,10 +152,7 @@ RULES:
 
     if (!window.envLoaded) {
       showTypingIndicator();
-      await Promise.race([
-        new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true })),
-        new Promise(resolve => setTimeout(resolve, 3000))
-      ]);
+      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
       removeTypingIndicator();
     }
 
