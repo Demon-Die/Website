@@ -259,25 +259,29 @@
       authWidget.innerHTML = `
         <div class="flex items-center gap-1.5 sm:gap-3">
           <img class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-primary object-cover shrink-0" src="${avatarUrl}" alt="Profile">
-          <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer whitespace-nowrap">
+          <button id="auth-logout-btn" class="hidden sm:inline-flex items-center text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer whitespace-nowrap">
             [ LOGOUT ]
+          </button>
+          <button id="auth-logout-btn-mobile" class="sm:hidden text-on-surface-variant hover:text-primary transition-colors p-1 flex items-center justify-center shrink-0 cursor-pointer" title="Logout">
+            <span class="material-symbols-outlined text-lg">logout</span>
           </button>
         </div>
       `;
+      const handleLogout = async () => {
+        try {
+          if (window.showGlobalLoader) window.showGlobalLoader('LOGGING_OUT...');
+          await auth.signOut();
+          sessionStorage.clear();
+          window.location.href = '/index.html';
+        } catch(err) {
+          console.error("Logout error:", err);
+          if (window.hideGlobalLoader) window.hideGlobalLoader();
+        }
+      };
       const logoutBtn = document.getElementById('auth-logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-          try {
-            if (window.showGlobalLoader) window.showGlobalLoader('LOGGING_OUT...');
-            await auth.signOut();
-            sessionStorage.clear();
-            window.location.href = '/index.html';
-          } catch(err) {
-            console.error("Logout error:", err);
-            if (window.hideGlobalLoader) window.hideGlobalLoader();
-          }
-        });
-      }
+      const logoutBtnMobile = document.getElementById('auth-logout-btn-mobile');
+      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+      if (logoutBtnMobile) logoutBtnMobile.addEventListener('click', handleLogout);
     } else {
       if (addBlogBtn) {
         addBlogBtn.classList.add('hidden');

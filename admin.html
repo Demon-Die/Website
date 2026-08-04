@@ -178,24 +178,29 @@
   <!-- Admin Main Content (Hidden until authenticated as admin) -->
   <div id="admin-content" class="hidden flex flex-col md:flex-row gap-4 sm:gap-6">
     <aside class="w-full md:w-64 glass-panel p-3.5 sm:p-6 shrink-0 flex flex-col gap-3">
-      <div class="flex items-center justify-between mb-1">
+      <div class="flex items-center justify-between">
         <h2 class="text-base sm:text-xl font-bold font-headline-mono text-accent">ADMIN_OVERRIDE</h2>
       </div>
-      <nav class="flex flex-row overflow-x-auto md:flex-col gap-1.5 sm:gap-2 pb-2 md:pb-0 scrollbar-none whitespace-nowrap -mx-3.5 px-3.5 md:mx-0 md:px-0">
-        <button id="btn-admin-tab-referrals" onclick="switchAdminTab('referrals')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-accent flex items-center gap-2 cursor-pointer">
-          <span class="material-symbols-outlined text-sm">verified</span> Verify Referrals
+      <nav class="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-col gap-1.5 sm:gap-2">
+        <button id="btn-admin-tab-referrals" onclick="switchAdminTab('referrals')" class="w-full text-left px-3 py-2.5 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-accent flex items-center justify-center md:justify-start gap-1.5 cursor-pointer">
+          <span class="material-symbols-outlined text-sm shrink-0">verified</span>
+          <span class="truncate">Verify Referrals</span>
         </button>
-        <button id="btn-admin-tab-ambassadors" onclick="switchAdminTab('ambassadors')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center gap-2 cursor-pointer">
-          <span class="material-symbols-outlined text-sm">group</span> Manage Ambassadors
+        <button id="btn-admin-tab-ambassadors" onclick="switchAdminTab('ambassadors')" class="w-full text-left px-3 py-2.5 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center justify-center md:justify-start gap-1.5 cursor-pointer">
+          <span class="material-symbols-outlined text-sm shrink-0">group</span>
+          <span class="truncate">Ambassadors</span>
         </button>
-        <button id="btn-admin-tab-campaigns" onclick="switchAdminTab('campaigns')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center gap-2 cursor-pointer">
-          <span class="material-symbols-outlined text-sm">campaign</span> Campaigns
+        <button id="btn-admin-tab-campaigns" onclick="switchAdminTab('campaigns')" class="w-full text-left px-3 py-2.5 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center justify-center md:justify-start gap-1.5 cursor-pointer">
+          <span class="material-symbols-outlined text-sm shrink-0">campaign</span>
+          <span class="truncate">Campaigns</span>
         </button>
-        <button id="btn-admin-tab-announcements" onclick="switchAdminTab('announcements')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center gap-2 cursor-pointer">
-          <span class="material-symbols-outlined text-sm">campaign</span> Announcements
+        <button id="btn-admin-tab-announcements" onclick="switchAdminTab('announcements')" class="w-full text-left px-3 py-2.5 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center justify-center md:justify-start gap-1.5 cursor-pointer">
+          <span class="material-symbols-outlined text-sm shrink-0">campaign</span>
+          <span class="truncate">Announcements</span>
         </button>
-        <button id="btn-admin-tab-analytics" onclick="switchAdminTab('analytics')" class="shrink-0 text-left px-3.5 py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center gap-2 cursor-pointer">
-          <span class="material-symbols-outlined text-sm">analytics</span> Analytics
+        <button id="btn-admin-tab-analytics" onclick="switchAdminTab('analytics')" class="col-span-2 sm:col-span-1 w-full text-left px-3 py-2.5 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent flex items-center justify-center md:justify-start gap-1.5 cursor-pointer">
+          <span class="material-symbols-outlined text-sm shrink-0">analytics</span>
+          <span class="truncate">Analytics</span>
         </button>
       </nav>
     </aside>
@@ -203,7 +208,8 @@
       <!-- Verify Referrals Tab -->
       <div id="tab-referrals">
         <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-accent">Pending Referrals</h1>
-        <div class="overflow-x-auto border border-surface-variant/30 rounded-lg">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto border border-surface-variant/30 rounded-lg">
           <table class="w-full text-left text-sm min-w-[650px]">
             <thead>
               <tr class="border-b border-surface-variant/50 text-on-surface-variant bg-surface-variant/10">
@@ -219,18 +225,23 @@
             </tbody>
           </table>
         </div>
+        <!-- Mobile Cards View -->
+        <div id="admin-referrals-cards" class="md:hidden flex flex-col gap-3">
+          <p class="text-sm text-on-surface-variant text-center py-4">Loading referrals...</p>
+        </div>
       </div>
       
       <!-- Manage Ambassadors Tab -->
       <div id="tab-ambassadors" class="hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           <h1 class="text-xl sm:text-2xl font-bold text-accent">Ambassador Directory & Applications</h1>
-          <button id="btn-approve-all-ambassadors" onclick="approveAllPendingAmbassadors()" class="w-full sm:w-auto justify-center px-4 py-2 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-mono font-bold rounded uppercase flex items-center gap-2 cursor-pointer shadow-sm">
+          <button id="btn-approve-all-ambassadors" onclick="approveAllPendingAmbassadors()" class="w-full sm:w-auto justify-center px-4 py-2.5 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-mono font-bold rounded uppercase flex items-center gap-2 cursor-pointer shadow-sm">
             <span class="material-symbols-outlined text-sm">done_all</span>
             <span>Approve All Pending</span>
           </button>
         </div>
-        <div class="overflow-x-auto border border-surface-variant/30 rounded-lg">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto border border-surface-variant/30 rounded-lg">
           <table class="w-full text-left text-sm min-w-[750px]">
             <thead>
               <tr class="border-b border-surface-variant/50 text-on-surface-variant bg-surface-variant/10">
@@ -248,6 +259,10 @@
               <tr><td colspan="8" class="py-4 text-center text-on-surface-variant">Loading...</td></tr>
             </tbody>
           </table>
+        </div>
+        <!-- Mobile Cards View -->
+        <div id="admin-ambassadors-cards" class="md:hidden flex flex-col gap-3">
+          <p class="text-sm text-on-surface-variant text-center py-4">Loading ambassadors...</p>
         </div>
       </div>
 
@@ -314,7 +329,8 @@
 
         <div class="glass-panel p-4 sm:p-6 border border-surface-variant/40">
           <h3 class="text-base sm:text-lg font-bold text-on-surface mb-4">Top Performing Ambassadors Leaderboard</h3>
-          <div class="overflow-x-auto border border-surface-variant/30 rounded-lg">
+          <!-- Desktop Table View -->
+          <div class="hidden md:block overflow-x-auto border border-surface-variant/30 rounded-lg">
             <table class="w-full text-left text-sm min-w-[500px]">
               <thead>
                 <tr class="border-b border-surface-variant text-on-surface-variant bg-surface-variant/10">
@@ -328,6 +344,10 @@
                 <tr><td colspan="4" class="py-4 text-center text-on-surface-variant">Loading leaderboard preview...</td></tr>
               </tbody>
             </table>
+          </div>
+          <!-- Mobile Cards View -->
+          <div id="analytics-leaderboard-cards" class="md:hidden flex flex-col gap-2.5">
+            <p class="text-sm text-on-surface-variant text-center py-4">Loading leaderboard...</p>
           </div>
         </div>
       </div>

@@ -172,7 +172,8 @@ window.switchAdminTab = function(tabName) {
 
 async function loadAdminReferrals() {
   const tbody = document.getElementById('admin-referrals-table');
-  if (!tbody) return;
+  const cardsContainer = document.getElementById('admin-referrals-cards');
+  if (!tbody && !cardsContainer) return;
   
   try {
     const [referrals, ambassadors] = await Promise.all([
@@ -181,7 +182,8 @@ async function loadAdminReferrals() {
     ]);
     
     if (referrals.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-on-surface-variant">No referrals found in database.</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-on-surface-variant">No referrals found in database.</td></tr>';
+      if (cardsContainer) cardsContainer.innerHTML = '<div class="glass-panel p-6 text-center text-on-surface-variant text-xs font-mono">No referrals found in database.</div>';
       return;
     }
     
@@ -190,38 +192,74 @@ async function loadAdminReferrals() {
       if (a.ambassadorId) ambMap[a.ambassadorId] = a;
     });
 
-    tbody.innerHTML = referrals.map(ref => {
-      const dateStr = ref.timestamp ? new Date(ref.timestamp.toDate()).toLocaleDateString() : 'Recent';
-      const amb = ambMap[ref.ambassadorId];
-      const ambName = amb ? amb.name : (ref.ambassadorId === 'DEMO' ? 'Demo Account' : 'Unknown Ambassador');
+    if (tbody) {
+      tbody.innerHTML = referrals.map(ref => {
+        const dateStr = ref.timestamp ? new Date(ref.timestamp.toDate()).toLocaleDateString() : 'Recent';
+        const amb = ambMap[ref.ambassadorId];
+        const ambName = amb ? amb.name : (ref.ambassadorId === 'DEMO' ? 'Demo Account' : 'Unknown Ambassador');
 
-      return `
-      <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
-        <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
-        <td class="px-4 py-3 whitespace-nowrap">
-          <button onclick="openAmbassadorDetailModal('${ref.ambassadorId}', 'ambassadorId')" class="text-left group cursor-pointer">
-            <div class="font-bold text-xs text-on-surface group-hover:text-accent transition-colors flex items-center gap-1">
-              ${ambName}
-              <span class="material-symbols-outlined text-[13px] text-accent opacity-60 group-hover:opacity-100 transition-opacity">info</span>
-            </div>
-            <div class="font-mono text-[11px] text-accent font-semibold">${ref.ambassadorId}</div>
-          </button>
-        </td>
-        <td class="px-4 py-3 font-mono text-xs whitespace-nowrap">${ref.visitorIp || 'Unknown'}</td>
-        <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${ref.campaignId || 'Hackathon 2026'}</td>
-        <td class="px-4 py-3 text-right whitespace-nowrap">
-          ${ref.status === 'verified' 
-            ? '<span class="px-2.5 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
-            : `<button onclick="verifyReferral('${ref.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase">Approve</button>`
-          }
-        </td>
-      </tr>
-      `;
-    }).join('');
+        return `
+        <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
+          <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
+          <td class="px-4 py-3 whitespace-nowrap">
+            <button onclick="openAmbassadorDetailModal('${ref.ambassadorId}', 'ambassadorId')" class="text-left group cursor-pointer">
+              <div class="font-bold text-xs text-on-surface group-hover:text-accent transition-colors flex items-center gap-1">
+                ${ambName}
+                <span class="material-symbols-outlined text-[13px] text-accent opacity-60 group-hover:opacity-100 transition-opacity">info</span>
+              </div>
+              <div class="font-mono text-[11px] text-accent font-semibold">${ref.ambassadorId}</div>
+            </button>
+          </td>
+          <td class="px-4 py-3 font-mono text-xs whitespace-nowrap">${ref.visitorIp || 'Unknown'}</td>
+          <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${ref.campaignId || 'Hackathon 2026'}</td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            ${ref.status === 'verified' 
+              ? '<span class="px-2.5 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
+              : `<button onclick="verifyReferral('${ref.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase cursor-pointer">Approve</button>`
+            }
+          </td>
+        </tr>
+        `;
+      }).join('');
+    }
+
+    if (cardsContainer) {
+      cardsContainer.innerHTML = referrals.map(ref => {
+        const dateStr = ref.timestamp ? new Date(ref.timestamp.toDate()).toLocaleDateString() : 'Recent';
+        const amb = ambMap[ref.ambassadorId];
+        const ambName = amb ? amb.name : (ref.ambassadorId === 'DEMO' ? 'Demo Account' : 'Unknown Ambassador');
+
+        return `
+        <div class="glass-panel p-4 border border-surface-variant/40 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono text-on-surface-variant">${dateStr}</span>
+            <span class="px-2 py-0.5 bg-surface-variant/30 text-on-surface-variant text-[10px] font-mono font-bold rounded uppercase">${ref.campaignId || 'Hackathon 2026'}</span>
+          </div>
+          <div>
+            <button onclick="openAmbassadorDetailModal('${ref.ambassadorId}', 'ambassadorId')" class="text-left group cursor-pointer">
+              <div class="font-bold text-sm text-on-surface group-hover:text-accent transition-colors flex items-center gap-1">
+                ${ambName}
+                <span class="material-symbols-outlined text-xs text-accent">info</span>
+              </div>
+              <div class="font-mono text-xs text-accent font-semibold">${ref.ambassadorId}</div>
+            </button>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-2.5 border-t border-surface-variant/30">
+            <span class="font-mono text-[11px] text-on-surface-variant truncate max-w-[160px]">IP: ${ref.visitorIp || 'Unknown'}</span>
+            ${ref.status === 'verified' 
+              ? '<span class="px-2.5 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase">Verified</span>'
+              : `<button onclick="verifyReferral('${ref.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase cursor-pointer">Approve</button>`
+            }
+          </div>
+        </div>
+        `;
+      }).join('');
+    }
     
   } catch (err) {
     console.error("Error loading referrals:", err);
-    tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-primary">Error loading data. Check console.</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-primary">Error loading data. Check console.</td></tr>';
+    if (cardsContainer) cardsContainer.innerHTML = '<div class="glass-panel p-4 text-center text-primary text-xs font-mono">Error loading data.</div>';
   }
 }
 
@@ -257,7 +295,8 @@ window.verifyReferral = async function(referralId) {
 
 async function loadPendingAmbassadors() {
   const tbody = document.getElementById('admin-ambassadors-table');
-  if (!tbody) return;
+  const cardsContainer = document.getElementById('admin-ambassadors-cards');
+  if (!tbody && !cardsContainer) return;
   
   try {
     const db = await getDb();
@@ -266,7 +305,8 @@ async function loadPendingAmbassadors() {
     let pendingCount = 0;
 
     if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-on-surface-variant">No ambassadors registered yet.</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-on-surface-variant">No ambassadors registered yet.</td></tr>';
+      if (cardsContainer) cardsContainer.innerHTML = '<div class="glass-panel p-6 text-center text-on-surface-variant text-xs font-mono">No ambassadors registered yet.</div>';
       if (approveAllBtn) {
         approveAllBtn.disabled = true;
         approveAllBtn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -275,7 +315,7 @@ async function loadPendingAmbassadors() {
       return;
     }
 
-    const rows = await Promise.all(snapshot.docs.map(async (doc) => {
+    const ambassadorsData = await Promise.all(snapshot.docs.map(async (doc) => {
       const data = doc.data();
       const isPending = data.status === 'pending';
       if (isPending) pendingCount++;
@@ -296,7 +336,11 @@ async function loadPendingAmbassadors() {
         ? (data.createdAt.toDate ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Recent')
         : 'Recent';
 
-      return `
+      return { doc, data, isPending, ambassadorId, effectiveClicks, verifiedCount, dateStr };
+    }));
+
+    if (tbody) {
+      tbody.innerHTML = ambassadorsData.map(({ doc, data, isPending, ambassadorId, effectiveClicks, verifiedCount, dateStr }) => `
       <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
         <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">${dateStr}</td>
         <td class="px-4 py-3 whitespace-nowrap">
@@ -324,10 +368,48 @@ async function loadPendingAmbassadors() {
             : `<span class="text-[10px] font-mono text-on-surface-variant">Approved</span>`}
         </td>
       </tr>
-      `;
-    }));
+      `).join('');
+    }
 
-    tbody.innerHTML = rows.join('');
+    if (cardsContainer) {
+      cardsContainer.innerHTML = ambassadorsData.map(({ doc, data, isPending, ambassadorId, effectiveClicks, verifiedCount, dateStr }) => `
+      <div class="glass-panel p-4 border border-surface-variant/40 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-mono text-on-surface-variant">${dateStr}</span>
+          ${isPending 
+            ? '<span class="px-2.5 py-1 bg-accent/20 text-accent font-bold rounded uppercase text-[10px]">Pending</span>'
+            : '<span class="px-2.5 py-1 bg-primary/20 text-primary font-bold rounded uppercase text-[10px]">Active</span>'}
+        </div>
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <button onclick="openAmbassadorDetailModal('${doc.id}', 'uid')" class="text-left group cursor-pointer">
+              <div class="font-bold text-sm text-on-surface group-hover:text-accent transition-colors flex items-center gap-1">
+                ${data.name || 'N/A'}
+                <span class="material-symbols-outlined text-xs text-accent">info</span>
+              </div>
+              <div class="font-mono text-xs text-primary font-bold">${ambassadorId || 'PENDING ID'}</div>
+            </button>
+            <p class="font-mono text-[11px] text-on-surface-variant mt-0.5 truncate max-w-[220px]">${data.email || 'N/A'}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 p-2.5 bg-surface-variant/10 rounded text-center font-mono text-xs border border-surface-variant/20">
+          <div>
+            <p class="text-[9px] text-on-surface-variant">CLICKS</p>
+            <p class="font-bold text-primary">${effectiveClicks}</p>
+          </div>
+          <div>
+            <p class="text-[9px] text-on-surface-variant">VERIFIED REFS</p>
+            <p class="font-bold text-accent">${verifiedCount}</p>
+          </div>
+        </div>
+        ${isPending ? `
+          <button onclick="approveAmbassador('${doc.id}')" class="w-full py-2 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-bold font-mono rounded uppercase cursor-pointer text-center">
+            Approve Ambassador
+          </button>
+        ` : ''}
+      </div>
+      `).join('');
+    }
     
     if (approveAllBtn) {
       if (pendingCount > 0) {
@@ -342,7 +424,8 @@ async function loadPendingAmbassadors() {
     }
   } catch (err) {
     console.error("Error loading ambassadors:", err);
-    tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-primary">Error loading data.</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-primary">Error loading data.</td></tr>';
+    if (cardsContainer) cardsContainer.innerHTML = '<div class="glass-panel p-4 text-center text-primary text-xs font-mono">Error loading data.</div>';
   }
 }
 
@@ -559,6 +642,7 @@ window.handleDeleteAnnouncement = async function(id) {
 async function loadSystemAnalytics() {
   const containerStats = document.getElementById('analytics-stats-grid');
   const leaderboardTable = document.getElementById('analytics-leaderboard-table');
+  const leaderboardCards = document.getElementById('analytics-leaderboard-cards');
   
   try {
     const stats = await getSystemAnalytics();
@@ -587,24 +671,46 @@ async function loadSystemAnalytics() {
       `;
     }
 
-    if (leaderboardTable) {
+    if (leaderboardTable || leaderboardCards) {
       const leaderboard = await getLeaderboard(10);
       if (leaderboard.length === 0) {
-        leaderboardTable.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-on-surface-variant">No active ambassadors on leaderboard yet.</td></tr>';
+        if (leaderboardTable) leaderboardTable.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-on-surface-variant">No active ambassadors on leaderboard yet.</td></tr>';
+        if (leaderboardCards) leaderboardCards.innerHTML = '<div class="p-4 text-center text-on-surface-variant text-xs font-mono">No active ambassadors on leaderboard yet.</div>';
         return;
       }
-      leaderboardTable.innerHTML = leaderboard.map((user, idx) => `
-        <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
-          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-bold font-mono text-xs text-primary">#${idx + 1}</td>
-          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs">
-            <button onclick="openAmbassadorDetailModal('${user.ambassadorId}', 'ambassadorId')" class="font-bold text-on-surface hover:text-accent underline transition-colors text-left cursor-pointer">
-              ${user.name || 'Anonymous'}
-            </button>
-          </td>
-          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs text-accent">${user.ambassadorId}</td>
-          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-bold text-xs text-right">${user.verifiedRegistrations || 0}</td>
-        </tr>
-      `).join('');
+      if (leaderboardTable) {
+        leaderboardTable.innerHTML = leaderboard.map((user, idx) => `
+          <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
+            <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-bold font-mono text-xs text-primary">#${idx + 1}</td>
+            <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs">
+              <button onclick="openAmbassadorDetailModal('${user.ambassadorId}', 'ambassadorId')" class="font-bold text-on-surface hover:text-accent underline transition-colors text-left cursor-pointer">
+                ${user.name || 'Anonymous'}
+              </button>
+            </td>
+            <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs text-accent">${user.ambassadorId}</td>
+            <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-bold text-xs text-right">${user.verifiedRegistrations || 0}</td>
+          </tr>
+        `).join('');
+      }
+      if (leaderboardCards) {
+        leaderboardCards.innerHTML = leaderboard.map((user, idx) => `
+          <div class="p-3 bg-surface-variant/20 border border-surface-variant/30 rounded-lg flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="font-bold font-mono text-sm text-primary">#${idx + 1}</span>
+              <div>
+                <button onclick="openAmbassadorDetailModal('${user.ambassadorId}', 'ambassadorId')" class="font-bold text-xs text-on-surface hover:text-accent underline transition-colors text-left cursor-pointer">
+                  ${user.name || 'Anonymous'}
+                </button>
+                <p class="font-mono text-[10px] text-accent">${user.ambassadorId}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <p class="text-[9px] font-mono text-on-surface-variant">VERIFIED REFS</p>
+              <p class="font-bold text-xs text-on-surface">${user.verifiedRegistrations || 0}</p>
+            </div>
+          </div>
+        `).join('');
+      }
     }
   } catch (err) {
     console.error("Error loading analytics:", err);
