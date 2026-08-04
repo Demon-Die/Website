@@ -91,6 +91,48 @@ function showAdminUI() {
   }
 }
 
+function showToast(msg, type = 'success') {
+  const existing = document.getElementById('admin-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'admin-toast';
+  let icon = 'check_circle';
+  let borderColor = 'border-primary';
+  let textColor = 'text-primary';
+  let glow = 'shadow-[0_0_15px_rgba(255,49,49,0.25)]';
+
+  if (type === 'error') {
+    icon = 'error';
+    borderColor = 'border-red-500';
+    textColor = 'text-red-400';
+    glow = 'shadow-[0_0_15px_rgba(239,68,68,0.25)]';
+  } else if (type === 'info') {
+    icon = 'info';
+    borderColor = 'border-accent';
+    textColor = 'text-accent';
+    glow = 'shadow-[0_0_15px_rgba(217,119,6,0.25)]';
+  } else if (type === 'warning') {
+    icon = 'warning';
+    borderColor = 'border-yellow-500';
+    textColor = 'text-yellow-400';
+    glow = 'shadow-[0_0_15px_rgba(234,179,8,0.25)]';
+  }
+
+  toast.className = `fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 bg-surface-elevation border ${borderColor} ${textColor} px-4 sm:px-5 py-3 font-mono text-xs shadow-lg ${glow} z-50 transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 rounded-lg opacity-0 translate-y-2`;
+  toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">${icon}</span><span>${msg}</span>`;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.remove('opacity-0', 'translate-y-2');
+  }, 10);
+
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
 window.switchAdminTab = function(tabName) {
   const tabs = ['referrals', 'ambassadors', 'campaigns', 'announcements', 'analytics'];
   if (!tabs.includes(tabName)) return;
@@ -111,6 +153,9 @@ window.switchAdminTab = function(tabName) {
       if (t === tabName) {
         btn.classList.add('bg-surface-variant/50', 'border-accent', 'text-on-surface');
         btn.classList.remove('border-transparent', 'text-on-surface-variant');
+        try {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } catch (e) {}
       } else {
         btn.classList.remove('bg-surface-variant/50', 'border-accent', 'text-on-surface');
         btn.classList.add('border-transparent', 'text-on-surface-variant');
@@ -201,12 +246,12 @@ window.verifyReferral = async function(referralId) {
       }
     }
     
-    alert("Referral approved!");
+    showToast("Referral approved!");
     loadAdminReferrals();
     
   } catch (err) {
     console.error("Error verifying:", err);
-    alert("Failed to verify referral. Check console.");
+    showToast("Failed to verify referral.", "error");
   }
 };
 
@@ -217,15 +262,23 @@ async function loadPendingAmbassadors() {
   try {
     const db = await getDb();
     const snapshot = await db.collection('users').where('role', '==', 'ambassador').get();
-    
+    const approveAllBtn = document.getElementById('btn-approve-all-ambassadors');
+    let pendingCount = 0;
+
     if (snapshot.empty) {
       tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-on-surface-variant">No ambassadors registered yet.</td></tr>';
+      if (approveAllBtn) {
+        approveAllBtn.disabled = true;
+        approveAllBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        approveAllBtn.innerHTML = `<span class="material-symbols-outlined text-sm">done_all</span><span>No Pending Ambassadors</span>`;
+      }
       return;
     }
 
     const rows = await Promise.all(snapshot.docs.map(async (doc) => {
       const data = doc.data();
       const isPending = data.status === 'pending';
+      if (isPending) pendingCount++;
       const ambassadorId = data.ambassadorId;
       
       let dbClicks = 0;
@@ -267,7 +320,7 @@ async function loadPendingAmbassadors() {
         </td>
         <td class="px-4 py-3 text-right whitespace-nowrap">
           ${isPending 
-            ? `<button onclick="approveAmbassador('${doc.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase">Approve</button>`
+            ? `<button onclick="approveAmbassador('${doc.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-[10px] font-bold rounded uppercase cursor-pointer">Approve</button>`
             : `<span class="text-[10px] font-mono text-on-surface-variant">Approved</span>`}
         </td>
       </tr>
@@ -276,6 +329,17 @@ async function loadPendingAmbassadors() {
 
     tbody.innerHTML = rows.join('');
     
+    if (approveAllBtn) {
+      if (pendingCount > 0) {
+        approveAllBtn.disabled = false;
+        approveAllBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        approveAllBtn.innerHTML = `<span class="material-symbols-outlined text-sm">done_all</span><span>Approve All Pending (${pendingCount})</span>`;
+      } else {
+        approveAllBtn.disabled = true;
+        approveAllBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        approveAllBtn.innerHTML = `<span class="material-symbols-outlined text-sm">done_all</span><span>No Pending Ambassadors</span>`;
+      }
+    }
   } catch (err) {
     console.error("Error loading ambassadors:", err);
     tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-primary">Error loading data.</td></tr>';
@@ -283,8 +347,6 @@ async function loadPendingAmbassadors() {
 }
 
 window.approveAmbassador = async function(userId) {
-  if (!confirm("Approve this ambassador and generate their unique ID?")) return;
-  
   try {
     const db = await getDb();
     const counterRef = db.collection('counters').doc('ambassadorId');
@@ -308,12 +370,67 @@ window.approveAmbassador = async function(userId) {
       });
     });
     
-    alert("Ambassador approved successfully!");
+    showToast("Ambassador approved successfully!");
     loadPendingAmbassadors();
     
   } catch (err) {
     console.error("Error approving ambassador:", err);
-    alert("Transaction failed! Check console.");
+    showToast("Transaction failed! Check console.", "error");
+  }
+};
+
+window.approveAllPendingAmbassadors = async function() {
+  const btn = document.getElementById('btn-approve-all-ambassadors');
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add('opacity-50', 'cursor-not-allowed');
+  }
+
+  try {
+    const db = await getDb();
+    const snapshot = await db.collection('users')
+      .where('role', '==', 'ambassador')
+      .where('status', '==', 'pending')
+      .get();
+
+    if (snapshot.empty) {
+      showToast("No pending ambassadors to approve.", "info");
+      return;
+    }
+
+    const pendingDocs = snapshot.docs;
+    const countToApprove = pendingDocs.length;
+    const counterRef = db.collection('counters').doc('ambassadorId');
+
+    await db.runTransaction(async (transaction) => {
+      const counterDoc = await transaction.get(counterRef);
+      let currentCount = counterDoc.exists ? (counterDoc.data().count || 0) : 0;
+
+      pendingDocs.forEach((doc) => {
+        currentCount++;
+        const paddedCount = String(currentCount).padStart(4, '0');
+        const newId = `OMNI26-AMB-${paddedCount}`;
+
+        transaction.update(doc.ref, {
+          status: 'active',
+          ambassadorId: newId
+        });
+      });
+
+      transaction.set(counterRef, { count: currentCount }, { merge: true });
+    });
+
+    showToast(`Successfully approved all ${countToApprove} pending ambassador${countToApprove > 1 ? 's' : ''}!`);
+    await loadPendingAmbassadors();
+
+  } catch (err) {
+    console.error("Error approving all pending ambassadors:", err);
+    showToast("Failed to approve pending ambassadors: " + err.message, "error");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
   }
 };
 
@@ -329,7 +446,7 @@ async function loadAdminCampaigns() {
     }
 
     container.innerHTML = campaigns.map(c => `
-      <div class="p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg flex items-center justify-between">
+      <div class="p-3.5 sm:p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div class="flex items-center gap-2 mb-1">
             <h4 class="font-bold text-sm text-on-surface">${c.title}</h4>
@@ -338,7 +455,7 @@ async function loadAdminCampaigns() {
           <p class="text-xs text-on-surface-variant">${c.description || ''}</p>
           <p class="text-[10px] font-mono text-accent mt-1">Target: ${c.target || 10} refs | Multiplier: ${c.multiplier || '1x'} | Reward: ${c.reward || 'Swag'}</p>
         </div>
-        <button onclick="toggleCampaign('${c.id}', '${c.status === 'active' ? 'inactive' : 'active'}')" class="px-3 py-1.5 bg-surface-elevation border border-surface-variant text-xs font-mono text-on-surface hover:border-primary transition-colors">
+        <button onclick="toggleCampaign('${c.id}', '${c.status === 'active' ? 'inactive' : 'active'}')" class="self-start sm:self-auto px-3 py-1.5 bg-surface-elevation border border-surface-variant text-xs font-mono text-on-surface hover:border-primary transition-colors cursor-pointer">
           ${c.status === 'active' ? 'Deactivate' : 'Activate'}
         </button>
       </div>
@@ -363,12 +480,12 @@ window.handleCreateCampaign = async function(event) {
 
   try {
     await createCampaign(campaignData);
-    alert("Campaign launched successfully!");
+    showToast("Campaign launched successfully!");
     document.getElementById('admin-campaign-form').reset();
     loadAdminCampaigns();
   } catch (err) {
     console.error("Error creating campaign:", err);
-    alert("Failed to create campaign: " + err.message);
+    showToast("Failed to create campaign: " + err.message, "error");
   }
 };
 
@@ -378,7 +495,7 @@ window.toggleCampaign = async function(id, newStatus) {
     loadAdminCampaigns();
   } catch (err) {
     console.error("Error updating campaign status:", err);
-    alert("Failed to update status.");
+    showToast("Failed to update status.", "error");
   }
 };
 
@@ -394,7 +511,7 @@ async function loadAdminAnnouncements() {
     }
 
     container.innerHTML = list.map(a => `
-      <div class="p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg flex items-center justify-between">
+      <div class="p-3.5 sm:p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div class="flex items-center gap-2 mb-1">
             <span class="px-2 py-0.5 bg-accent/20 text-accent font-mono text-[10px] font-bold rounded uppercase">${a.priority || 'INFO'}</span>
@@ -402,7 +519,7 @@ async function loadAdminAnnouncements() {
           </div>
           <p class="text-xs text-on-surface-variant">${a.message}</p>
         </div>
-        <button onclick="handleDeleteAnnouncement('${a.id}')" class="px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background text-xs font-mono transition-colors">
+        <button onclick="handleDeleteAnnouncement('${a.id}')" class="self-start sm:self-auto px-3 py-1 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background text-xs font-mono transition-colors cursor-pointer">
           Delete
         </button>
       </div>
@@ -420,12 +537,12 @@ window.handleCreateAnnouncement = async function(event) {
 
   try {
     await createAnnouncement({ title, priority, message });
-    alert("Announcement broadcasted!");
+    showToast("Announcement broadcasted!");
     document.getElementById('admin-announce-form').reset();
     loadAdminAnnouncements();
   } catch (err) {
     console.error("Error posting announcement:", err);
-    alert("Failed to post announcement.");
+    showToast("Failed to post announcement.", "error");
   }
 };
 
@@ -478,14 +595,14 @@ async function loadSystemAnalytics() {
       }
       leaderboardTable.innerHTML = leaderboard.map((user, idx) => `
         <tr class="border-b border-surface-variant/30 hover:bg-surface-variant/10 transition-colors">
-          <td class="py-3 font-bold font-mono text-xs text-primary">#${idx + 1}</td>
-          <td class="py-3 font-mono text-xs">
+          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-bold font-mono text-xs text-primary">#${idx + 1}</td>
+          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs">
             <button onclick="openAmbassadorDetailModal('${user.ambassadorId}', 'ambassadorId')" class="font-bold text-on-surface hover:text-accent underline transition-colors text-left cursor-pointer">
               ${user.name || 'Anonymous'}
             </button>
           </td>
-          <td class="py-3 font-mono text-xs text-accent">${user.ambassadorId}</td>
-          <td class="py-3 font-bold text-xs">${user.verifiedRegistrations || 0}</td>
+          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-mono text-xs text-accent">${user.ambassadorId}</td>
+          <td class="px-3 sm:px-4 py-2.5 sm:py-3 font-bold text-xs text-right">${user.verifiedRegistrations || 0}</td>
         </tr>
       `).join('');
     }
@@ -589,13 +706,13 @@ function renderAmbassadorDossier(user) {
 
   modalBody.innerHTML = `
     <!-- Top Header Card -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg">
-      <div class="flex items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-primary/20 border border-primary text-primary flex items-center justify-center font-bold text-xl font-mono shrink-0 overflow-hidden">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 bg-surface-variant/20 border border-surface-variant/40 rounded-lg">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary/20 border border-primary text-primary flex items-center justify-center font-bold text-lg sm:text-xl font-mono shrink-0 overflow-hidden">
           ${user.photoURL ? `<img src="${user.photoURL}" class="w-full h-full object-cover">` : (user.name ? user.name.charAt(0).toUpperCase() : 'A')}
         </div>
         <div>
-          <h3 class="text-xl font-bold text-on-surface">${user.name || 'Anonymous Ambassador'}</h3>
+          <h3 class="text-base sm:text-xl font-bold text-on-surface">${user.name || 'Anonymous Ambassador'}</h3>
           <p class="text-xs font-mono text-on-surface-variant">${user.email || 'No email provided'}</p>
           <div class="flex items-center gap-2 mt-1">
             <span class="px-2 py-0.5 bg-primary/20 text-primary font-mono text-[10px] font-bold rounded uppercase">${user.ambassadorId || 'PENDING ID'}</span>
@@ -607,7 +724,7 @@ function renderAmbassadorDossier(user) {
       </div>
       
       ${isPending ? `
-        <button onclick="approveAmbassadorFromModal('${user.uid}')" class="px-4 py-2 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-bold font-mono rounded uppercase glow-hover">
+        <button onclick="approveAmbassadorFromModal('${user.uid}')" class="w-full sm:w-auto px-4 py-2 bg-accent/20 border border-accent text-accent hover:bg-accent hover:text-background transition-colors text-xs font-bold font-mono rounded uppercase glow-hover cursor-pointer text-center">
           Approve Ambassador
         </button>
       ` : ''}
@@ -615,34 +732,34 @@ function renderAmbassadorDossier(user) {
 
     <!-- Academic & Personal Details Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
+      <div class="p-3.5 sm:p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
         <h4 class="text-xs font-mono text-accent uppercase font-bold mb-3 flex items-center gap-1.5">
           <span class="material-symbols-outlined text-sm">school</span> ACADEMIC DETAILS
         </h4>
         <div class="space-y-2 text-xs">
           <div>
             <span class="text-on-surface-variant font-mono">College / University:</span>
-            <p class="font-semibold text-on-surface text-sm">${user.college || 'Not Provided'}</p>
+            <p class="font-semibold text-on-surface text-xs sm:text-sm">${user.college || 'Not Provided'}</p>
           </div>
           <div>
             <span class="text-on-surface-variant font-mono">Branch / Major:</span>
-            <p class="font-semibold text-on-surface text-sm">${user.branch || 'Not Provided'}</p>
+            <p class="font-semibold text-on-surface text-xs sm:text-sm">${user.branch || 'Not Provided'}</p>
           </div>
           <div>
             <span class="text-on-surface-variant font-mono">Year of Study:</span>
-            <p class="font-semibold text-on-surface text-sm">${yearText}</p>
+            <p class="font-semibold text-on-surface text-xs sm:text-sm">${yearText}</p>
           </div>
         </div>
       </div>
 
-      <div class="p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
+      <div class="p-3.5 sm:p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
         <h4 class="text-xs font-mono text-accent uppercase font-bold mb-3 flex items-center gap-1.5">
           <span class="material-symbols-outlined text-sm">contact_phone</span> CONTACT & SOCIALS
         </h4>
         <div class="space-y-2 text-xs">
           <div>
             <span class="text-on-surface-variant font-mono">Phone / WhatsApp:</span>
-            <p class="font-semibold text-on-surface text-sm">${user.phone || 'Not Provided'}</p>
+            <p class="font-semibold text-on-surface text-xs sm:text-sm">${user.phone || 'Not Provided'}</p>
           </div>
           <div>
             <span class="text-on-surface-variant font-mono">Social Profiles:</span>
@@ -659,7 +776,7 @@ function renderAmbassadorDossier(user) {
     </div>
 
     <!-- Application Bio / Statement -->
-    <div class="p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
+    <div class="p-3.5 sm:p-4 bg-surface-elevation border border-surface-variant/30 rounded-lg">
       <h4 class="text-xs font-mono text-accent uppercase font-bold mb-2 flex items-center gap-1.5">
         <span class="material-symbols-outlined text-sm">description</span> APPLICATION BIO / PITCH
       </h4>
@@ -669,18 +786,18 @@ function renderAmbassadorDossier(user) {
     </div>
 
     <!-- Performance Stats -->
-    <div class="grid grid-cols-3 gap-3 p-4 bg-surface-variant/20 border border-primary/30 rounded-lg text-center">
-      <div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 p-3.5 sm:p-4 bg-surface-variant/20 border border-primary/30 rounded-lg text-center">
+      <div class="p-2 sm:p-0">
         <p class="text-[10px] font-mono text-on-surface-variant">TOTAL CLICKS</p>
-        <p class="text-xl font-bold font-mono text-primary">${user.totalClicks || user.uniqueClicks || 0}</p>
+        <p class="text-lg sm:text-xl font-bold font-mono text-primary">${user.totalClicks || user.uniqueClicks || 0}</p>
       </div>
-      <div>
+      <div class="p-2 sm:p-0 border-t border-b sm:border-t-0 sm:border-b-0 sm:border-l sm:border-r border-surface-variant/30">
         <p class="text-[10px] font-mono text-on-surface-variant">VERIFIED REFS</p>
-        <p class="text-xl font-bold font-mono text-accent">${verified}</p>
+        <p class="text-lg sm:text-xl font-bold font-mono text-accent">${verified}</p>
       </div>
-      <div>
+      <div class="p-2 sm:p-0">
         <p class="text-[10px] font-mono text-on-surface-variant">CURRENT TIER</p>
-        <p class="text-xl font-bold font-mono text-on-surface">${tier}</p>
+        <p class="text-lg sm:text-xl font-bold font-mono text-on-surface">${tier}</p>
       </div>
     </div>
   `;
