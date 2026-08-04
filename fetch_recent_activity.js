@@ -4,10 +4,7 @@
 
   try {
     if (!window.envLoaded) {
-      await Promise.race([
-        new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true })),
-        new Promise(resolve => setTimeout(resolve, 3000))
-      ]);
+      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
     }
 
     const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;

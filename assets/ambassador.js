@@ -12,20 +12,11 @@ import {
 let currentProfile = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  const slowLoadingTimer = setTimeout(() => {
-    const timeoutBox = document.getElementById('dashboard-loading-timeout');
-    const loadingScreen = document.getElementById('dashboard-loading-screen');
-    if (timeoutBox && loadingScreen && !loadingScreen.classList.contains('hidden')) {
-      timeoutBox.classList.remove('hidden');
-    }
-  }, 3500);
-
   const checkAuth = setInterval(async () => {
     if (window.firebase && firebase.auth) {
       clearInterval(checkAuth);
       
       firebase.auth().onAuthStateChanged(async (user) => {
-        clearTimeout(slowLoadingTimer);
         const dashboardContent = document.getElementById('dashboard-content');
         const accessDeniedScreen = document.getElementById('access-denied-screen');
         const loadingScreen = document.getElementById('dashboard-loading-screen');
@@ -33,11 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loadingScreen) loadingScreen.classList.add('hidden');
 
         if (!user) {
-          const nameEl = document.getElementById('ambassador-name');
-          const idEl = document.getElementById('ambassador-id');
-          if (nameEl) nameEl.textContent = 'Guest User';
-          if (idEl) idEl.textContent = 'NOT LOGGED IN';
-
           if (dashboardContent) dashboardContent.classList.add('hidden');
           if (accessDeniedScreen) {
             accessDeniedScreen.classList.remove('hidden');
