@@ -569,4 +569,24 @@ select:-webkit-autofill:focus {
     pointer-events: auto;
 }
 
+/* Fail-safe Sizing for Omnikon Logos & Header Branding (Prevents Full-Size Logo UI Glitch) */
+img[src*="LogoOmnikon"],
+img[alt*="Omnikon Logo"],
+.logo-omnikon {
+    max-width: 40px !important;
+    max-height: 40px !important;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    display: inline-block;
+}
+
+/* Navbar & Header layout fallbacks if CDN/Tailwind fails or delays */
+nav .flex.items-center img,
+header .flex.items-center img {
+    max-width: 40px !important;
+    max-height: 40px !important;
+}
+
+
 

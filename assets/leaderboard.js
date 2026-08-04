@@ -54,6 +54,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     
   } catch (err) {
     console.error("Error loading leaderboard:", err);
-    tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-primary font-mono">ERROR ESTABLISHING UPLINK.</td></tr>';
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="py-8 text-center text-on-surface-variant font-mono">
+          <p class="text-primary font-bold mb-1">ERROR ESTABLISHING UPLINK</p>
+          <p class="text-xs mb-3 opacity-80">Loading is taking time or authenticating issue occurred. Please refresh after some time.</p>
+          <button onclick="window.location.reload()" class="px-4 py-1.5 bg-primary/20 border border-primary text-primary text-xs font-bold uppercase rounded hover:bg-primary/30 transition-colors">
+            REFRESH PAGE
+          </button>
+        </td>
+      </tr>
+    `;
   }
 });

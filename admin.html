@@ -101,7 +101,7 @@
 <nav class="fixed top-0 left-0 right-0 w-full z-50 bg-[#050505]/80 backdrop-blur-md border-b border-surface-variant/30 transition-all">
 <div class="flex justify-between items-center w-full px-3 sm:px-gutter h-16 max-w-container-max mx-auto overflow-hidden">
 <div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
-<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
+<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" width="40" height="40" style="max-width:40px; max-height:40px;" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md logo-omnikon">
 <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
 </div>
 <div id="desktop-nav" class="hidden md:flex items-center gap-8"><a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="index.html">Home</a>
@@ -156,9 +156,16 @@
 <main class="pt-20 sm:pt-24 pb-section-gap max-w-container-max mx-auto px-3 sm:px-gutter min-h-screen">
     <!-- Loading Screen (Visible while auth resolves) -->
     <div id="admin-loading-screen" class="flex items-center justify-center min-h-[50vh] p-6">
-      <div class="text-center flex flex-col items-center">
+      <div class="text-center flex flex-col items-center max-w-sm px-4">
         <div class="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="text-accent font-mono text-sm uppercase tracking-wider animate-pulse">VERIFYING_ADMIN_CLEARANCE...</p>
+        <p class="text-accent font-mono text-sm uppercase tracking-wider animate-pulse mb-2">VERIFYING_ADMIN_CLEARANCE...</p>
+        <div id="admin-loading-timeout" class="hidden mt-3 p-4 bg-surface-elevation/90 border border-primary/40 rounded-lg text-xs text-on-surface-variant font-mono">
+          <p class="mb-3">Authenticating or checking clearance is taking time. If you aren't logged in or network is slow, please refresh after some time.</p>
+          <div class="flex gap-2 justify-center">
+            <button onclick="window.location.reload()" class="px-3 py-1.5 bg-primary text-background font-bold uppercase text-[11px] rounded hover:opacity-90">Refresh Page</button>
+            <button onclick="if(window.openAuthModal) window.openAuthModal()" class="px-3 py-1.5 bg-surface-variant border border-primary text-primary font-bold uppercase text-[11px] rounded hover:bg-primary/20">Login</button>
+          </div>
+        </div>
       </div>
     </div>
 
