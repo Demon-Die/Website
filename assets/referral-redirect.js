@@ -97,8 +97,24 @@ async function doRedirect() {
         platform: navigator.platform || 'Unknown'
       })
     );
+
+    // 2. Update user profile document totalClicks counter in real-time
+    writes.push(
+      db.collection('users').where('ambassadorId', '==', ambassadorId).limit(1).get().then(snap => {
+        if (!snap.empty) {
+          const userDoc = snap.docs[0];
+          const updates = {
+            totalClicks: window.firebase.firestore.FieldValue.increment(1)
+          };
+          if (!isDuplicate) {
+            updates.uniqueClicks = window.firebase.firestore.FieldValue.increment(1);
+          }
+          return userDoc.ref.update(updates);
+        }
+      }).catch(err => console.error("Error updating user totalClicks:", err))
+    );
     
-    // 2. Log referral entry if not duplicate
+    // 3. Log referral entry if not duplicate
     if (!isDuplicate) {
       writes.push(
         db.collection('referrals').add({
