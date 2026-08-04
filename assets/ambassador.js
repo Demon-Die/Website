@@ -340,7 +340,7 @@ function loadProfileForm(profile) {
 window.saveProfile = async function(event) {
   event.preventDefault();
   if (!currentProfile || !currentProfile.uid) {
-    alert("User profile missing. Please log in again.");
+    showToast("User profile missing. Please log in again.", "error");
     return;
   }
 
@@ -370,7 +370,7 @@ window.saveProfile = async function(event) {
     renderDashboard(currentProfile);
   } catch (err) {
     console.error("Error updating profile:", err);
-    alert("Failed to save profile. " + err.message);
+    showToast("Failed to save profile. " + err.message, "error");
   }
 };
 
@@ -424,7 +424,7 @@ window.refreshDashboardData = async function() {
 window.copyReferralLink = function() {
   const idEl = document.getElementById('ambassador-id');
   if (!idEl || idEl.textContent === '--' || idEl.textContent === 'PENDING APPROVAL') {
-    alert('Your ambassador account is pending admin approval.');
+    showToast('Your ambassador account is pending admin approval.', 'warning');
     return;
   }
   
@@ -440,14 +440,44 @@ window.copySpecificCampaignLink = function(link) {
   });
 };
 
-function showToast(msg) {
+function showToast(msg, type = 'success') {
+  const existing = document.getElementById('ambassador-toast');
+  if (existing) existing.remove();
+
   const toast = document.createElement('div');
-  toast.className = 'fixed bottom-6 right-6 bg-surface-elevation border border-primary text-primary px-6 py-3 font-mono text-sm shadow-[0_0_15px_rgba(255,49,49,0.25)] z-50 transition-opacity duration-300 flex items-center gap-2';
-  toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">check_circle</span>${msg}`;
+  toast.id = 'ambassador-toast';
+  let icon = 'check_circle';
+  let borderColor = 'border-primary';
+  let textColor = 'text-primary';
+  let glow = 'shadow-[0_0_15px_rgba(255,49,49,0.25)]';
+
+  if (type === 'error') {
+    icon = 'error';
+    borderColor = 'border-red-500';
+    textColor = 'text-red-400';
+    glow = 'shadow-[0_0_15px_rgba(239,68,68,0.25)]';
+  } else if (type === 'info') {
+    icon = 'info';
+    borderColor = 'border-accent';
+    textColor = 'text-accent';
+    glow = 'shadow-[0_0_15px_rgba(217,119,6,0.25)]';
+  } else if (type === 'warning') {
+    icon = 'warning';
+    borderColor = 'border-yellow-500';
+    textColor = 'text-yellow-400';
+    glow = 'shadow-[0_0_15px_rgba(234,179,8,0.25)]';
+  }
+
+  toast.className = `fixed bottom-6 right-6 bg-surface-elevation border ${borderColor} ${textColor} px-6 py-3 font-mono text-sm shadow-lg ${glow} z-50 transition-all duration-300 flex items-center gap-2 rounded-lg opacity-0 translate-y-2`;
+  toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">${icon}</span><span>${msg}</span>`;
   document.body.appendChild(toast);
   
   setTimeout(() => {
-    toast.style.opacity = '0';
+    toast.classList.remove('opacity-0', 'translate-y-2');
+  }, 10);
+
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
     setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  }, 3500);
 }
