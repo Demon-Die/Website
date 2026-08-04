@@ -36,12 +36,18 @@ function getCookie(name) {
   return null;
 }
 
-// Fetch IP for hashing
+// Fetch IP with strict 350ms timeout so external API never blocks DB writes
 async function fetchIp() {
   try {
-    const res = await fetch('https://api.ipify.org?format=json');
-    const data = await res.json();
-    return data.ip || '0.0.0.0';
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 350);
+    const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (res.ok) {
+      const data = await res.json();
+      return data.ip || '0.0.0.0';
+    }
+    return '0.0.0.0';
   } catch (e) {
     return '0.0.0.0';
   }
@@ -57,10 +63,16 @@ async function doRedirect() {
     return;
   }
 
-  // Safety fallback: Redirect after 1.8 seconds max even if DB hangs
-  const fallbackTimer = setTimeout(() => {
-    window.location.replace(DESTINATION_URL);
-  }, 1800);
+  // Safety fallback: Redirect after 2.5 seconds max if network hangs completely
+  let redirected = false;
+  const redirectNow = () => {
+    if (!redirected) {
+      redirected = true;
+      window.location.replace(DESTINATION_URL);
+    }
+  };
+
+  const fallbackTimer = setTimeout(redirectNow, 2500);
 
   try {
     const db = await getDb();
@@ -70,36 +82,65 @@ async function doRedirect() {
     const isDuplicate = (existingCookie === ambassadorId) || (existingLocal === ambassadorId);
     
     const rawIp = await fetchIp();
-    const ipHash = await hashString(rawIp + (navigator.userAgent || ''));
+    const ipHash = await hashString(rawIp + (navigator.userAgent || '') + Math.random().toString());
     
-    // Log click event to clicks collection
-    await db.collection('clicks').add({
-      ambassadorId: ambassadorId,
-      timestamp: window.firebase.firestore.FieldValue.serverTimestamp(),
-      ipHash: ipHash,
-      userAgent: navigator.userAgent || 'Unknown',
-      referrer: document.referrer || 'direct',
-      platform: navigator.platform || 'Unknown'
-    });
-    
-    if (!isDuplicate) {
-      // Log referral entry to referrals collection
-      await db.collection('referrals').add({
+    const writes = [];
+
+    // 1. Log click event to clicks collection
+    writes.push(
+      db.collection('clicks').add({
         ambassadorId: ambassadorId,
-        visitorIp: ipHash ? ipHash.substring(0, 12) : 'Anonymous',
-        status: 'pending',
-        campaignId: campaign,
-        timestamp: window.firebase.firestore.FieldValue.serverTimestamp()
-      });
+        timestamp: window.firebase.firestore.FieldValue.serverTimestamp(),
+        ipHash: ipHash,
+        userAgent: navigator.userAgent || 'Unknown',
+        referrer: document.referrer || 'direct',
+        platform: navigator.platform || 'Unknown'
+      })
+    );
+
+    // 2. Update user profile document totalClicks counter in real-time
+    writes.push(
+      db.collection('users').where('ambassadorId', '==', ambassadorId).limit(1).get().then(snap => {
+        if (!snap.empty) {
+          const userDoc = snap.docs[0];
+          const updates = {
+            totalClicks: window.firebase.firestore.FieldValue.increment(1)
+          };
+          if (!isDuplicate) {
+            updates.uniqueClicks = window.firebase.firestore.FieldValue.increment(1);
+          }
+          return userDoc.ref.update(updates);
+        }
+      }).catch(err => console.error("Error updating user totalClicks:", err))
+    );
+    
+    // 3. Log referral entry if not duplicate
+    if (!isDuplicate) {
+      writes.push(
+        db.collection('referrals').add({
+          ambassadorId: ambassadorId,
+          visitorIp: ipHash ? ipHash.substring(0, 12) : 'Anonymous',
+          status: 'pending',
+          campaignId: campaign,
+          timestamp: window.firebase.firestore.FieldValue.serverTimestamp()
+        })
+      );
       
       setCookie(COOKIE_NAME, ambassadorId, COOKIE_DAYS);
       localStorage.setItem('omniReferralVisited', ambassadorId);
     }
+
+    // Wait for writes to be acknowledged by Firestore (up to 1500ms max)
+    await Promise.race([
+      Promise.allSettled(writes),
+      new Promise(resolve => setTimeout(resolve, 1500))
+    ]);
+
   } catch (err) {
     console.error("Tracking error:", err);
   } finally {
     clearTimeout(fallbackTimer);
-    window.location.replace(DESTINATION_URL);
+    redirectNow();
   }
 }
 

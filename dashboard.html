@@ -98,10 +98,10 @@
   }
 ]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script></head><body class="bg-background text-on-surface antialiased flex flex-col min-h-screen relative grid-bg overflow-x-hidden">
 
-<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
+<nav class="fixed top-0 left-0 right-0 w-full z-50 bg-[#050505]/80 backdrop-blur-md border-b border-surface-variant/30 transition-all">
 <div class="flex justify-between items-center w-full px-3 sm:px-gutter h-16 max-w-container-max mx-auto overflow-hidden">
 <div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
-<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
+<img src="./public/LogoOmnikon.jpeg" alt="Omnikon Logo" width="40" height="40" style="max-width:40px; max-height:40px;" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md logo-omnikon">
 <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
 </div>
 <div id="desktop-nav" class="hidden md:flex items-center gap-8"><a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="index.html">Home</a>
@@ -153,43 +153,77 @@
     }
 </script>
 </nav>
-<main class="pt-24 pb-section-gap max-w-container-max mx-auto px-margin-mobile md:px-gutter min-h-screen">
+<main class="pt-20 sm:pt-24 pb-section-gap max-w-container-max mx-auto px-3 sm:px-gutter min-h-screen w-full min-w-0 max-w-full overflow-x-hidden">
 
-  <div class="flex flex-col md:flex-row gap-6">
-    <!-- Sidebar -->
-    <aside class="w-full md:w-64 glass-panel p-6 shrink-0 flex flex-col gap-4 relative overflow-hidden">
+  <div class="flex flex-col md:flex-row gap-4 sm:gap-6 w-full min-w-0 max-w-full">
+    <!-- Sidebar / Topbar on Mobile -->
+    <aside class="w-full md:w-64 glass-panel p-4 sm:p-6 shrink-0 flex flex-col gap-3 relative overflow-hidden min-w-0 max-w-full">
       <div class="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl rounded-full pointer-events-none"></div>
-      <h2 class="text-xl font-bold font-headline-mono text-on-surface mb-2">PORTAL_ACCESS</h2>
       
-      <div class="flex items-center gap-3 mb-6">
-        <img id="ambassador-avatar" src="/LogoOmnikon.jpeg" class="w-12 h-12 rounded-full border border-primary object-cover">
-        <div>
-          <p id="ambassador-name" class="font-bold text-sm text-on-surface">Loading...</p>
-          <p id="ambassador-id" class="text-xs text-primary font-mono">--</p>
+      <div class="flex items-center justify-between mb-1">
+        <h2 class="text-lg sm:text-xl font-bold font-headline-mono text-on-surface">PORTAL_ACCESS</h2>
+        <button onclick="refreshDashboardData()" title="Refresh Live Data" class="p-1.5 bg-surface-variant/30 hover:bg-primary/20 text-on-surface hover:text-primary rounded transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-base">refresh</span>
+        </button>
+      </div>
+      
+      <div class="flex items-center gap-3 p-3 bg-surface-variant/15 border border-surface-variant/30 rounded-lg mb-2 min-w-0">
+        <img id="ambassador-avatar" src="/LogoOmnikon.jpeg" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-primary object-cover shrink-0">
+        <div class="min-w-0 flex-1">
+          <p id="ambassador-name" class="font-bold text-xs sm:text-sm text-on-surface truncate">Loading...</p>
+          <p id="ambassador-id" class="text-[11px] sm:text-xs text-primary font-mono truncate">--</p>
         </div>
       </div>
       
-      <nav class="flex flex-col gap-2">
-        <button id="btn-tab-overview" onclick="switchTab('overview')" class="w-full text-left px-4 py-2 text-sm text-on-surface bg-primary/20 border-l-2 border-primary transition-colors">Overview</button>
-        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Referral History</button>
-        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Campaigns</button>
-        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Rewards & Badges</button>
-        <button id="btn-tab-profile" onclick="switchTab('profile')" class="w-full text-left px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-variant/50 border-l-2 border-transparent transition-colors">Profile Settings</button>
+      <nav class="flex flex-row overflow-x-auto md:flex-col gap-1.5 sm:gap-2 pb-2 md:pb-0 scrollbar-none whitespace-nowrap w-full min-w-0 max-w-full">
+        <button id="btn-tab-overview" onclick="switchTab('overview')" class="shrink-0 text-left px-3 py-1.5 sm:px-3.5 sm:py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface bg-primary/20 border-b-2 md:border-b-0 md:border-l-2 border-primary transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">dashboard</span> Overview
+        </button>
+        <button id="btn-tab-referrals" onclick="switchTab('referrals')" class="shrink-0 text-left px-3 py-1.5 sm:px-3.5 sm:py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">history</span> Referrals
+        </button>
+        <button id="btn-tab-campaigns" onclick="switchTab('campaigns')" class="shrink-0 text-left px-3 py-1.5 sm:px-3.5 sm:py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">campaign</span> Campaigns
+        </button>
+        <button id="btn-tab-rewards" onclick="switchTab('rewards')" class="shrink-0 text-left px-3 py-1.5 sm:px-3.5 sm:py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">military_tech</span> Rewards
+        </button>
+        <button id="btn-tab-profile" onclick="switchTab('profile')" class="shrink-0 text-left px-3 py-1.5 sm:px-3.5 sm:py-2 rounded md:rounded-none text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-variant/50 border-b-2 md:border-b-0 md:border-l-2 border-transparent transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">person</span> Profile
+        </button>
       </nav>
       
-      <div class="mt-auto pt-6 border-t border-surface-variant/50">
-        <button onclick="copyReferralLink()" class="w-full py-2 bg-primary/10 hover:bg-primary/20 border border-primary text-primary text-sm font-mono transition-colors glow-hover">
-          <span class="material-symbols-outlined text-[14px] align-middle mr-1">content_copy</span> COPY REF LINK
+      <div class="mt-auto pt-4 border-t border-surface-variant/50 flex gap-2 w-full">
+        <button onclick="copyReferralLink()" class="flex-1 py-2.5 px-2.5 bg-primary/10 hover:bg-primary/20 border border-primary text-primary text-xs sm:text-sm font-mono transition-colors glow-hover flex items-center justify-center gap-1.5 rounded truncate">
+          <span class="material-symbols-outlined text-sm shrink-0">content_copy</span> <span class="truncate">COPY REF LINK</span>
+        </button>
+        <button onclick="refreshDashboardData()" title="Refresh Live Data" class="py-2.5 px-3 bg-surface-elevation border border-surface-variant text-on-surface-variant hover:text-primary hover:border-primary text-xs font-mono transition-colors flex items-center justify-center rounded shrink-0">
+          <span class="material-symbols-outlined text-sm">refresh</span>
         </button>
       </div>
     </aside>
     
+    <!-- Loading Screen (Visible while auth resolves) -->
+    <div id="dashboard-loading-screen" class="flex-1 flex items-center justify-center min-h-[50vh] w-full min-w-0">
+      <div class="text-center flex flex-col items-center max-w-sm px-4">
+        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-primary font-mono text-sm uppercase tracking-wider animate-pulse mb-2">AUTHENTICATING_USER...</p>
+        <div id="dashboard-loading-timeout" class="hidden mt-3 p-4 bg-surface-elevation/90 border border-primary/40 rounded-lg text-xs text-on-surface-variant font-mono">
+          <p class="mb-3">Authenticating is taking time. If you aren't logged in or network is slow, please refresh after some time.</p>
+          <div class="flex gap-2 justify-center">
+            <button onclick="window.location.reload()" class="px-3 py-1.5 bg-primary text-background font-bold uppercase text-[11px] rounded hover:opacity-90">Refresh Page</button>
+            <button onclick="if(window.openAuthModal) window.openAuthModal()" class="px-3 py-1.5 bg-surface-variant border border-primary text-primary font-bold uppercase text-[11px] rounded hover:bg-primary/20">Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Access Denied Screen (Hidden by default) -->
-    <div id="access-denied-screen" class="hidden flex-1 items-center justify-center">
-      <div class="glass-panel p-12 max-w-md w-full border border-primary text-center">
-        <span class="material-symbols-outlined text-6xl text-primary mb-4 block">warning</span>
-        <h2 class="text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
-        <p class="text-on-surface-variant font-mono text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
+    <div id="access-denied-screen" class="hidden flex-1 items-center justify-center w-full min-w-0">
+      <div class="glass-panel p-6 sm:p-12 max-w-md w-full border border-primary text-center">
+        <span class="material-symbols-outlined text-5xl sm:text-6xl text-primary mb-4 block">warning</span>
+        <h2 class="text-xl sm:text-2xl font-bold font-headline-mono text-primary mb-2">ACCESS_DENIED</h2>
+        <p class="text-on-surface-variant font-mono text-xs sm:text-sm mb-6">Authentication required to access the Ambassador Portal.</p>
         <div class="flex flex-col gap-3">
           <button onclick="if(window.openAuthModal) window.openAuthModal()" class="w-full inline-flex justify-center items-center gap-2 px-6 py-3 bg-primary text-background font-bold transition-colors font-mono text-sm uppercase glow-hover">
             LOGIN TO CONTINUE
@@ -199,33 +233,38 @@
       </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col gap-6 relative" id="dashboard-content">
+    <!-- Main Content (Hidden until authenticated) -->
+    <div class="hidden flex-1 flex flex-col gap-6 relative w-full min-w-0 max-w-full" id="dashboard-content">
       <!-- Overview Tab -->
-      <div id="tab-overview">
-        <h1 class="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ambassador Overview</h1>
+      <div id="tab-overview" class="w-full min-w-0">
+        <div class="flex items-center justify-between mb-4 sm:mb-6 min-w-0">
+          <h1 class="text-xl sm:text-3xl font-bold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent truncate">Ambassador Overview</h1>
+          <button onclick="refreshDashboardData()" class="sm:hidden p-2 bg-primary/10 border border-primary/40 text-primary rounded flex items-center gap-1 text-xs font-mono shrink-0">
+            <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+          </button>
+        </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mb-6 sm:mb-8 w-full min-w-0">
           <!-- Stat Cards -->
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-3.5 sm:p-5 relative overflow-hidden group min-w-0">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">CURRENT RANK</p>
-            <h3 class="text-3xl font-bold text-on-surface" id="stat-rank">--</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1 truncate">CURRENT RANK</p>
+            <h3 class="text-lg sm:text-3xl font-bold text-on-surface truncate" id="stat-rank">--</h3>
           </div>
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-3.5 sm:p-5 relative overflow-hidden group min-w-0">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">VERIFIED REFS</p>
-            <h3 class="text-3xl font-bold text-primary" id="stat-refs">--</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1 truncate">VERIFIED REFS</p>
+            <h3 class="text-lg sm:text-3xl font-bold text-primary truncate" id="stat-refs">--</h3>
           </div>
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-3.5 sm:p-5 relative overflow-hidden group min-w-0">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">TOTAL CLICKS</p>
-            <h3 class="text-3xl font-bold text-on-surface" id="stat-clicks">--</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1 truncate">TOTAL CLICKS</p>
+            <h3 class="text-lg sm:text-3xl font-bold text-on-surface truncate" id="stat-clicks">--</h3>
           </div>
-          <div class="glass-panel p-5 relative overflow-hidden group">
+          <div class="glass-panel p-3.5 sm:p-5 relative overflow-hidden group min-w-0">
             <div class="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            <p class="text-xs text-on-surface-variant font-mono mb-1">CONVERSION</p>
-            <h3 class="text-3xl font-bold text-accent" id="stat-conversion">--%</h3>
+            <p class="text-[10px] sm:text-xs text-on-surface-variant font-mono mb-1 truncate">CONVERSION</p>
+            <h3 class="text-lg sm:text-3xl font-bold text-accent truncate" id="stat-conversion">--%</h3>
           </div>
         </div>
         
@@ -318,8 +357,15 @@
               <input type="text" id="profile-branch" placeholder="e.g. Computer Science" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
             </div>
             <div>
-              <label class="block text-xs font-mono text-on-surface-variant mb-2">GRADUATION YEAR</label>
-              <input type="text" id="profile-year" placeholder="e.g. 2026" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+              <label class="block text-xs font-mono text-on-surface-variant mb-2">YEAR OF STUDY</label>
+              <select id="profile-year" class="w-full bg-surface-elevation border border-surface-variant/50 rounded p-3 text-sm text-on-surface focus:outline-none focus:border-primary">
+                <option value="" disabled selected>Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                <option value="5">5th Year / Other</option>
+              </select>
             </div>
           </div>
 

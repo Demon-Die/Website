@@ -44,12 +44,13 @@
 
   
   async function initFirebase() {
-    
     if (!window.envLoaded) {
-      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
+      await Promise.race([
+        new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true })),
+        new Promise(resolve => setTimeout(resolve, 3000))
+      ]);
     }
 
-    
     if (!window.env?.FIREBASE_API_KEY) {
       console.warn('Firebase configuration missing in environment.');
       return;
@@ -65,16 +66,13 @@
     };
 
     try {
-      
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
       }
       auth = firebase.auth();
 
-      
       mountAuthUI();
 
-      
       auth.onAuthStateChanged((user) => {
         updateAuthWidget(user);
       });
@@ -83,9 +81,7 @@
     }
   }
 
-  
   function mountAuthUI() {
-    
     modal = document.createElement('div');
     modal.className = 'auth-modal-overlay';
     modal.id = 'auth-modal';
@@ -122,6 +118,9 @@
           </div>
           <p id="auth-error-msg" class="text-primary text-[10px] font-mono hidden mt-1"></p>
         </div>
+        <p class="text-[10px] text-on-surface-variant/70 font-mono mt-4 text-center leading-tight">
+          Authenticating taking time or not logged in? Please refresh after some time.
+        </p>
       </div>
     `;
     document.body.appendChild(modal);
@@ -136,7 +135,6 @@
       modal.classList.add('open');
     };
 
-    
     document.getElementById('auth-github-btn').addEventListener('click', () => signIn('github'));
     document.getElementById('auth-google-btn').addEventListener('click', () => signIn('google'));
     
@@ -145,8 +143,9 @@
   }
   
   function showError(msg) {
+    if (window.hideGlobalLoader) window.hideGlobalLoader();
     const errorEl = document.getElementById('auth-error-msg');
-    errorEl.textContent = msg;
+    errorEl.innerHTML = `${msg}<br><span class="text-[9px] text-on-surface-variant/80 mt-1 block">Taking too much time? Please refresh the page after some time.</span>`;
     errorEl.classList.remove('hidden');
   }
 
@@ -161,12 +160,17 @@
       return;
     }
     
+    if (window.showGlobalLoader) {
+      window.showGlobalLoader(type === 'login' ? 'AUTHENTICATING_EMAIL...' : 'CREATING_ACCOUNT...');
+    }
+
     const promise = type === 'login' 
       ? auth.signInWithEmailAndPassword(email, password)
       : auth.createUserWithEmailAndPassword(email, password);
       
     promise.then(() => {
       modal.classList.remove('open');
+      if (window.hideGlobalLoader) window.hideGlobalLoader();
     }).catch(error => {
       console.error('Email auth failed:', error);
       showError(`ERR: ${error.message}`);
@@ -181,11 +185,14 @@
       provider = new firebase.auth.GoogleAuthProvider();
     }
 
+    if (window.showGlobalLoader) {
+      window.showGlobalLoader('INITIATING_OAUTH...');
+    }
+
     auth.signInWithPopup(provider)
       .then((result) => {
-        // Linking accounts is generally handled on the backend or in Firebase Console settings.
-        // If a user with the same email exists, Firebase might throw an error we need to catch.
         modal.classList.remove('open');
+        if (window.hideGlobalLoader) window.hideGlobalLoader();
       })
       .catch((error) => {
         if (error.code === 'auth/account-exists-with-different-credential') {
@@ -200,13 +207,11 @@
   
   function updateAuthWidget(user) {
     const mobileToggle = document.querySelector('nav button.md\\:hidden, header button.md\\:hidden');
-    if (!mobileToggle) return;
-
-    let authWidget = document.getElementById('auth-widget');
+    if (!mobileToggle) return;    let authWidget = document.getElementById('auth-widget');
     if (!authWidget) {
       authWidget = document.createElement('div');
       authWidget.id = 'auth-widget';
-      authWidget.className = 'flex items-center gap-4 mr-4';
+      authWidget.className = 'flex items-center gap-2 sm:gap-4 mr-2 sm:mr-4 shrink-0';
       mobileToggle.parentNode.insertBefore(authWidget, mobileToggle);
     }
 
@@ -214,7 +219,7 @@
 
     if (user) {
       if (addBlogBtn) {
-        const displayName = (user.displayName || '').toLowerCase().replace(/\\s+/g, '');
+        const displayName = (user.displayName || '').toLowerCase().replace(/\s+/g, '');
         const emailPrefix = (user.email || '').split('@')[0].toLowerCase();
         const screenName = (user.reloadUserInfo && user.reloadUserInfo.screenName) ? user.reloadUserInfo.screenName.toLowerCase() : '';
         const allowedAdmins = ['rishibyte', 'pranav00076', 'pranavthawait', 'sharanyobanerjee', 'yuvraj', 'yuvraj-sarathe'];
@@ -227,7 +232,7 @@
             if (provider.providerId === 'github.com') {
               
               const providerEmailPrefix = (provider.email || '').split('@')[0].toLowerCase();
-              const providerName = (provider.displayName || '').toLowerCase().replace(/\\s+/g, '');
+              const providerName = (provider.displayName || '').toLowerCase().replace(/\s+/g, '');
               const providerUid = provider.uid; 
               if (allowedAdmins.includes(providerEmailPrefix) || allowedAdmins.includes(providerName) || providerUid === "108343166" || providerUid === "140939527" || providerUid === "140889218" || providerUid === "96338573") {
                 isAdmin = true;
@@ -248,17 +253,31 @@
 
       const avatarUrl = user.photoURL || './public/LogoOmnikon.jpeg';
       authWidget.innerHTML = `
-        <div class="flex items-center gap-3">
-          <img class="w-8 h-8 rounded-full border border-primary object-cover" src="${avatarUrl}" alt="Profile">
-          <button id="auth-logout-btn" class="text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer">
+        <div class="flex items-center gap-1.5 sm:gap-3">
+          <img class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-primary object-cover shrink-0" src="${avatarUrl}" alt="Profile">
+          <button id="auth-logout-btn" class="hidden sm:inline-flex items-center text-on-surface-variant hover:text-primary transition-colors text-[10px] sm:text-xs font-label-mono tracking-wider cursor-pointer whitespace-nowrap">
             [ LOGOUT ]
+          </button>
+          <button id="auth-logout-btn-mobile" class="sm:hidden text-on-surface-variant hover:text-primary transition-colors p-1 flex items-center justify-center shrink-0 cursor-pointer" title="Logout">
+            <span class="material-symbols-outlined text-lg">logout</span>
           </button>
         </div>
       `;
+      const handleLogout = async () => {
+        try {
+          if (window.showGlobalLoader) window.showGlobalLoader('LOGGING_OUT...');
+          await auth.signOut();
+          sessionStorage.clear();
+          window.location.href = '/index.html';
+        } catch(err) {
+          console.error("Logout error:", err);
+          if (window.hideGlobalLoader) window.hideGlobalLoader();
+        }
+      };
       const logoutBtn = document.getElementById('auth-logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => auth.signOut());
-      }
+      const logoutBtnMobile = document.getElementById('auth-logout-btn-mobile');
+      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+      if (logoutBtnMobile) logoutBtnMobile.addEventListener('click', handleLogout);
     } else {
       if (addBlogBtn) {
         addBlogBtn.classList.add('hidden');

@@ -3,6 +3,7 @@ import {
   getAmbassadorData, 
   createAmbassadorProfile, 
   getReferrals, 
+  getClicksCount,
   getActiveCampaigns, 
   getAnnouncements, 
   updateUserProfile 
@@ -11,24 +12,39 @@ import {
 let currentProfile = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  const slowLoadingTimer = setTimeout(() => {
+    const timeoutBox = document.getElementById('dashboard-loading-timeout');
+    const loadingScreen = document.getElementById('dashboard-loading-screen');
+    if (timeoutBox && loadingScreen && !loadingScreen.classList.contains('hidden')) {
+      timeoutBox.classList.remove('hidden');
+    }
+  }, 3500);
+
   const checkAuth = setInterval(async () => {
     if (window.firebase && firebase.auth) {
       clearInterval(checkAuth);
       
       firebase.auth().onAuthStateChanged(async (user) => {
+        clearTimeout(slowLoadingTimer);
         const dashboardContent = document.getElementById('dashboard-content');
         const accessDeniedScreen = document.getElementById('access-denied-screen');
+        const loadingScreen = document.getElementById('dashboard-loading-screen');
         
+        if (loadingScreen) loadingScreen.classList.add('hidden');
+
         if (!user) {
+          const nameEl = document.getElementById('ambassador-name');
+          const idEl = document.getElementById('ambassador-id');
+          if (nameEl) nameEl.textContent = 'Guest User';
+          if (idEl) idEl.textContent = 'NOT LOGGED IN';
+
           if (dashboardContent) dashboardContent.classList.add('hidden');
-          if (accessDeniedScreen) accessDeniedScreen.classList.remove('hidden');
-          if (accessDeniedScreen) accessDeniedScreen.classList.add('flex');
+          if (accessDeniedScreen) {
+            accessDeniedScreen.classList.remove('hidden');
+            accessDeniedScreen.classList.add('flex');
+          }
           return;
         }
-
-        if (dashboardContent) dashboardContent.classList.remove('hidden');
-        if (accessDeniedScreen) accessDeniedScreen.classList.add('hidden');
-        if (accessDeniedScreen) accessDeniedScreen.classList.remove('flex');
 
         try {
           let profile = await getAmbassadorData(user.uid);
@@ -42,10 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
           
           if (!profile) {
             profile = await createAmbassadorProfile(user, appData);
-          } else if (Object.keys(appData).length > 0) {
-            const db = await getDb();
-            await db.collection('users').doc(user.uid).update(appData);
-            profile = { ...profile, ...appData };
           }
           
           if (profile.role === 'admin') {
@@ -53,13 +65,34 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
           }
 
+          if (dashboardContent) dashboardContent.classList.remove('hidden');
+          if (accessDeniedScreen) {
+            accessDeniedScreen.classList.add('hidden');
+            accessDeniedScreen.classList.remove('flex');
+          }
+
           currentProfile = profile;
-          renderDashboard(profile);
+          await renderDashboard(profile);
           loadReferrals(profile.ambassadorId);
           loadAnnouncements();
           loadCampaigns(profile.ambassadorId);
           loadRewardsAndBadges(profile);
           loadProfileForm(profile);
+          
+          // Auto-refresh stats every 10s in background
+          if (window.ambassadorPollInterval) clearInterval(window.ambassadorPollInterval);
+          window.ambassadorPollInterval = setInterval(async () => {
+            if (currentProfile && currentProfile.uid) {
+              try {
+                const fresh = await getAmbassadorData(currentProfile.uid);
+                if (fresh) currentProfile = fresh;
+                await renderDashboard(currentProfile);
+                if (currentProfile.ambassadorId) {
+                  loadReferrals(currentProfile.ambassadorId);
+                }
+              } catch(e){}
+            }
+          }, 10000);
           
         } catch (err) {
           console.error("Dashboard error:", err);
@@ -69,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 100);
 });
 
-function renderDashboard(profile) {
+async function renderDashboard(profile) {
   const nameEl = document.getElementById('ambassador-name');
   const idEl = document.getElementById('ambassador-id');
   const avatarEl = document.getElementById('ambassador-avatar');
@@ -91,10 +124,9 @@ function renderDashboard(profile) {
   const clicksEl = document.getElementById('stat-clicks');
   const convEl = document.getElementById('stat-conversion');
   
-  // Calculate tier based on verified registrations
   const verifiedCount = profile.verifiedRegistrations || 0;
   let computedTier = 'Bronze';
-  if (verifiedCount >= 50) computedTier = 'Diamond';
+  if (verifiedCount >= 50) computedTier = 'Cyber Master';
   else if (verifiedCount >= 30) computedTier = 'Platinum';
   else if (verifiedCount >= 15) computedTier = 'Gold';
   else if (verifiedCount >= 5) computedTier = 'Silver';
@@ -102,16 +134,22 @@ function renderDashboard(profile) {
   if (rankEl) rankEl.textContent = computedTier;
   if (refsEl) refsEl.textContent = verifiedCount;
   
-  const uniqueClicks = profile.uniqueClicks || 0;
-  const totalClicks = profile.totalClicks || 0;
+  let dbClicks = 0;
+  let referralsList = [];
+  if (profile.ambassadorId) {
+    dbClicks = await getClicksCount(profile.ambassadorId);
+    referralsList = await getReferrals(profile.ambassadorId);
+  }
+
+  const profileClicks = profile.totalClicks || profile.uniqueClicks || 0;
+  // Effective total clicks count: max of db clicks, profile stored clicks, referrals count, and verified count
+  const effectiveClicks = Math.max(dbClicks, profileClicks, referralsList.length, verifiedCount);
   
-  if (clicksEl) clicksEl.textContent = totalClicks;
+  if (clicksEl) clicksEl.textContent = effectiveClicks;
   
   let conversionRate = 0;
-  if (totalClicks > 0) {
-    conversionRate = Math.round((verifiedCount / totalClicks) * 100);
-  } else if (uniqueClicks > 0) {
-    conversionRate = Math.round((verifiedCount / uniqueClicks) * 100);
+  if (effectiveClicks > 0) {
+    conversionRate = Math.round((verifiedCount / effectiveClicks) * 100);
   }
   
   if (convEl) convEl.textContent = conversionRate + '%';
@@ -316,7 +354,7 @@ function loadProfileForm(profile) {
 window.saveProfile = async function(event) {
   event.preventDefault();
   if (!currentProfile || !currentProfile.uid) {
-    alert("User profile missing. Please log in again.");
+    showToast("User profile missing. Please log in again.", "error");
     return;
   }
 
@@ -346,7 +384,7 @@ window.saveProfile = async function(event) {
     renderDashboard(currentProfile);
   } catch (err) {
     console.error("Error updating profile:", err);
-    alert("Failed to save profile. " + err.message);
+    showToast("Failed to save profile. " + err.message, "error");
   }
 };
 
@@ -378,10 +416,29 @@ window.switchTab = function(tabName) {
   });
 };
 
+window.refreshDashboardData = async function() {
+  if (!currentProfile || !currentProfile.uid) return;
+  try {
+    showToast("Refreshing live stats...");
+    const freshProfile = await getAmbassadorData(currentProfile.uid);
+    if (freshProfile) currentProfile = freshProfile;
+    await renderDashboard(currentProfile);
+    if (currentProfile.ambassadorId) {
+      await loadReferrals(currentProfile.ambassadorId);
+      loadCampaigns(currentProfile.ambassadorId);
+    }
+    loadAnnouncements();
+    loadRewardsAndBadges(currentProfile);
+    showToast("Dashboard stats updated!");
+  } catch (err) {
+    console.error("Refresh error:", err);
+  }
+};
+
 window.copyReferralLink = function() {
   const idEl = document.getElementById('ambassador-id');
   if (!idEl || idEl.textContent === '--' || idEl.textContent === 'PENDING APPROVAL') {
-    alert('Your ambassador account is pending admin approval.');
+    showToast('Your ambassador account is pending admin approval.', 'warning');
     return;
   }
   
@@ -397,14 +454,44 @@ window.copySpecificCampaignLink = function(link) {
   });
 };
 
-function showToast(msg) {
+function showToast(msg, type = 'success') {
+  const existing = document.getElementById('ambassador-toast');
+  if (existing) existing.remove();
+
   const toast = document.createElement('div');
-  toast.className = 'fixed bottom-6 right-6 bg-surface-elevation border border-primary text-primary px-6 py-3 font-mono text-sm shadow-[0_0_15px_rgba(255,49,49,0.25)] z-50 transition-opacity duration-300 flex items-center gap-2';
-  toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">check_circle</span>${msg}`;
+  toast.id = 'ambassador-toast';
+  let icon = 'check_circle';
+  let borderColor = 'border-primary';
+  let textColor = 'text-primary';
+  let glow = 'shadow-[0_0_15px_rgba(255,49,49,0.25)]';
+
+  if (type === 'error') {
+    icon = 'error';
+    borderColor = 'border-red-500';
+    textColor = 'text-red-400';
+    glow = 'shadow-[0_0_15px_rgba(239,68,68,0.25)]';
+  } else if (type === 'info') {
+    icon = 'info';
+    borderColor = 'border-accent';
+    textColor = 'text-accent';
+    glow = 'shadow-[0_0_15px_rgba(217,119,6,0.25)]';
+  } else if (type === 'warning') {
+    icon = 'warning';
+    borderColor = 'border-yellow-500';
+    textColor = 'text-yellow-400';
+    glow = 'shadow-[0_0_15px_rgba(234,179,8,0.25)]';
+  }
+
+  toast.className = `fixed bottom-6 right-6 bg-surface-elevation border ${borderColor} ${textColor} px-6 py-3 font-mono text-sm shadow-lg ${glow} z-50 transition-all duration-300 flex items-center gap-2 rounded-lg opacity-0 translate-y-2`;
+  toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">${icon}</span><span>${msg}</span>`;
   document.body.appendChild(toast);
   
   setTimeout(() => {
-    toast.style.opacity = '0';
+    toast.classList.remove('opacity-0', 'translate-y-2');
+  }, 10);
+
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
     setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  }, 3500);
 }

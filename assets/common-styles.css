@@ -459,4 +459,134 @@ html, body {
     }
 }
 
+/* Defensive Layout & Image Fallbacks */
+img {
+    max-width: 100%;
+}
+
+.hero-img {
+    max-width: 100%;
+    max-height: 520px !important;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .hero-img {
+        max-height: 320px !important;
+    }
+}
+
+nav {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 50 !important;
+}
+
+/* Dark Theme Form Input Styles, Placeholders & Autofill Fix */
+input, select, textarea {
+    background-color: #141416 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    background-color: #1a1a1c !important;
+    color: #ffffff !important;
+    border-color: #ff2a4b !important;
+    outline: none !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+select option {
+    background-color: #141416 !important;
+    color: #ffffff !important;
+}
+
+/* Chrome/Safari Browser Autofill Override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #141416 inset !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+    color: #ffffff !important;
+}
+
+/* Sleek Global Loading Progress Bar & Glass Overlay */
+#top-loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff2a4b, #ff7b00, #ff2a4b);
+    background-size: 200% 100%;
+    animation: loadingBarGradient 2s ease infinite;
+    z-index: 100000;
+    width: 0%;
+    opacity: 0;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    box-shadow: 0 0 12px rgba(255, 42, 75, 0.8);
+}
+
+@keyframes loadingBarGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#global-loader-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(5, 5, 5, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+#global-loader-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Fail-safe Sizing for Omnikon Logos & Header Branding (Prevents Full-Size Logo UI Glitch) */
+img[src*="LogoOmnikon"],
+img[alt*="Omnikon Logo"],
+.logo-omnikon {
+    max-width: 40px !important;
+    max-height: 40px !important;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    display: inline-block;
+}
+
+/* Navbar & Header layout fallbacks if CDN/Tailwind fails or delays */
+nav .flex.items-center img,
+header .flex.items-center img {
+    max-width: 40px !important;
+    max-height: 40px !important;
+}
+
+
 
