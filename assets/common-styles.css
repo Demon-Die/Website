@@ -569,16 +569,58 @@ select:-webkit-autofill:focus {
     pointer-events: auto;
 }
 
+/* Critical Utility Fallbacks (Prevents FOUC & UI breakdown on initial load) */
+[hidden], .hidden, [style*="display: none"] {
+    display: none !important;
+}
+
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-col { flex-direction: column; }
+.shrink-0 { flex-shrink: 0; }
+
+.fixed { position: fixed; }
+.absolute { position: absolute; }
+.relative { position: relative; }
+.top-0 { top: 0; }
+.left-0 { left: 0; }
+.right-0 { right: 0; }
+.z-50 { z-index: 50; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.w-7 { width: 1.75rem; }
+.h-7 { height: 1.75rem; }
+.w-8 { width: 2rem; }
+.h-8 { height: 2rem; }
+.w-10 { width: 2.5rem; }
+.h-10 { height: 2.5rem; }
+.w-12 { width: 3rem; }
+.h-12 { height: 3rem; }
+
+.rounded-full { border-radius: 9999px; }
+.rounded-md { border-radius: 0.375rem; }
+.rounded-lg { border-radius: 0.5rem; }
+.object-cover { object-fit: cover; }
+.object-contain { object-fit: contain; }
+
 /* Fail-safe Sizing for Omnikon Logos & Header Branding (Prevents Full-Size Logo UI Glitch) */
 img[src*="LogoOmnikon"],
 img[alt*="Omnikon Logo"],
 .logo-omnikon {
     max-width: 40px !important;
     max-height: 40px !important;
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    display: inline-block;
+    width: 40px !important;
+    height: 40px !important;
+    object-fit: cover !important;
+    display: inline-block !important;
 }
 
 /* Navbar & Header layout fallbacks if CDN/Tailwind fails or delays */
@@ -587,6 +629,34 @@ header .flex.items-center img {
     max-width: 40px !important;
     max-height: 40px !important;
 }
+
+/* Fail-safe Avatar Sizing (Prevents Giant Avatar Box Glitch) */
+#ambassador-avatar,
+.avatar-box,
+img[class*="rounded-full"] {
+    max-width: 48px !important;
+    max-height: 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 9999px !important;
+    object-fit: cover !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+}
+
+div[class*="rounded-full"] {
+    max-width: 48px !important;
+    max-height: 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 9999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+}
+
 
 
 
