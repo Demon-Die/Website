@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           
           if (profile.role === 'admin') {
-            window.location.replace('/admin.html');
+            window.location.replace('/pages/admin.html');
             return;
           }
 
@@ -240,7 +240,7 @@ async function loadCampaigns(ambassadorId) {
     }
 
     container.innerHTML = campaigns.map(c => {
-      const campaignLink = window.location.origin + `/r.html?id=${ambassadorId || 'DEMO'}&campaign=${encodeURIComponent(c.title || c.id)}`;
+      const campaignLink = window.location.origin + `/pages/r.html?id=${ambassadorId || 'DEMO'}&campaign=${encodeURIComponent(c.title || c.id)}`;
       return `
         <div class="glass-panel p-6 border border-surface-variant/50 relative overflow-hidden flex flex-col justify-between">
           <div class="mb-4">
@@ -428,7 +428,7 @@ window.copyReferralLink = function() {
     return;
   }
   
-  const link = window.location.origin + '/r.html?id=' + idEl.textContent;
+  const link = window.location.origin + '/pages/r.html?id=' + idEl.textContent;
   navigator.clipboard.writeText(link).then(() => {
     showToast('Referral link copied to clipboard!');
   });

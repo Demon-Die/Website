@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const cheerio = require('cheerio');
 
-const dir = '/Users/rishibhardwaj/Desktop/Website';
+const dir = path.join(__dirname, 'pages');
 
 // 1. Create missing pages
 const template = fs.readFileSync(path.join(dir, '404err.html'), 'utf-8');
@@ -111,7 +111,7 @@ files.forEach(file => {
   }
 
   const meta = getMeta(file);
-  const url = 'https://omnikonhub.com/' + (file === 'index.html' ? '' : file);
+  const url = 'https://omnikonhub.com/pages/' + (file === 'index.html' ? '' : file);
 
   // Update Head Metadata
   $('title').text(meta.title);
@@ -120,8 +120,8 @@ files.forEach(file => {
   $('meta[property^="og:"]').remove();
   $('meta[name^="twitter:"]').remove();
   $('meta[name="robots"]').remove();
-  $('link[href="./assets/hackathon-window.css"]').remove();
-  $('script[src="./assets/hackathon-window.js"]').remove();
+  $('link[href="../assets/hackathon-window.css"]').remove();
+  $('script[src="../assets/hackathon-window.js"]').remove();
   
   const headMeta = [
     '<meta name="description" content="' + meta.desc + '">',
@@ -135,8 +135,8 @@ files.forEach(file => {
     '<meta name="twitter:description" content="' + meta.desc + '">',
     '<meta name="robots" content="index, follow">',
     '<meta name="view-transition" content="same-origin" />',
-    '<link rel="stylesheet" href="./assets/hackathon-window.css">',
-    '<script type="module" src="./assets/hackathon-window.js"></script>'
+    '<link rel="stylesheet" href="../assets/hackathon-window.css">',
+    '<script type="module" src="../assets/hackathon-window.js"></script>'
   ].join('\n');
   $('head').append(headMeta);
 

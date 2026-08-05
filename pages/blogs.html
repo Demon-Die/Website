@@ -2,11 +2,11 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-<link rel="icon" type="image/png" href="./Favicon.png?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="./favicon_io/apple-touch-icon.png?v=1">
-<link rel="icon" type="image/png" sizes="32x32" href="./favicon_io/favicon-32x32.png?v=1">
-<link rel="icon" type="image/png" sizes="16x16" href="./favicon_io/favicon-16x16.png?v=1">
-<link rel="manifest" href="./favicon_io/site.webmanifest?v=1">
+<link rel="icon" type="image/png" href="../Favicon.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png?v=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png?v=1">
+<link rel="manifest" href="/favicon_io/site.webmanifest?v=1">
 
 
 
@@ -22,6 +22,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script type="module" src="../assets/tailwind-theme.js"></script>
+<link rel="stylesheet" href="../assets/common-styles.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -48,19 +50,21 @@
 <!-- Structured Data -->
 
 
-<link rel="icon" type="image/png" sizes="192x192" href="./favicon_io/android-chrome-192x192.png?v=1">
-<link rel="icon" type="image/png" sizes="512x512" href="./favicon_io/android-chrome-512x512.png?v=1">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon_io/android-chrome-192x192.png?v=1">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon_io/android-chrome-512x512.png?v=1">
 <meta name="description" content="Read the latest technical articles, tutorials, and insights from the Omnikon blog.">
-<link rel="canonical" href="https://omnikonhub.com/blogs.html">
+<link rel="canonical" href="https://omnikonhub.com/pages/blogs.html">
 <meta property="og:title" content="Developer Blog | Omnikon">
 <meta property="og:description" content="Read the latest technical articles, tutorials, and insights from the Omnikon blog.">
-<meta property="og:url" content="https://omnikonhub.com/blogs.html">
+<meta property="og:url" content="https://omnikonhub.com/pages/blogs.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Developer Blog | Omnikon">
 <meta name="twitter:description" content="Read the latest technical articles, tutorials, and insights from the Omnikon blog.">
 <meta name="robots" content="index, follow">
-<meta name="view-transition" content="same-origin"><script type="application/ld+json">[
+<meta name="view-transition" content="same-origin">
+<link rel="stylesheet" href="../assets/hackathon-window.css">
+<script type="module" src="../assets/hackathon-window.js"></script><script type="application/ld+json">[
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -75,7 +79,7 @@
         "@type": "ListItem",
         "position": 2,
         "name": "Developer Blog",
-        "item": "https://omnikonhub.com/blogs.html"
+        "item": "https://omnikonhub.com/pages/blogs.html"
       }
     ]
   },
@@ -84,20 +88,14 @@
     "@type": "Blog",
     "name": "Developer Blog | Omnikon"
   }
-]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/blogs-arqhampw.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-D3Tm_XB5.js">
-  <link rel="modulepreload" crossorigin href="/assets/common-styles-BaLo8lnt.js">
-  <link rel="modulepreload" crossorigin href="/assets/particles-skXxxqKX.js">
-  <link rel="stylesheet" crossorigin href="/assets/common-styles-DXOQ9IKX.css">
-  <link rel="stylesheet" crossorigin href="/assets/particles-Bnl5njdN.css">
-</head><body class="text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary selection:text-background grid-bg">
+]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script></head><body class="text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary selection:text-background grid-bg">
 
 
 
 <nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
 <div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
 <div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
-<img src="/assets/LogoOmnikon-BC6S2juO.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
+<img src="/public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
 <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
 </div>
 <div id="desktop-nav" class="hidden md:flex items-center gap-8">
@@ -388,25 +386,10 @@ Star on GitHub
     window.env = {};
     (async function() {
       try {
-        const responseJson = await fetch('env-public.json');
+        const responseJson = await fetch('/env-public.json');
         if (responseJson.ok) {
           window.env = await responseJson.json();
         }
-        
-        try {
-          const responseEnv = await fetch('.env');
-          if (responseEnv.ok) {
-            const text = await responseEnv.text();
-            text.split('').forEach(line => {
-              const parts = line.split('=');
-              if (parts.length >= 2) {
-                const key = parts[0].trim();
-                const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
-                window.env[key] = val;
-              }
-            });
-          }
-        } catch(err) { /* .env missing on prod */ }
       } catch (e) {
         console.warn('Environment loading error:', e);
       } finally {
@@ -421,14 +404,6 @@ Star on GitHub
     let supabaseClient = null;
     let allBlogs = [];
     let currentScrapedBlog = null;
-
-    // Load admin secret from localStorage if exists
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedSecret = localStorage.getItem('omnikon_admin_secret');
-        if (savedSecret) {
-            document.getElementById('input-secret').value = savedSecret;
-        }
-    });
 
     // Listen to Env Loaded Event to initialize Supabase
     window.addEventListener('envLoaded', () => {
@@ -609,24 +584,14 @@ Star on GitHub
     // Trigger scraping server-side
     async function scrapeMetadata() {
         const url = document.getElementById('input-url').value.trim();
-        const secret = document.getElementById('input-secret').value.trim();
-        
+
         if (!url) {
             showModalError('Please enter a valid URL');
             return;
         }
 
-        // Validate secret exists
-        const adminSecret = window.env?.ADMIN_SECRET;
-        if (adminSecret && secret !== adminSecret) {
-            showModalError('Invalid admin authorization key.');
-            return;
-        }
-
-        // Save secret to localStorage for convenience
-        if (secret) {
-            localStorage.setItem('omnikon_admin_secret', secret);
-        }
+        // The admin authorization key is validated server-side on publish
+        // (api/blog-insert.js). It is never stored in localStorage.
 
         document.getElementById('modal-scrape-phase').classList.add('hidden');
         document.getElementById('modal-loading-phase').classList.remove('hidden');
@@ -670,10 +635,8 @@ Star on GitHub
         const url = currentScrapedBlog.url;
         const secret = document.getElementById('input-secret').value.trim();
 
-        // Server validation/double check
-        const adminSecret = window.env?.ADMIN_SECRET;
-        if (adminSecret && secret !== adminSecret) {
-            showModalError('Unauthorized transaction.');
+        if (!secret) {
+            showModalError('Admin authorization key is required.');
             return;
         }
 
@@ -699,15 +662,15 @@ Star on GitHub
         };
 
         try {
-            const { data, error } = await supabaseClient
-                .from('blogs')
-                .insert([payload]);
+            const response = await fetch('/api/blog-insert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ secret, blog: payload })
+            });
 
-            if (error) {
-                if (error.code === '23505') {
-                    throw new Error('This article has already been added to the database.');
-                }
-                throw error;
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to save the article to database.');
             }
 
             closeModal();
@@ -763,6 +726,21 @@ Star on GitHub
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<!-- Google Ads -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-8663425706426895"
+     data-ad-slot="2153298266"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script type="module" src="../auth.js"></script>
+<script type="module" src="../particles.js"></script>
 <footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
     <div class="flex flex-wrap justify-center gap-6 mb-3">
         <a href="https://github.com/Omnikon-Org" target="_blank" class="hover:text-primary transition-colors">GitHub</a>

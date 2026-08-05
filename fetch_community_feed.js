@@ -7,8 +7,10 @@
       await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
     }
 
-    const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;
-    container.innerHTML = '';
+    // No GitHub token is ever used in the browser. All authenticated org
+    // data is fetched server-side in CI (.github/workflows/update_projects.yml
+    // → public/github_summary.json). Anonymous REST calls are rate-limited
+    // to 60 req/hr per IP, which is sufficient for this feed.
 
     const renderItem = (userLogin, userAvatar, title, timeStr, link) => {
       const div = document.createElement('div');
@@ -72,72 +74,18 @@
       return `${diffDays}d ago`;
     };
 
-    if (token) {
-      try {
-        const query = `
-          query {
-            repository(owner: "Omnikon-Org", name: "Website") {
-              discussions(first: 8, orderBy: {field: CREATED_AT, direction: DESC}) {
-                nodes {
-                  title
-                  url
-                  createdAt
-                  author {
-                    login
-                    avatarUrl
-                  }
-                }
-              }
-            }
-          }
-        `;
-        const resp = await fetch('https://api.github.com/graphql', {
-          method: 'POST',
-          headers: {
-            Authorization: `bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ query })
-        });
-        if (resp.ok) {
-          const result = await resp.json();
-          const nodes = result.data?.repository?.discussions?.nodes;
-          if (nodes && nodes.length > 0) {
-            nodes.forEach(node => {
-              renderItem(
-                node.author?.login || 'anonymous',
-                node.author?.avatarUrl,
-                node.title,
-                getTimeAgo(node.createdAt),
-                node.url
-              );
-            });
-            return;
-          }
-        }
-      } catch (e) {
-        console.warn('GraphQL query failed, falling back to REST issues', e);
-      }
-    }
-
     let data;
     try {
-      const headers = token ? { Authorization: `token ${token}` } : {};
-      let resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc', { headers });
-      if (!resp.ok && resp.status === 401 && token) {
-        console.warn('GitHub search issues returned 401 with token, retrying anonymously...');
-        resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
-      }
+      const resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
       if (!resp.ok) throw new Error('GitHub search issues failed');
       data = await resp.json();
     } catch (e) {
-      console.warn('Authenticated search failed, trying final anonymous request...', e);
-      const resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
-      if (!resp.ok) throw new Error('Anonymous backup search failed');
-      data = await resp.json();
+      console.warn('Failed to load community feed:', e);
+      data = null;
     }
 
-    const items = data.items || [];
+    const items = (data && data.items) || [];
+    container.innerHTML = '';
     if (items.length === 0) {
       container.innerHTML = '<p class="text-on-surface-variant text-code-sm">No discussions or activity found.</p>';
       return;
