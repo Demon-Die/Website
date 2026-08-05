@@ -255,7 +255,7 @@
         }
       }
 
-      const avatarUrl = user.photoURL || './public/LogoOmnikon.jpeg';
+      const avatarUrl = user.photoURL || './LogoOmnikon.jpeg';
       authWidget.innerHTML = `
         <div class="flex items-center gap-1.5 sm:gap-3">
           <img class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-primary object-cover shrink-0" src="${avatarUrl}" alt="Profile">
