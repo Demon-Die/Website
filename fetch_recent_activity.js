@@ -3,27 +3,15 @@
   if (!container) return;
 
   try {
-    if (!window.envLoaded) {
-      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
-    }
-
-    const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;
     let events;
-
     try {
-      const headers = token ? { Authorization: `token ${token}` } : {};
-      let resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events', { headers });
-      if (!resp.ok && resp.status === 401 && token) {
-        console.warn('GitHub events request returned 401 with token, retrying anonymously...');
-        resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
-      }
+      const resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
       if (!resp.ok) throw new Error('GitHub events request failed');
       events = await resp.json();
     } catch (e) {
-      console.warn('Authenticated fetch failed, trying final anonymous request...', e);
-      const resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
-      if (!resp.ok) throw new Error('Anonymous backup request failed');
-      events = await resp.json();
+      console.warn('GitHub activity fetch error:', e);
+      container.innerHTML = '<p class="text-on-surface-variant text-code-sm">Unable to load recent activity.</p>';
+      return;
     }
 
     container.innerHTML = '';

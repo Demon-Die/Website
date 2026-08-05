@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script type="module" src="./assets/tailwind-theme.js"></script>
+<script type="module" src="./assets/env-config.js"></script>
     <link rel="stylesheet" href="./assets/common-styles.css">
 
 <!-- SEO: JSON-LD for Organization Logo -->
@@ -179,37 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   <div id="chatbot-modal" class="hidden"></div>
   
-  <script>
-    window.env = {};
-    (async function() {
-      try {
-        const responseJson = await fetch('env-public.json');
-        if (responseJson.ok) {
-          window.env = await responseJson.json();
-        }
-        
-        try {
-          const responseEnv = await fetch('.env');
-          if (responseEnv.ok) {
-            const text = await responseEnv.text();
-            text.split('').forEach(line => {
-              const parts = line.split('=');
-              if (parts.length >= 2) {
-                const key = parts[0].trim();
-                const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
-                window.env[key] = val;
-              }
-            });
-          }
-        } catch(err) { /* .env missing on prod */ }
-      } catch (e) {
-        console.warn('Environment loading error:', e);
-      } finally {
-        window.envLoaded = true;
-        window.dispatchEvent(new CustomEvent('envLoaded'));
-      }
-    })();
-  </script>
+
   
   <script type="module" src="fetch_recent_activity.js"></script>
   <script type="module" src="fetch_community_feed.js"></script>

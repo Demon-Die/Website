@@ -77,12 +77,13 @@
       "url": "https://hackathon-website-sooty-delta.vercel.app/"
     }
   }
-]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/main-Bk7LegK5.js"></script>
+]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/main-DvAX9kS4.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-D3Tm_XB5.js">
   <link rel="modulepreload" crossorigin href="/assets/common-styles-BaLo8lnt.js">
+  <link rel="modulepreload" crossorigin href="/assets/env-config-BKs_y0lZ.js">
   <link rel="modulepreload" crossorigin href="/assets/hero-animation-rdkI1kZj.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-skXxxqKX.js">
-  <link rel="modulepreload" crossorigin href="/assets/interactivity-CfdIJDHT.js">
+  <link rel="modulepreload" crossorigin href="/assets/interactivity-Cd13yzie.js">
   <link rel="modulepreload" crossorigin href="/assets/db-xsv61YUd.js">
   <link rel="stylesheet" crossorigin href="/assets/common-styles-DXOQ9IKX.css">
   <link rel="stylesheet" crossorigin href="/assets/hero-animation-XjMRtk73.css">
@@ -656,10 +657,8 @@
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         try {
-            const envResp = await fetch('env-public.json');
-            const env = await envResp.json();
-            const supabaseUrl = env.SUPABASE_URL;
-            const supabaseKey = env.SUPABASE_ANON_KEY;
+            const supabaseUrl = window.env?.SUPABASE_URL;
+            const supabaseKey = window.env?.SUPABASE_ANON_KEY;
             if(!supabaseUrl || !supabaseKey) return;
             
             let normalizedUrl = supabaseUrl.trim();
@@ -1488,26 +1487,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   <div id="chatbot-modal" class="hidden"></div>
   
-  <script>
-    window.env = {};
-    (async function() {
-      try {
-        const responseJson = await fetch('env-public.json');
-        if (responseJson.ok) {
-          window.env = await responseJson.json();
-        }
-        
-        try {
-// Removed insecure .env fetch – secrets are now provided only via env-public.json
-        } catch(err) { /* .env missing on prod */ }
-      } catch (e) {
-        console.warn('Environment loading error:', e);
-      } finally {
-        window.envLoaded = true;
-        window.dispatchEvent(new CustomEvent('envLoaded'));
-      }
-    })();
-  </script>
+
   
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895"

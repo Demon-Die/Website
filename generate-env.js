@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const envKeys = [
+// Only include non-secret public client keys
+const publicEnvKeys = [
   'FIREBASE_API_KEY',
   'FIREBASE_AUTH_DOMAIN',
   'FIREBASE_PROJECT_ID',
@@ -9,13 +10,12 @@ const envKeys = [
   'FIREBASE_MESSAGING_SENDER_ID',
   'FIREBASE_APP_ID',
   'SUPABASE_URL',
-  'SUPABASE_ANON_KEY',
-  'HF_TOKEN'
+  'SUPABASE_ANON_KEY'
 ];
 
 const envData = {};
 
-// Fallback to local .env if available (for local builds)
+// Fallback to local .env if available (for local dev builds)
 try {
   const envFile = fs.readFileSync(path.join(__dirname, '.env'), 'utf-8');
   envFile.split('\n').forEach(line => {
@@ -23,39 +23,60 @@ try {
     if (parts.length >= 2) {
       const key = parts[0].trim();
       const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
-      if (envKeys.includes(key)) {
+      if (publicEnvKeys.includes(key)) {
         envData[key] = val;
       }
     }
   });
 } catch (e) {
-  // .env might not exist on Vercel, which is fine
+  // .env might not exist on Vercel
 }
 
-// Fallback default public keys for Firebase
+// Fallback default public keys for Firebase & Supabase if env vars are missing
 const defaultPublicKeys = {
-  FIREBASE_API_KEY: 'AIzaSyBiNIObFcI06vECfiBivu967NLq0EbxNlg',
-  FIREBASE_AUTH_DOMAIN: 'omnikon-web-auth-2026.firebaseapp.com',
-  FIREBASE_PROJECT_ID: 'omnikon-web-auth-2026',
-  FIREBASE_STORAGE_BUCKET: 'omnikon-web-auth-2026.firebasestorage.app',
-  FIREBASE_MESSAGING_SENDER_ID: '1003258119714',
-  FIREBASE_APP_ID: '1:1003258119714:web:e10c18f3955a9862242c7b'
+  FIREBASE_API_KEY: 'AIzaSyC7-bvWLmQe8XB8lgSqa3XMWAfiMI-rvMo',
+  FIREBASE_AUTH_DOMAIN: 'omnikon-8e717.firebaseapp.com',
+  FIREBASE_PROJECT_ID: 'omnikon-8e717',
+  FIREBASE_STORAGE_BUCKET: 'omnikon-8e717.firebasestorage.app',
+  FIREBASE_MESSAGING_SENDER_ID: '650489055837',
+  FIREBASE_APP_ID: '1:650489055837:web:328b14e8e00ad77722dbb4',
+  SUPABASE_URL: 'https://ptdxgxhjycyubixeffei.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0ZHhneGhqeWN5dWJpeGVmZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDcwMzIsImV4cCI6MjA5NjY4MzAzMn0.SzL7KWf-Dq337_S23iuzDIIyX-ufRt5tI1KC63ew8LE'
 };
 
-// Override with process.env (Vercel Environment Variables)
-envKeys.forEach(key => {
+publicEnvKeys.forEach(key => {
   if (process.env[key]) {
     envData[key] = process.env[key];
-  } else if (defaultPublicKeys[key]) {
+  } else if (!envData[key] && defaultPublicKeys[key]) {
     envData[key] = defaultPublicKeys[key];
   }
 });
 
-// Write to public/env-public.json so Vite includes it in the dist folder
-const publicDir = path.join(__dirname, 'public');
-if (!fs.existsSync(publicDir)) {
-  fs.mkdirSync(publicDir);
+// Write synchronous JS config file to assets/env-config.js
+const assetsDir = path.join(__dirname, 'assets');
+if (!fs.existsSync(assetsDir)) {
+  fs.mkdirSync(assetsDir, { recursive: true });
 }
 
-fs.writeFileSync(path.join(publicDir, 'env-public.json'), JSON.stringify(envData, null, 2));
-console.log('Successfully generated public/env-public.json from environment variables.');
+const jsContent = `// Auto-generated synchronous client environment config
+(function() {
+  window.env = window.env || ${JSON.stringify(envData, null, 2)};
+  window.envLoaded = true;
+  if (typeof window.dispatchEvent === 'function') {
+    window.dispatchEvent(new CustomEvent('envLoaded'));
+  }
+})();
+`;
+
+fs.writeFileSync(path.join(assetsDir, 'env-config.js'), jsContent);
+console.log('Successfully generated assets/env-config.js from environment variables.');
+
+// Remove legacy insecure env-public.json files if present
+const publicDir = path.join(__dirname, 'public');
+['env-public.json', 'env-public 2.json'].forEach(file => {
+  const filePath = path.join(publicDir, file);
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+    console.log(`Deleted legacy file: ${file}`);
+  }
+});
