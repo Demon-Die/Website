@@ -173,7 +173,7 @@ files.forEach(file => {
       "@type": "Organization",
       "name": "Omnikon",
       "url": "https://omnikonhub.com",
-      "logo": "https://omnikonhub.com/public/LogoOmnikon.jpeg",
+      "logo": "https://omnikonhub.com/LogoOmnikon.jpeg",
       "email": "contact@omnikonhub.com",
       "sameAs": ["https://github.com/Omnikon-Org", "https://discord.gg/yWtjK2Tb8T"],
       "contactPoint": {
