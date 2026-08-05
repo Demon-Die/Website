@@ -22,95 +22,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "on-tertiary": "#313030",
-          "surface-container-high": "#292a2a",
-          "surface-variant": "#343535",
-          "on-tertiary-fixed-variant": "#474646",
-          "on-secondary-fixed": "#1c1b1b",
-          "inverse-surface": "#e3e2e2",
-          "secondary-fixed-dim": "#c8c6c5",
-          "secondary": "#c8c6c5",
-          "surface-container-lowest": "#0d0e0f",
-          "secondary-fixed": "#e5e2e1",
-          "primary-container": "#ff544b",
-          "tertiary": "#c8c6c5",
-          "on-surface-variant": "#e7bcb8",
-          "surface": "#0a0a0c",
-          "on-primary-fixed-variant": "#93000c",
-          "surface-dim": "#050505",
-          "primary": "#ff2a4b",
-          "on-primary-container": "#5c0005",
-          "error-container": "#93000a",
-          "secondary-container": "#2a2a2c",
-          "on-error-container": "#ffdad6",
-          "surface-bright": "#1a1a1c",
-          "tertiary-container": "#4a4a4c",
-          "on-error": "#690005",
-          "background": "#050505",
-          "on-secondary": "#313030",
-          "on-surface": "#e3e2e2",
-          "error": "#ffb4ab",
-          "on-secondary-fixed-variant": "#474746",
-          "on-primary-fixed": "#410002",
-          "primary-fixed": "#ffdad6",
-          "tertiary-fixed": "#e5e2e1",
-          "primary-fixed-dim": "#ffb4ab",
-          "inverse-primary": "#c00014",
-          "surface-tint": "#ffb4ab",
-          "surface-container-highest": "#343535",
-          "surface-container": "#1a1a1a",
-          "on-primary": "#000000",
-          "on-background": "#e3e2e2",
-          "outline-variant": "#1a1a1a",
-          "inverse-on-surface": "#2f3131",
-          "outline": "#1a1a1a",
-          "surface-container-low": "#1a1c1c",
-          "tertiary-fixed-dim": "#c8c6c5",
-          "on-tertiary-fixed": "#1c1b1b",
-          "on-secondary-container": "#b7b5b4",
-          "on-tertiary-container": "#2a2a29",
-          "surface-elevation": "#141416"
-        },
-        borderRadius: {
-          DEFAULT: "0.75rem",
-          md: "0.5rem",
-          lg: "1rem",
-          xl: "1.5rem",
-          full: "9999px"
-        },
-        spacing: {
-          gutter: "24px",
-          "section-gap": "80px",
-          "margin-mobile": "16px",
-          unit: "4px",
-          "container-max": "1280px"
-        },
-        fontFamily: {
-          "code-sm": ["JetBrains Mono", "monospace"],
-          "label-mono": ["JetBrains Mono", "monospace"],
-          "headline-md-mobile": ["Inter", "sans-serif"],
-          "body-base": ["JetBrains Mono", "monospace"],
-          "display-lg": ["Inter", "sans-serif"],
-          "headline-md": ["Inter", "sans-serif"]
-        },
-        fontSize: {
-          "code-sm": ["12px", { lineHeight: "1.5", fontWeight: "400" }],
-          "label-mono": ["14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
-          "headline-md-mobile": ["24px", { lineHeight: "1.2", fontWeight: "600" }],
-          "body-base": ["14px", { lineHeight: "1.6", fontWeight: "400" }],
-          "display-lg": ["56px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
-          "headline-md": ["32px", { lineHeight: "1.2", fontWeight: "600" }]
-        }
-      }
-    }
-  };
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -173,10 +84,10 @@
     "@type": "Blog",
     "name": "Developer Blog | Omnikon"
   }
-]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/blogs-BLyYRhtv.js"></script>
+]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/blogs-arqhampw.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-D3Tm_XB5.js">
   <link rel="modulepreload" crossorigin href="/assets/common-styles-BaLo8lnt.js">
-  <link rel="modulepreload" crossorigin href="/assets/particles-Djd-Z2FF.js">
+  <link rel="modulepreload" crossorigin href="/assets/particles-skXxxqKX.js">
   <link rel="stylesheet" crossorigin href="/assets/common-styles-DXOQ9IKX.css">
   <link rel="stylesheet" crossorigin href="/assets/particles-Bnl5njdN.css">
 </head><body class="text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary selection:text-background grid-bg">
@@ -473,7 +384,37 @@ Star on GitHub
 </footer>
 
 
-
+<script>
+    window.env = {};
+    (async function() {
+      try {
+        const responseJson = await fetch('env-public.json');
+        if (responseJson.ok) {
+          window.env = await responseJson.json();
+        }
+        
+        try {
+          const responseEnv = await fetch('.env');
+          if (responseEnv.ok) {
+            const text = await responseEnv.text();
+            text.split('').forEach(line => {
+              const parts = line.split('=');
+              if (parts.length >= 2) {
+                const key = parts[0].trim();
+                const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
+                window.env[key] = val;
+              }
+            });
+          }
+        } catch(err) { /* .env missing on prod */ }
+      } catch (e) {
+        console.warn('Environment loading error:', e);
+      } finally {
+        window.envLoaded = true;
+        window.dispatchEvent(new CustomEvent('envLoaded'));
+      }
+    })();
+</script>
 
 
 <script>
@@ -491,8 +432,8 @@ Star on GitHub
 
     // Listen to Env Loaded Event to initialize Supabase
     window.addEventListener('envLoaded', () => {
-        const supabaseUrl = window.env?.SUPABASE_URL || window.env?.NEXT_PUBLIC_SUPABASE_URL || 'https://ptdxgxhjycyubixeffei.supabase.co';
-        const supabaseAnonKey = window.env?.SUPABASE_ANON_KEY || window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0ZHhneGhqeWN5dWJpeGVmZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDcwMzIsImV4cCI6MjA5NjY4MzAzMn0.SzL7KWf-Dq337_S23iuzDIIyX-ufRt5tI1KC63ew8LE';
+        const supabaseUrl = window.env?.SUPABASE_URL || window.env?.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseAnonKey = window.env?.SUPABASE_ANON_KEY || window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
         if (!supabaseUrl || !supabaseAnonKey) {
             console.error('Supabase credentials missing.');
@@ -596,7 +537,7 @@ Star on GitHub
             card.className = 'border border-surface-variant bg-surface-container p-4 flex flex-col gap-4 glow-hover transition-all';
             
             // Image template fallback
-            const imgUrl = blog.image || './LogoOmnikon.jpeg';
+            const imgUrl = blog.image || './public/LogoOmnikon.jpeg';
             
             // Platform badge styling
             let badgeBg = 'bg-primary/10 border-primary/20 text-primary';
@@ -822,19 +763,6 @@ Star on GitHub
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<!-- Google Ads -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895"
-     crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-layout="in-article"
-     data-ad-format="fluid"
-     data-ad-client="ca-pub-8663425706426895"
-     data-ad-slot="2153298266"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
 <footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
     <div class="flex flex-wrap justify-center gap-6 mb-3">
         <a href="https://github.com/Omnikon-Org" target="_blank" class="hover:text-primary transition-colors">GitHub</a>

@@ -65,10 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
           loadRewardsAndBadges(profile);
           loadProfileForm(profile);
           
-          // Auto-refresh stats every 60s when tab is active
+          // Auto-refresh stats every 10s in background
           if (window.ambassadorPollInterval) clearInterval(window.ambassadorPollInterval);
           window.ambassadorPollInterval = setInterval(async () => {
-            if (document.hidden) return;
             if (currentProfile && currentProfile.uid) {
               try {
                 const fresh = await getAmbassadorData(currentProfile.uid);
@@ -79,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               } catch(e){}
             }
-          }, 60000);
+          }, 10000);
           
         } catch (err) {
           console.error("Dashboard error:", err);
