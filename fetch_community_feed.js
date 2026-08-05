@@ -3,11 +3,6 @@
   if (!container) return;
 
   try {
-    if (!window.envLoaded) {
-      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
-    }
-
-    const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;
     container.innerHTML = '';
 
     const renderItem = (userLogin, userAvatar, title, timeStr, link) => {
@@ -122,19 +117,13 @@
 
     let data;
     try {
-      const headers = token ? { Authorization: `token ${token}` } : {};
-      let resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc', { headers });
-      if (!resp.ok && resp.status === 401 && token) {
-        console.warn('GitHub search issues returned 401 with token, retrying anonymously...');
-        resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
-      }
+      const resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
       if (!resp.ok) throw new Error('GitHub search issues failed');
       data = await resp.json();
     } catch (e) {
-      console.warn('Authenticated search failed, trying final anonymous request...', e);
-      const resp = await fetch('https://api.github.com/search/issues?q=org:Omnikon-Org+sort:created-desc');
-      if (!resp.ok) throw new Error('Anonymous backup search failed');
-      data = await resp.json();
+      console.warn('GitHub search issues error:', e);
+      container.innerHTML = '<p class="text-on-surface-variant text-code-sm">Unable to load community feed.</p>';
+      return;
     }
 
     const items = data.items || [];

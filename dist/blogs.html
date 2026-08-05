@@ -84,9 +84,10 @@
     "@type": "Blog",
     "name": "Developer Blog | Omnikon"
   }
-]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/blogs-arqhampw.js"></script>
+]</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>  <script type="module" crossorigin src="/assets/blogs-DVCqUZnd.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-D3Tm_XB5.js">
   <link rel="modulepreload" crossorigin href="/assets/common-styles-BaLo8lnt.js">
+  <link rel="modulepreload" crossorigin href="/assets/env-config-BKs_y0lZ.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-skXxxqKX.js">
   <link rel="stylesheet" crossorigin href="/assets/common-styles-DXOQ9IKX.css">
   <link rel="stylesheet" crossorigin href="/assets/particles-Bnl5njdN.css">
@@ -384,37 +385,7 @@ Star on GitHub
 </footer>
 
 
-<script>
-    window.env = {};
-    (async function() {
-      try {
-        const responseJson = await fetch('env-public.json');
-        if (responseJson.ok) {
-          window.env = await responseJson.json();
-        }
-        
-        try {
-          const responseEnv = await fetch('.env');
-          if (responseEnv.ok) {
-            const text = await responseEnv.text();
-            text.split('').forEach(line => {
-              const parts = line.split('=');
-              if (parts.length >= 2) {
-                const key = parts[0].trim();
-                const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
-                window.env[key] = val;
-              }
-            });
-          }
-        } catch(err) { /* .env missing on prod */ }
-      } catch (e) {
-        console.warn('Environment loading error:', e);
-      } finally {
-        window.envLoaded = true;
-        window.dispatchEvent(new CustomEvent('envLoaded'));
-      }
-    })();
-</script>
+
 
 
 <script>
