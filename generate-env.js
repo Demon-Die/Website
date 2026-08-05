@@ -10,8 +10,7 @@ const envKeys = [
   'FIREBASE_APP_ID',
   'SUPABASE_URL',
   'SUPABASE_ANON_KEY',
-  'HF_TOKEN',
-  'ADMIN_SECRET'
+  'HF_TOKEN'
 ];
 
 const envData = {};
