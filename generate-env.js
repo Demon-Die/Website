@@ -52,12 +52,6 @@ publicEnvKeys.forEach(key => {
   }
 });
 
-// Write synchronous JS config file to assets/env-config.js
-const assetsDir = path.join(__dirname, 'assets');
-if (!fs.existsSync(assetsDir)) {
-  fs.mkdirSync(assetsDir, { recursive: true });
-}
-
 const jsContent = `// Auto-generated synchronous client environment config
 (function() {
   window.env = window.env || ${JSON.stringify(envData, null, 2)};
@@ -68,7 +62,14 @@ const jsContent = `// Auto-generated synchronous client environment config
 })();
 `;
 
-fs.writeFileSync(path.join(assetsDir, 'env-config.js'), jsContent);
+// Write to both assets/env-config.js and public/assets/env-config.js
+[path.join(__dirname, 'assets'), path.join(__dirname, 'public', 'assets')].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(path.join(dir, 'env-config.js'), jsContent);
+});
+
 console.log('Successfully generated assets/env-config.js from environment variables.');
 
 // Remove legacy insecure env-public.json files if present
