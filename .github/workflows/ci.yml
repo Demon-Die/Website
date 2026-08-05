@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check HTML exists
-        run: test -f index.html
+        run: test -f pages/index.html
 
       - name: Check CSS exists
         run: test -f style.css
