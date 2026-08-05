@@ -96,7 +96,6 @@
     }
   };
 </script>
-<script src="./assets/env-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script type="module" src="./assets/tailwind-theme.js"></script>
@@ -741,8 +740,8 @@
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         try {
-            const supabaseUrl = window.env?.SUPABASE_URL;
-            const supabaseKey = window.env?.SUPABASE_ANON_KEY;
+            const supabaseUrl = window.env?.SUPABASE_URL || 'https://ptdxgxhjycyubixeffei.supabase.co';
+            const supabaseKey = window.env?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0ZHhneGhqeWN5dWJpeGVmZmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDcwMzIsImV4cCI6MjA5NjY4MzAzMn0.SzL7KWf-Dq337_S23iuzDIIyX-ufRt5tI1KC63ew8LE';
             if(!supabaseUrl || !supabaseKey) return;
             
             let normalizedUrl = supabaseUrl.trim();
