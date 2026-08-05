@@ -2,25 +2,16 @@
 
 export async function getDb() {
   if (!window.firebase) throw new Error("Firebase SDK not loaded");
-  
-  // Wait for environment variables to load
-  if (!window.envLoaded) {
-    await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
-  }
 
   // Ensure Firebase app is initialized (auth.js normally does this, but we check just in case)
   if (!firebase.apps.length) {
-    if (!window.env?.FIREBASE_API_KEY) {
-      console.warn('Firebase configuration missing in environment.');
-      throw new Error('Firebase config missing');
-    }
     const firebaseConfig = {
-      apiKey: window.env.FIREBASE_API_KEY,
-      authDomain: window.env.FIREBASE_AUTH_DOMAIN,
-      projectId: window.env.FIREBASE_PROJECT_ID,
-      storageBucket: window.env.FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: window.env.FIREBASE_MESSAGING_SENDER_ID,
-      appId: window.env.FIREBASE_APP_ID
+      apiKey: window.env?.FIREBASE_API_KEY || 'AIzaSyC7-bvWLmQe8XB8lgSqa3XMWAfiMI-rvMo',
+      authDomain: window.env?.FIREBASE_AUTH_DOMAIN || 'omnikon-8e717.firebaseapp.com',
+      projectId: window.env?.FIREBASE_PROJECT_ID || 'omnikon-8e717',
+      storageBucket: window.env?.FIREBASE_STORAGE_BUCKET || 'omnikon-8e717.firebasestorage.app',
+      messagingSenderId: window.env?.FIREBASE_MESSAGING_SENDER_ID || '650489055837',
+      appId: window.env?.FIREBASE_APP_ID || '1:650489055837:web:328b14e8e00ad77722dbb4'
     };
     firebase.initializeApp(firebaseConfig);
   }
