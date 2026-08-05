@@ -141,12 +141,26 @@ RULES:
     }
   };
 
+  const getHFToken = () => window.env?.HF_TOKEN || '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';
+
   const sendMessage = async () => {
     const userText = input.value.trim();
     if (!userText) return;
 
     appendMessage(userText, 'user');
     input.value = '';
+
+    if (!window.envLoaded) {
+      showTypingIndicator();
+      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
+      removeTypingIndicator();
+    }
+
+    const token = getHFToken();
+    if (!token) {
+      appendMessage('API key missing. Please add HF_TOKEN to your .env file in the repository root to enable the AI assistant.', 'bot');
+      return;
+    }
 
     showTypingIndicator();
 
@@ -155,24 +169,28 @@ RULES:
       content: msg.content
     }));
 
-    const messagesPayload = [
-      { role: 'system', content: getSystemPrompt() },
-      ...recentHistory,
-      { role: 'user', content: userText }
-    ];
+    const payload = {
+      model: 'meta-llama/Llama-3.1-8B-Instruct:novita',
+      messages: [
+        { role: 'system', content: getSystemPrompt() },
+        ...recentHistory,
+        { role: 'user', content: userText }
+      ]
+    };
 
     try {
-      const resp = await fetch('/api/chat', {
+      const resp = await fetch('https://router.huggingface.co/v1/chat/completions', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ messages: messagesPayload })
+        body: JSON.stringify(payload)
       });
 
       removeTypingIndicator();
 
-      if (!resp.ok) throw new Error('Chat API request failed');
+      if (!resp.ok) throw new Error('HuggingFace request failed');
       const data = await resp.json();
       const reply = data.choices?.[0]?.message?.content || 'No response';
       
@@ -183,7 +201,7 @@ RULES:
     } catch (e) {
       console.error(e);
       removeTypingIndicator();
-      appendMessage('Unable to connect to the AI service. Please try again later.', 'bot');
+      appendMessage('Unable to connect to the AI service. Please verify your HF_TOKEN configuration.', 'bot');
     }
   };
 

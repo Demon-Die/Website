@@ -38,10 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
           showAdminUI();
           loadAdminReferrals();
           
-          // Auto-refresh active admin view every 60 seconds when tab is active
+          // Auto-refresh active admin view every 10 seconds
           if (window.adminPollInterval) clearInterval(window.adminPollInterval);
           window.adminPollInterval = setInterval(() => {
-            if (document.hidden) return;
             const activeTab = document.querySelector('[id^="tab-"]:not(.hidden)');
             if (activeTab) {
               const tabName = activeTab.id.replace('tab-', '');
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
               if (tabName === 'ambassadors') loadPendingAmbassadors();
               if (tabName === 'analytics') loadSystemAnalytics();
             }
-          }, 60000);
+          }, 10000);
           
         } catch (err) {
           console.error("Admin error:", err);
@@ -391,22 +390,29 @@ async function loadPendingAmbassadors() {
       return;
     }
 
-    const ambassadorsData = snapshot.docs.map((doc) => {
+    const ambassadorsData = await Promise.all(snapshot.docs.map(async (doc) => {
       const data = doc.data();
       const isPending = data.status === 'pending';
       if (isPending) pendingCount++;
       const ambassadorId = data.ambassadorId;
       
+      let dbClicks = 0;
+      let userRefs = [];
+      if (ambassadorId) {
+        dbClicks = await getClicksCount(ambassadorId);
+        userRefs = await getReferrals(ambassadorId);
+      }
+      
       const verifiedCount = data.verifiedRegistrations || 0;
       const profileClicks = data.totalClicks || data.uniqueClicks || 0;
-      const effectiveClicks = Math.max(profileClicks, verifiedCount);
+      const effectiveClicks = Math.max(dbClicks, profileClicks, userRefs.length, verifiedCount);
       
       const dateStr = data.createdAt 
         ? (data.createdAt.toDate ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'Recent')
         : 'Recent';
 
       return { doc, data, isPending, ambassadorId, effectiveClicks, verifiedCount, dateStr };
-    });
+    }));
 
     if (tbody) {
       tbody.innerHTML = ambassadorsData.map(({ doc, data, isPending, ambassadorId, effectiveClicks, verifiedCount, dateStr }) => `

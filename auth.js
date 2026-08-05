@@ -44,16 +44,28 @@
 
   
   async function initFirebase() {
+    
+    if (!window.envLoaded) {
+      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
+    }
+
+    
+    if (!window.env?.FIREBASE_API_KEY) {
+      console.warn('Firebase configuration missing in environment.');
+      return;
+    }
+
     const firebaseConfig = {
-      apiKey: window.env?.FIREBASE_API_KEY || 'AIzaSyC7-bvWLmQe8XB8lgSqa3XMWAfiMI-rvMo',
-      authDomain: window.env?.FIREBASE_AUTH_DOMAIN || 'omnikon-8e717.firebaseapp.com',
-      projectId: window.env?.FIREBASE_PROJECT_ID || 'omnikon-8e717',
-      storageBucket: window.env?.FIREBASE_STORAGE_BUCKET || 'omnikon-8e717.firebasestorage.app',
-      messagingSenderId: window.env?.FIREBASE_MESSAGING_SENDER_ID || '650489055837',
-      appId: window.env?.FIREBASE_APP_ID || '1:650489055837:web:328b14e8e00ad77722dbb4'
+      apiKey: window.env.FIREBASE_API_KEY,
+      authDomain: window.env.FIREBASE_AUTH_DOMAIN,
+      projectId: window.env.FIREBASE_PROJECT_ID,
+      storageBucket: window.env.FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: window.env.FIREBASE_MESSAGING_SENDER_ID,
+      appId: window.env.FIREBASE_APP_ID
     };
 
     try {
+      
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
       }
@@ -243,7 +255,7 @@
         }
       }
 
-      const avatarUrl = user.photoURL || './LogoOmnikon.jpeg';
+      const avatarUrl = user.photoURL || './public/LogoOmnikon.jpeg';
       authWidget.innerHTML = `
         <div class="flex items-center gap-1.5 sm:gap-3">
           <img class="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-primary object-cover shrink-0" src="${avatarUrl}" alt="Profile">
