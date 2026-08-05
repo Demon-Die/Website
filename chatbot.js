@@ -26,7 +26,7 @@
 
   async function loadOrgData() {
     try {
-      const res = await fetch('github_summary.json');
+      const res = await fetch('/github_summary.json');
       if (res.ok) {
         orgData = await res.json();
       }
@@ -141,26 +141,12 @@ RULES:
     }
   };
 
-  const getHFToken = () => window.env?.HF_TOKEN || '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';
-
   const sendMessage = async () => {
     const userText = input.value.trim();
     if (!userText) return;
 
     appendMessage(userText, 'user');
     input.value = '';
-
-    if (!window.envLoaded) {
-      showTypingIndicator();
-      await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
-      removeTypingIndicator();
-    }
-
-    const token = getHFToken();
-    if (!token) {
-      appendMessage('API key missing. Please add HF_TOKEN to your .env file in the repository root to enable the AI assistant.', 'bot');
-      return;
-    }
 
     showTypingIndicator();
 
@@ -179,10 +165,9 @@ RULES:
     };
 
     try {
-      const resp = await fetch('https://router.huggingface.co/v1/chat/completions', {
+      const resp = await fetch('/api/chat', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
@@ -190,7 +175,7 @@ RULES:
 
       removeTypingIndicator();
 
-      if (!resp.ok) throw new Error('HuggingFace request failed');
+      if (!resp.ok) throw new Error('AI service request failed');
       const data = await resp.json();
       const reply = data.choices?.[0]?.message?.content || 'No response';
       
@@ -201,7 +186,7 @@ RULES:
     } catch (e) {
       console.error(e);
       removeTypingIndicator();
-      appendMessage('Unable to connect to the AI service. Please verify your HF_TOKEN configuration.', 'bot');
+      appendMessage('Unable to connect to the AI service. Please try again later.', 'bot');
     }
   };
 
