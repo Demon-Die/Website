@@ -611,7 +611,7 @@ async function loadAdminCampaigns() {
             <span class="px-2 py-0.5 ${c.status === 'active' ? 'bg-primary/20 text-primary' : 'bg-surface-variant text-on-surface-variant'} text-[10px] font-bold rounded uppercase">${c.status || 'active'}</span>
           </div>
           <p class="text-xs text-on-surface-variant">${c.description || ''}</p>
-          <p class="text-[10px] font-mono text-accent mt-1">Target: ${c.target || 10} refs | Multiplier: ${c.multiplier || '1x'} | Reward: ${c.reward || 'Swag'}</p>
+          <p class="text-[10px] font-mono text-accent mt-1">Target: ${c.target || 10} refs | Multiplier: ${c.multiplier || '1x'} | Reward: ${c.reward || 'Certificate & Recognition'}</p>
         </div>
         <button onclick="toggleCampaign('${c.id}', '${c.status === 'active' ? 'inactive' : 'active'}')" class="self-start sm:self-auto px-3 py-1.5 bg-surface-elevation border border-surface-variant text-xs font-mono text-on-surface hover:border-primary transition-colors cursor-pointer">
           ${c.status === 'active' ? 'Deactivate' : 'Activate'}

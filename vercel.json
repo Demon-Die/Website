@@ -2,7 +2,15 @@
   "rewrites": [
     {
       "source": "/omnikon-ref-:id",
-      "destination": "/r.html?id=:id"
+      "destination": "/pages/r.html?id=:id"
+    },
+    {
+      "source": "/",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/:page.html",
+      "destination": "/pages/:page.html"
     }
   ]
 }

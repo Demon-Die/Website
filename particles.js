@@ -170,29 +170,29 @@ class Particle {
         const preloadNormal = document.createElement('link');
         preloadNormal.rel = 'preload';
         preloadNormal.as = 'image';
-        preloadNormal.href = './cursor/Cursor_64x64.png';
+        preloadNormal.href = '/cursor/Cursor_64x64.png';
         document.head.appendChild(preloadNormal);
 
         const preloadActive = document.createElement('link');
         preloadActive.rel = 'preload';
         preloadActive.as = 'image';
-        preloadActive.href = './cursor/CursorActiveNew.png?v=2';
+        preloadActive.href = '/cursor/CursorActiveNew.png?v=2';
         document.head.appendChild(preloadActive);
 
         
         const imgNormal = new Image();
-        imgNormal.src = './cursor/Cursor_64x64.png';
+        imgNormal.src = '/cursor/Cursor_64x64.png';
         const imgActive = new Image();
-        imgActive.src = './cursor/CursorActiveNew.png?v=2';
+        imgActive.src = '/cursor/CursorActiveNew.png?v=2';
 
         const cursorStyle = document.createElement('style');
         cursorStyle.textContent = `
             html, body, a, button, select, [role="button"] {
-                cursor: url('./cursor/Cursor_64x64.png') 16 7, auto !important;
+                cursor: url('/cursor/Cursor_64x64.png') 16 7, auto !important;
             }
             a:hover, button:hover, select:hover, [role="button"]:hover, .cursor-pointer, .cursor-pointer:hover,
             a:active, button:active, select:active, [role="button"]:active, :active {
-                cursor: url('./cursor/CursorActiveNew.png?v=2') 16 7, auto !important;
+                cursor: url('/cursor/CursorActiveNew.png?v=2') 16 7, auto !important;
             }
         `;
         document.head.appendChild(cursorStyle);

@@ -178,7 +178,7 @@ export async function getActiveCampaigns() {
         title: 'Omnikon National Tech Hackathon 2026',
         description: 'Empower student developers by referring participants to the premier national hackathon.',
         target: 20,
-        reward: 'Exclusive Swag & Certificate',
+        reward: 'Verified Certificate & Recognition',
         status: 'active',
         multiplier: '1.5x'
       }];
@@ -190,7 +190,7 @@ export async function getActiveCampaigns() {
       title: 'Omnikon National Tech Hackathon 2026',
       description: 'Empower student developers by referring participants to the premier national hackathon.',
       target: 20,
-      reward: 'Exclusive Swag & Certificate',
+      reward: 'Verified Certificate & Recognition',
       status: 'active',
       multiplier: '1.5x'
     }];
@@ -292,12 +292,23 @@ export async function getSystemAnalytics() {
 // ── Leaderboard ──────────────────────────────────────────
 export async function getLeaderboard(limit = 100) {
   const db = await getDb();
+  let snapshot;
   try {
-    const snapshot = await db.collection('users')
+    snapshot = await db.collection('users')
       .where('role', '==', 'ambassador')
       .where('status', '==', 'active')
       .get();
-      
+  } catch (err) {
+    console.warn("Primary users query failed, checking fallback queries/collections:", err);
+    try {
+      snapshot = await db.collection('leaderboard').get();
+    } catch (fallbackErr) {
+      console.error("Error in getLeaderboard:", fallbackErr);
+      return [];
+    }
+  }
+
+  try {
     let data = snapshot.docs.map(doc => doc.data());
     
     data.sort((a, b) => {
@@ -314,7 +325,7 @@ export async function getLeaderboard(limit = 100) {
     
     return data.slice(0, limit);
   } catch (err) {
-    console.error("Error in getLeaderboard:", err);
+    console.error("Error processing leaderboard data:", err);
     return [];
   }
 }

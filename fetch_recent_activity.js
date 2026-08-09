@@ -7,23 +7,19 @@
       await new Promise(resolve => window.addEventListener('envLoaded', resolve, { once: true }));
     }
 
-    const token = window.env?.GIT_OMNIKON_ALL || window.env?.GITHUB_TOKEN;
-    let events;
+    // No GitHub token is ever used in the browser. All authenticated org
+    // data is fetched server-side in CI (.github/workflows/update_projects.yml
+    // → public/github_summary.json). Anonymous REST calls are rate-limited
+    // to 60 req/hr per IP, which is sufficient for this feed.
 
+    let events;
     try {
-      const headers = token ? { Authorization: `token ${token}` } : {};
-      let resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events', { headers });
-      if (!resp.ok && resp.status === 401 && token) {
-        console.warn('GitHub events request returned 401 with token, retrying anonymously...');
-        resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
-      }
+      const resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
       if (!resp.ok) throw new Error('GitHub events request failed');
       events = await resp.json();
     } catch (e) {
-      console.warn('Authenticated fetch failed, trying final anonymous request...', e);
-      const resp = await fetch('https://api.github.com/orgs/Omnikon-Org/events');
-      if (!resp.ok) throw new Error('Anonymous backup request failed');
-      events = await resp.json();
+      console.warn('Failed to load recent activity:', e);
+      events = null;
     }
 
     container.innerHTML = '';

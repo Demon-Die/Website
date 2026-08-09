@@ -1,28 +1,5 @@
 /* Common Styles Extracted from Inline HTML Blocks */
 
-/* --- CORE FOUC PROTECTIONS --- */
-/* Prevent layout trash before Tailwind CDN compiles */
-[hidden], .hidden { display: none; }
-img { max-width: 100%; height: auto; }
-img[src*="LogoOmnikon"], img[alt*="Omnikon Logo"] {
-    max-width: 40px !important;
-    max-height: 40px !important;
-    width: 40px !important;
-    height: 40px !important;
-    object-fit: cover !important;
-    display: inline-block !important;
-}
-img[alt*="Avatar"], img[src*="avatar"], .avatar-box, #ambassador-avatar {
-    max-width: 48px !important;
-    max-height: 48px !important;
-    width: 48px !important;
-    height: 48px !important;
-    border-radius: 9999px !important;
-    object-fit: cover !important;
-    display: inline-block !important;
-    overflow: hidden !important;
-}
-/* ----------------------------- */
 html {
     scroll-behavior: smooth;
 }

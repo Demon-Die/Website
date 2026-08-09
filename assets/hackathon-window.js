@@ -48,7 +48,7 @@ class HackathonWindow {
     const titleContainer = document.createElement('div');
     titleContainer.className = 'hackathon-window-title';
     titleContainer.innerHTML = `
-      <img src="./public/LogoOmnikon.jpeg" alt="Omnikon" />
+      <img src="/LogoOmnikon.jpeg" alt="Omnikon" />
       Omnikon National Tech Hackathon 2026
     `;
     
