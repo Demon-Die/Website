@@ -251,7 +251,7 @@ async function loadCampaigns(ambassadorId) {
             <h3 class="text-xl font-bold text-on-surface mb-2">${c.title}</h3>
             <p class="text-xs text-on-surface-variant leading-relaxed mb-4">${c.description || 'Drive registrations and earn bonus rewards.'}</p>
             <div class="p-3 bg-background/50 border border-surface-variant/40 rounded text-xs font-mono text-primary flex items-center justify-between">
-              <span class="truncate">Reward: ${c.reward || 'Swag Kit & Certificate'}</span>
+              <span class="truncate">Reward: ${c.reward || 'Verified Certificate & Recognition'}</span>
             </div>
           </div>
           <button onclick="copySpecificCampaignLink('${campaignLink}')" class="w-full py-2 bg-primary/10 hover:bg-primary/20 border border-primary text-primary text-xs font-mono transition-colors glow-hover flex items-center justify-center gap-2">
@@ -269,11 +269,11 @@ function loadRewardsAndBadges(profile) {
   const verified = profile.verifiedRegistrations || 0;
   
   const tiers = [
-    { name: 'Bronze', count: 0, reward: 'Ambassador Onboarding & Digital Badge', icon: 'military_tech', color: 'text-amber-600' },
-    { name: 'Silver', count: 5, reward: 'Official Certificate of Appreciation & Discord VIP Role', icon: 'workspace_premium', color: 'text-slate-400' },
-    { name: 'Gold', count: 15, reward: 'Omnikon Exclusive Swag Kit (T-Shirt, Stickers, Sipper)', icon: 'stars', color: 'text-yellow-400' },
-    { name: 'Platinum', count: 30, reward: 'Direct Interview Call for Omnikon Core Team & Paid Internships', icon: 'diamond', color: 'text-cyan-400' },
-    { name: 'Cyber Master', count: 50, reward: 'Sponsored Hackathon Pass, Cash Prize Pool & Trophy', icon: 'trophy', color: 'text-primary' }
+    { name: 'Bronze', count: 0, reward: 'Ambassador Onboarding, Digital Badge & Community Access', icon: 'military_tech', color: 'text-amber-600' },
+    { name: 'Silver', count: 5, reward: 'Official Certificate of Appreciation & Discord Community Leader Role', icon: 'workspace_premium', color: 'text-slate-400' },
+    { name: 'Gold', count: 15, reward: 'Certificate of Excellence & Networking with Core Tech Mentors', icon: 'stars', color: 'text-yellow-400' },
+    { name: 'Platinum', count: 30, reward: 'Certificate of Distinction & Regional Leadership Opportunities', icon: 'diamond', color: 'text-cyan-400' },
+    { name: 'Cyber Master', count: 50, reward: 'Certificate of Honor, Omnikon Core Recommendation & Website Spotlight', icon: 'trophy', color: 'text-primary' }
   ];
 
   const tierContainer = document.getElementById('rewards-tier-list');

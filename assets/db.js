@@ -178,7 +178,7 @@ export async function getActiveCampaigns() {
         title: 'Omnikon National Tech Hackathon 2026',
         description: 'Empower student developers by referring participants to the premier national hackathon.',
         target: 20,
-        reward: 'Exclusive Swag & Certificate',
+        reward: 'Verified Certificate & Recognition',
         status: 'active',
         multiplier: '1.5x'
       }];
@@ -190,7 +190,7 @@ export async function getActiveCampaigns() {
       title: 'Omnikon National Tech Hackathon 2026',
       description: 'Empower student developers by referring participants to the premier national hackathon.',
       target: 20,
-      reward: 'Exclusive Swag & Certificate',
+      reward: 'Verified Certificate & Recognition',
       status: 'active',
       multiplier: '1.5x'
     }];
