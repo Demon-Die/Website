@@ -49,7 +49,10 @@ export default defineConfig({
         admin: resolve(import.meta.dirname, 'pages/admin.html'),
         leaderboard: resolve(import.meta.dirname, 'pages/leaderboard.html'),
         r: resolve(import.meta.dirname, 'pages/r.html'),
-        docs: resolve(import.meta.dirname, 'pages/docs.html')
+        docs: resolve(import.meta.dirname, 'pages/docs.html'),
+        blogOpenSource: resolve(import.meta.dirname, 'pages/blog/getting-started-open-source.html'),
+        blogHackathon: resolve(import.meta.dirname, 'pages/blog/hackathon-guide-2026.html'),
+        blogWebApps: resolve(import.meta.dirname, 'pages/blog/building-scalable-web-apps.html')
       }
     }
   }

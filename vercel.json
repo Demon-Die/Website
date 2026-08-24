@@ -9,6 +9,10 @@
       "destination": "/pages/index.html"
     },
     {
+      "source": "/blog/:article.html",
+      "destination": "/pages/blog/:article.html"
+    },
+    {
       "source": "/:page.html",
       "destination": "/pages/:page.html"
     }
