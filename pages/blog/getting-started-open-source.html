@@ -1,0 +1,200 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<link rel="icon" type="image/png" href="../../Favicon.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png?v=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png?v=1">
+<link rel="manifest" href="/favicon_io/site.webmanifest?v=1">
+
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../../assets/tailwind.css">
+<script type="module" src="../../assets/tailwind-theme.js"></script>
+<link rel="stylesheet" href="../../assets/common-styles.css">
+
+<title>Getting Started with Open Source Development | Omnikon Developer Blog</title>
+
+<meta name="keywords" content="Open Source, Git Workflow, Pull Requests, GitHub Community, Omnikon Blog, Open Source for Beginners">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="A comprehensive beginner-to-advanced guide on contributing to open-source software, mastering Git workflows, and building a public engineering record.">
+<link rel="canonical" href="https://omnikonhub.com/pages/blog/getting-started-open-source.html">
+<meta property="og:title" content="Getting Started with Open Source Development | Omnikon Blog">
+<meta property="og:description" content="A comprehensive guide on contributing to open-source software, mastering Git workflows, and building a public engineering record.">
+<meta property="og:url" content="https://omnikonhub.com/pages/blog/getting-started-open-source.html">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Getting Started with Open Source Development | Omnikon Blog">
+<meta name="twitter:description" content="A comprehensive guide on contributing to open-source software, mastering Git workflows, and building a public engineering record.">
+<meta name="robots" content="index, follow">
+<meta name="view-transition" content="same-origin">
+<script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://omnikonhub.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://omnikonhub.com/pages/blogs.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Getting Started with Open Source",
+        "item": "https://omnikonhub.com/pages/blog/getting-started-open-source.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Getting Started with Open Source Development",
+    "author": {
+      "@type": "Organization",
+      "name": "Omnikon Core Team"
+    },
+    "datePublished": "2026-08-24",
+    "description": "Learn how to contribute to open-source repositories, manage pull requests, and collaborate effectively in developer communities."
+  }
+]</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>
+</head>
+<body class="text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary selection:text-background grid-bg">
+
+<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
+<div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
+<img src="/public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
+<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
+</div>
+<div id="desktop-nav" class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../index.html">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../about.html">About</a>
+<a class="text-primary border-b border-primary font-label-mono text-label-mono text-xs" href="../blogs.html">Blog</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../projects.html">Projects</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../members.html">Members</a>
+</div>
+<a href="https://github.com/Omnikon-Org" target="_blank">
+<button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="Star on GitHub">
+<span class="material-symbols-outlined text-sm">star</span> Star on GitHub
+</button>
+</a>
+</div>
+</nav>
+
+<main class="flex-grow w-full max-w-4xl mx-auto px-margin-mobile md:px-gutter py-section-gap flex flex-col gap-8 pt-24">
+<nav class="breadcrumbs-ui py-2 text-sm text-on-surface-variant" aria-label="breadcrumb">
+<a href="../index.html" class="hover:text-primary">Home</a> &gt; <a href="../blogs.html" class="hover:text-primary">Blog</a> &gt; <span class="text-on-surface">Getting Started with Open Source</span>
+</nav>
+
+<header class="border-b border-surface-variant pb-8 space-y-4">
+<div class="flex items-center gap-3">
+<span class="bg-primary/10 text-primary border border-primary/30 px-3 py-1 font-label-mono text-xs uppercase font-bold">Open Source</span>
+<span class="text-on-surface-variant font-label-mono text-xs">Published: August 24, 2026</span>
+<span class="text-on-surface-variant font-label-mono text-xs">• 8 min read</span>
+</div>
+<h1 class="text-display-lg font-display-lg text-on-surface font-bold">Getting Started with Open Source Development: A Developer's Roadmap</h1>
+<p class="text-on-surface-variant text-base leading-relaxed">
+Discover how contributing to open-source software accelerates career growth, sharpens technical skills, and establishes a proven track record of software engineering.
+</p>
+</header>
+
+<article class="space-y-8 text-on-surface leading-relaxed font-body-base text-base">
+<section class="space-y-4">
+<h2 class="text-2xl font-bold text-on-surface">Why Open Source Matters in Modern Engineering</h2>
+<p>
+Open-source software powers the modern digital world. From cloud infrastructure like Kubernetes and Linux to web frameworks like React and Next.js, community-driven code underpins modern software architecture. For student developers and self-taught engineers, participating in open source is one of the most effective ways to transition from theoretical programming to real-world software craft.
+</p>
+<p>
+Unlike synthetic tutorial projects, open-source repositories expose developers to established codebases, peer code reviews, continuous integration pipelines, and collaborative problem solving.
+</p>
+</section>
+
+<section class="space-y-4 border-l-2 border-primary pl-6 bg-surface-container-low/50 p-6">
+<h2 class="text-xl font-bold text-on-surface">Key Benefits of Open Source Contributions</h2>
+<ul class="list-disc list-inside space-y-2 text-on-surface-variant text-sm">
+<li><strong>Verified Proof of Skill:</strong> Your GitHub contribution graph and merged pull requests serve as an immutable portfolio for prospective technical recruiters.</li>
+<li><strong>Code Quality & Standards:</strong> Working with maintainers teaches you linting rules, architectural design patterns, unit testing, and git hygiene.</li>
+<li><strong>Networking & Mentorship:</strong> Engage with senior engineers across global developer ecosystems, open-source organizations, and technical communities.</li>
+</ul>
+</section>
+
+<section class="space-y-4">
+<h2 class="text-2xl font-bold text-on-surface">Mastering the Standard Git Contribution Workflow</h2>
+<p>
+Before submitting your first pull request, familiarize yourself with the canonical Git workflow used across professional open-source projects:
+</p>
+
+<div class="space-y-4 font-label-mono text-sm bg-surface-container-lowest p-6 border border-surface-variant">
+<h3 class="font-bold text-primary text-base uppercase">Step 1: Forking & Cloning</h3>
+<p class="text-xs text-on-surface-variant">Always create a copy of the upstream repository under your personal GitHub profile, then clone it locally:</p>
+<div class="bg-[#050505] p-3 text-xs text-on-surface border border-surface-variant/50">
+$ git clone https://github.com/YOUR_USERNAME/Website.git<br>
+$ cd Website<br>
+$ git remote add upstream https://github.com/Omnikon-Org/Website.git
+</div>
+
+<h3 class="font-bold text-primary text-base uppercase pt-2">Step 2: Creating a Feature Branch</h3>
+<p class="text-xs text-on-surface-variant">Never commit directly to the <code>main</code> branch. Isolate your changes inside a dedicated branch:</p>
+<div class="bg-[#050505] p-3 text-xs text-on-surface border border-surface-variant/50">
+$ git checkout -b feat/add-dark-mode-toggle
+</div>
+
+<h3 class="font-bold text-primary text-base uppercase pt-2">Step 3: Committing & Pushing</h3>
+<p class="text-xs text-on-surface-variant">Write descriptive commit messages explaining <em>why</em> the change was made:</p>
+<div class="bg-[#050505] p-3 text-xs text-on-surface border border-surface-variant/50">
+$ git add .<br>
+$ git commit -m "feat(ui): implement accessible dark mode toggle in header"<br>
+$ git push origin feat/add-dark-mode-toggle
+</div>
+</div>
+</section>
+
+<section class="space-y-4">
+<h2 class="text-2xl font-bold text-on-surface">Finding Good First Issues at Omnikon</h2>
+<p>
+At Omnikon, we curate beginner-friendly issues tagged with <code>good first issue</code> and <code>help wanted</code> across our community repositories. These issues range from UI tweaks and documentation improvements to writing unit tests and refactoring utility functions.
+</p>
+<p>
+To get started:
+</p>
+<ol class="list-decimal list-inside space-y-2 text-on-surface-variant text-sm">
+<li>Visit our official GitHub Organization at <a href="https://github.com/Omnikon-Org" target="_blank" class="text-primary hover:underline font-bold">github.com/Omnikon-Org</a>.</li>
+<li>Filter issues by label <code>good first issue</code>.</li>
+<li>Comment on the issue requesting assignment before starting implementation to prevent overlapping work.</li>
+</ol>
+</section>
+
+<section class="border border-surface-variant bg-surface-container-low p-6 text-center space-y-4">
+<h3 class="text-xl font-bold text-on-surface">Ready to Make Your First Commit?</h3>
+<p class="text-on-surface-variant text-xs max-w-md mx-auto">
+Explore our repositories, join our Discord server, and start collaborating with developers around the globe.
+</p>
+<a href="https://github.com/Omnikon-Org" target="_blank" class="inline-block bg-primary text-background font-label-mono text-xs px-6 py-3 font-bold border border-primary hover:shadow-[0_0_15px_rgba(255,49,49,0.5)] transition-all">
+Explore Omnikon Repositories
+</a>
+</section>
+</article>
+</main>
+
+<footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
+<div class="flex flex-wrap justify-center gap-6 mb-2">
+<a href="../privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
+<a href="../terms.html" class="hover:text-primary transition-colors">Terms & Conditions</a>
+<a href="../contact.html" class="hover:text-primary transition-colors">Contact Us</a>
+</div>
+<p>&copy; <script>document.write(new Date().getFullYear())</script> Omnikon. All rights reserved.</p>
+</footer>
+</body></html>
