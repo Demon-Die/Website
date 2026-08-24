@@ -6,82 +6,82 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/about.html</loc>
+        <loc>https://omnikonhub.com/about.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/blogs.html</loc>
+        <loc>https://omnikonhub.com/blogs.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/projects.html</loc>
+        <loc>https://omnikonhub.com/projects.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/achievements.html</loc>
+        <loc>https://omnikonhub.com/achievements.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/members.html</loc>
+        <loc>https://omnikonhub.com/members.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/docs.html</loc>
+        <loc>https://omnikonhub.com/docs.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/guidelines.html</loc>
+        <loc>https://omnikonhub.com/guidelines.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/codeOfConduct.html</loc>
+        <loc>https://omnikonhub.com/codeOfConduct.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/faqs.html</loc>
+        <loc>https://omnikonhub.com/faqs.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/contact.html</loc>
+        <loc>https://omnikonhub.com/contact.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/licence.html</loc>
+        <loc>https://omnikonhub.com/licence.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/privacy.html</loc>
+        <loc>https://omnikonhub.com/privacy.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/terms.html</loc>
+        <loc>https://omnikonhub.com/terms.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/blog/getting-started-open-source.html</loc>
+        <loc>https://omnikonhub.com/blog/getting-started-open-source.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/blog/hackathon-guide-2026.html</loc>
+        <loc>https://omnikonhub.com/blog/hackathon-guide-2026.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://omnikonhub.com/pages/blog/building-scalable-web-apps.html</loc>
+        <loc>https://omnikonhub.com/blog/building-scalable-web-apps.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
