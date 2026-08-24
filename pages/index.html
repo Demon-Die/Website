@@ -6,7 +6,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png?v=1">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png?v=1">
 <link rel="manifest" href="/favicon_io/site.webmanifest?v=1">
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../assets/tailwind.css">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
@@ -349,9 +349,9 @@
               🏆 National Hackathon 2026
             </span>
             <!-- Live badge -->
-            <span id="hk-live-badge" class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-green-500/10 border border-green-500/30 text-green-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-wider rounded animate-pulse shrink-0" aria-label="Registration is currently open">
-              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.8)]"></span>
-              Registration Open
+            <span id="hk-live-badge" class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-primary/10 border border-primary/30 text-primary font-bold text-[9px] sm:text-[10px] uppercase tracking-wider rounded animate-pulse shrink-0" aria-label="Problem statements have been released">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-primary shadow-[0_0_6px_rgba(255,42,75,0.8)]"></span>
+              Problem Statements Live
             </span>
           </div>
 
@@ -400,18 +400,21 @@
             <div class="absolute left-[11px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary/60 to-[#9333ea]/20 rounded pointer-events-none" aria-hidden="true"></div>
             <ol class="flex flex-col gap-4 pl-8">
               <li class="scroll-reveal relative" style="transition-delay:60ms">
-                <div class="absolute -left-8 top-1 w-6 h-6 rounded-full bg-surface border-2 border-primary flex items-center justify-center shadow-[0_0_8px_rgba(255,42,75,0.4)]" aria-hidden="true">
-                  <div class="w-2 h-2 bg-primary rounded-full"></div>
-                </div>
-                <div class="text-on-surface font-label-mono text-sm font-bold">Registration Open</div>
-                <div class="text-on-surface-variant font-code-sm text-[11px]">Sign up now — spots are limited</div>
-              </li>
-              <li class="scroll-reveal relative" style="transition-delay:100ms">
-                <div class="absolute -left-8 top-1 w-6 h-6 rounded-full bg-surface border-2 border-surface-variant flex items-center justify-center" aria-hidden="true">
+                <div class="absolute -left-8 top-1 w-6 h-6 rounded-full bg-surface border-2 border-surface-variant flex items-center justify-center opacity-70" aria-hidden="true">
                   <div class="w-2 h-2 bg-surface-variant rounded-full"></div>
                 </div>
-                <div class="text-on-surface font-label-mono text-sm font-bold">Problem Statements Released</div>
-                <div class="text-on-surface-variant font-code-sm text-[11px]">Themes &amp; challenges announced</div>
+                <div class="text-on-surface-variant font-label-mono text-sm font-semibold opacity-75">Registration Closed</div>
+                <div class="text-on-surface-variant/70 font-code-sm text-[11px]">Registrations have ended</div>
+              </li>
+              <li class="scroll-reveal relative" style="transition-delay:100ms">
+                <div class="absolute -left-8 top-1 w-6 h-6 rounded-full bg-surface border-2 border-primary flex items-center justify-center shadow-[0_0_8px_rgba(255,42,75,0.5)]" aria-hidden="true">
+                  <div class="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                </div>
+                <div class="text-primary font-label-mono text-sm font-bold flex items-center gap-2">
+                  Problem Statements Released
+                  <span class="px-1.5 py-0.5 bg-primary/20 text-primary text-[9px] font-bold rounded uppercase tracking-wider">Active</span>
+                </div>
+                <div class="text-on-surface font-code-sm text-[11px]">Themes &amp; challenges live — start building</div>
               </li>
               <li class="scroll-reveal relative" style="transition-delay:140ms">
                 <div class="absolute -left-8 top-1 w-6 h-6 rounded-full bg-surface border-2 border-surface-variant flex items-center justify-center" aria-hidden="true">
@@ -439,10 +442,10 @@
 
           <!-- CTA Buttons -->
           <div class="flex flex-wrap gap-4 pt-2">
-            <a href="https://unstop.com/hackathons/omnikon-national-hackathon-2026-omnikon-1715716" target="_blank" rel="noopener noreferrer" id="hk-register-btn">
-              <button class="glass-button text-white font-label-mono text-label-mono px-7 py-3 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background" aria-label="Register for the Omnikon National Tech Hackathon 2026">
-                <span class="material-symbols-outlined text-sm" aria-hidden="true" data-icon="rocket_launch">rocket_launch</span>
-                Register Now
+            <a href="https://omnikonhackathon.vercel.app/tracks#problem-statements" target="_blank" rel="noopener noreferrer" id="hk-ps-btn">
+              <button class="glass-button text-white font-label-mono text-label-mono px-7 py-3 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background" aria-label="View Problem Statements for the Omnikon National Tech Hackathon 2026">
+                <span class="material-symbols-outlined text-sm" aria-hidden="true" data-icon="description">description</span>
+                Problem Statements
               </button>
             </a>
             <a href="https://hackathon-website-sooty-delta.vercel.app/" target="_blank" rel="noopener noreferrer" id="hk-details-btn">
@@ -554,7 +557,7 @@
     to   { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
   }
   /* Button glow enhancement */
-  #hk-register-btn button:hover {
+  #hk-ps-btn button:hover {
     box-shadow: 0 0 28px rgba(255,42,75,0.55), 0 0 8px rgba(255,42,75,0.35);
   }
   #hk-details-btn button:hover {

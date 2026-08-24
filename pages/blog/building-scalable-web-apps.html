@@ -1,0 +1,182 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<link rel="icon" type="image/png" href="../../Favicon.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png?v=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png?v=1">
+<link rel="manifest" href="/favicon_io/site.webmanifest?v=1">
+
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../../assets/tailwind.css">
+<script type="module" src="../../assets/tailwind-theme.js"></script>
+<link rel="stylesheet" href="../../assets/common-styles.css">
+
+<title>Architecting Performant Web Applications with Vite & Tailwind CSS | Omnikon Developer Blog</title>
+
+<meta name="keywords" content="Web Performance, Core Web Vitals, Vite, Tailwind CSS, JavaScript Optimization, Omnikon Tech Blog">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Technical deep-dive on optimizing front-end performance, asset bundle sizes, Core Web Vitals, and responsive UI design systems.">
+<link rel="canonical" href="https://omnikonhub.com/pages/blog/building-scalable-web-apps.html">
+<meta property="og:title" content="Architecting Performant Web Applications with Vite & Tailwind CSS | Omnikon Blog">
+<meta property="og:description" content="Technical deep-dive on optimizing front-end performance, asset bundle sizes, Core Web Vitals, and responsive UI design systems.">
+<meta property="og:url" content="https://omnikonhub.com/pages/blog/building-scalable-web-apps.html">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Architecting Performant Web Applications with Vite & Tailwind CSS | Omnikon Blog">
+<meta name="twitter:description" content="Technical deep-dive on optimizing front-end performance, asset bundle sizes, Core Web Vitals, and responsive UI design systems.">
+<meta name="robots" content="index, follow">
+<meta name="view-transition" content="same-origin">
+<script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://omnikonhub.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://omnikonhub.com/pages/blogs.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Web Performance Architecture",
+        "item": "https://omnikonhub.com/pages/blog/building-scalable-web-apps.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Architecting Performant Web Applications with Vite and Tailwind CSS",
+    "author": {
+      "@type": "Organization",
+      "name": "Omnikon Tech Engineering"
+    },
+    "datePublished": "2026-08-24",
+    "description": "Learn how to optimize bundle sizes, leverage native ES modules, and achieve top Core Web Vitals scores."
+  }
+]</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663425706426895" crossorigin="anonymous"></script>
+</head>
+<body class="text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary selection:text-background grid-bg">
+
+<nav class="bg-[#050505]/80 backdrop-blur-md dark:bg-[#050505]/80 docked full-width top-0 border-b border-surface-variant/30 z-50 fixed w-full transition-all">
+<div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-1.5 sm:gap-2 h-full shrink-0">
+<img src="/public/LogoOmnikon.jpeg" alt="Omnikon Logo" class="h-8 w-8 sm:h-10 sm:w-10 mr-1 sm:mr-1.5 object-cover rounded-md">
+<span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-on-surface text-base sm:text-xl">Omnikon</span>
+</div>
+<div id="desktop-nav" class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../index.html">Home</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../about.html">About</a>
+<a class="text-primary border-b border-primary font-label-mono text-label-mono text-xs" href="../blogs.html">Blog</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../projects.html">Projects</a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono text-xs" href="../members.html">Members</a>
+</div>
+<a href="https://github.com/Omnikon-Org" target="_blank">
+<button class="hidden md:flex items-center gap-2 px-4 py-2 border border-surface-container hover:border-primary glow-hover text-on-surface font-label-mono text-xs transition-all duration-200" aria-label="Star on GitHub">
+<span class="material-symbols-outlined text-sm">star</span> Star on GitHub
+</button>
+</a>
+</div>
+</nav>
+
+<main class="flex-grow w-full max-w-4xl mx-auto px-margin-mobile md:px-gutter py-section-gap flex flex-col gap-8 pt-24">
+<nav class="breadcrumbs-ui py-2 text-sm text-on-surface-variant" aria-label="breadcrumb">
+<a href="../index.html" class="hover:text-primary">Home</a> &gt; <a href="../blogs.html" class="hover:text-primary">Blog</a> &gt; <span class="text-on-surface">Web Performance Architecture</span>
+</nav>
+
+<header class="border-b border-surface-variant pb-8 space-y-4">
+<div class="flex items-center gap-3">
+<span class="bg-primary/10 text-primary border border-primary/30 px-3 py-1 font-label-mono text-xs uppercase font-bold">Web Development</span>
+<span class="text-on-surface-variant font-label-mono text-xs">Published: August 24, 2026</span>
+<span class="text-on-surface-variant font-label-mono text-xs">• 9 min read</span>
+</div>
+<h1 class="text-display-lg font-display-lg text-on-surface font-bold">Architecting Performant Web Applications with Vite and Tailwind CSS</h1>
+<p class="text-on-surface-variant text-base leading-relaxed">
+A technical dive into bundle optimization, native ES modules, layout stability (CLS), and achieving 95+ Lighthouse performance scores.
+</p>
+</header>
+
+<article class="space-y-8 text-on-surface leading-relaxed font-body-base text-base">
+<section class="space-y-4">
+<h2 class="text-2xl font-bold text-on-surface">The Need for Speed in Modern Web Engineering</h2>
+<p>
+User retention directly correlates with page load speeds. Search engines, including Google, utilize **Core Web Vitals** (Largest Contentful Paint, Interaction to Next Paint, and Cumulative Layout Shift) as primary ranking factors. Building performant web applications requires moving beyond heavy monolithic runtime JavaScript frameworks when lightweight, native browser capabilities suffice.
+</p>
+</section>
+
+<section class="space-y-4">
+<h2 class="text-2xl font-bold text-on-surface">1. Leveraging Vite for Instant HMR & Production Rollup Builds</h2>
+<p>
+Traditional bundlers process the entire application graph before serving content locally. Vite revolutionizes this by serving code via native ES Modules during development, offloading module resolution to the browser engine:
+</p>
+<div class="bg-[#050505] p-4 text-xs font-label-mono text-on-surface border border-surface-variant space-y-2">
+<span class="text-primary">// vite.config.mjs</span><br>
+import { defineConfig } from 'vite';<br><br>
+export default defineConfig({<br>
+&nbsp;&nbsp;build: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;target: 'esnext',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;minify: 'terser',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rollupOptions: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manualChunks: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vendor: ['@supabase/supabase-js']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+});
+</div>
+</section>
+
+<section class="space-y-4">
+<h2 class="text-2xl font-bold text-on-surface">2. Eliminating Unused CSS with Tailwind Purging</h2>
+<p>
+Tailwind CSS provides low-level utility classes that yield minimal final CSS bundle size when configured correctly. By analyzing template files during build time, unused utility selectors are purged, resulting in production CSS files under 15KB gzipped.
+</p>
+</section>
+
+<section class="space-y-4 border-l-2 border-primary pl-6 bg-surface-container-low/50 p-6">
+<h2 class="text-xl font-bold text-on-surface">Core Web Vitals Optimization Checklist</h2>
+<ul class="list-disc list-inside space-y-2 text-on-surface-variant text-sm">
+<li><strong>Font Preloading:</strong> Add <code>rel="preconnect"</code> for Google Fonts and load display fonts with <code>font-display: swap</code>.</li>
+<li><strong>Image Aspect Ratios:</strong> Set explicit <code>width</code> and <code>height</code> attributes on all <code>&lt;img&gt;</code> tags to prevent Cumulative Layout Shift (CLS).</li>
+<li><strong>Resource Hints:</strong> Use <code>rel="canonical"</code> and pre-connect to external API domains (Supabase, Firebase) early in the <code>&lt;head&gt;</code> tag.</li>
+</ul>
+</section>
+
+<section class="border border-surface-variant bg-surface-container-low p-6 text-center space-y-4">
+<h3 class="text-xl font-bold text-on-surface">Explore Omnikon Developer Projects</h3>
+<p class="text-on-surface-variant text-xs max-w-md mx-auto">
+Check out our open-source projects built using Vite, Tailwind CSS, and clean web architecture patterns.
+</p>
+<a href="../projects.html" class="inline-block bg-primary text-background font-label-mono text-xs px-6 py-3 font-bold border border-primary hover:shadow-[0_0_15px_rgba(255,49,49,0.5)] transition-all">
+View Omnikon Projects
+</a>
+</section>
+</article>
+</main>
+
+<footer class="bg-[#050505] text-on-surface-variant border-t border-surface-variant/30 py-6 mt-12 w-full text-center text-sm font-label-mono z-50 relative">
+<div class="flex flex-wrap justify-center gap-6 mb-2">
+<a href="../privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
+<a href="../terms.html" class="hover:text-primary transition-colors">Terms & Conditions</a>
+<a href="../contact.html" class="hover:text-primary transition-colors">Contact Us</a>
+</div>
+<p>&copy; <script>document.write(new Date().getFullYear())</script> Omnikon. All rights reserved.</p>
+</footer>
+</body></html>
