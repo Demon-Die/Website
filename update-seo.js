@@ -111,7 +111,7 @@ files.forEach(file => {
   }
 
   const meta = getMeta(file);
-  const url = 'https://omnikonhub.com/pages/' + (file === 'index.html' ? '' : file);
+  const url = 'https://omnikonhub.com/' + (file === 'index.html' ? '' : file);
 
   // Update Head Metadata
   $('title').text(meta.title);
